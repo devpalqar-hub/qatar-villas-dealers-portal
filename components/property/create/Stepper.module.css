@@ -1,0 +1,73 @@
+.stepper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    margin-bottom: 32px;
+}
+
+.stepper::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--border);
+    z-index: 0;
+    transform: translateY(-50%);
+}
+
+.step {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    background: var(--surface);
+    padding: 0 16px;
+}
+
+.circle {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 600;
+    background: var(--bg);
+    border: 2px solid var(--border);
+    color: var(--text-light);
+    transition: 0.3s;
+}
+
+.label {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-light);
+    white-space: nowrap;
+    position: absolute;
+    top: 40px;
+    transition: 0.3s;
+}
+
+/* States */
+.step.active .circle {
+    border-color: var(--primary);
+    background: var(--primary);
+    color: #fff;
+}
+
+.step.active .label {
+    color: var(--primary);
+    font-weight: 600;
+}
+
+.step.completed .circle {
+    border-color: var(--primary);
+    background: var(--primary-light);
+    color: var(--primary);
+}

@@ -1,0 +1,104 @@
+.sidebar {
+
+    width: 260px;
+
+    height: 100vh;
+
+    background: var(--sidebar-bg);
+
+    color: white;
+
+    padding: 28px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    position: sticky;
+
+    top: 0;
+
+}
+
+.logo {
+
+    font-size: var(--text-2xl);
+
+    font-weight: var(--font-bold);
+
+    margin-bottom: 40px;
+
+}
+
+.nav {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 8px;
+
+}
+
+.link {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 14px;
+
+    padding: 14px 18px;
+
+    color: #cbd5e1;
+
+    text-decoration: none;
+
+    border-radius: 12px;
+
+    transition: .2s;
+
+}
+
+.link:hover {
+
+    background: rgba(255, 255, 255, .08);
+
+    color: white;
+
+}
+
+.active {
+
+    background: var(--primary);
+
+    color: white;
+
+}
+
+.footer {
+    margin-top: auto;
+    padding-top: 24px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.logoutBtn {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 18px;
+    width: 100%;
+    background: transparent;
+    border: none;
+    color: #ef4444; /* tailwind red-500 */
+    font-size: var(--text-base);
+    font-weight: var(--font-semibold);
+    text-decoration: none;
+    border-radius: 12px;
+    transition: 0.2s;
+    cursor: pointer;
+}
+
+.logoutBtn:hover {
+    background: rgba(239, 68, 68, 0.1);
+}

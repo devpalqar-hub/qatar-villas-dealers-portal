@@ -1,0 +1,120 @@
+.overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 16px;
+
+    /* enter animation */
+    animation: fadeIn 0.15s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+.modal {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.18);
+    width: 100%;
+    max-width: 420px;
+    padding: 32px;
+    animation: slideUp 0.18s ease;
+}
+
+@keyframes slideUp {
+    from { transform: translateY(10px); opacity: 0; }
+    to   { transform: translateY(0);    opacity: 1; }
+}
+
+/* icon area */
+.iconWrap {
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    font-size: 22px;
+}
+
+.iconWrap.danger  { background: #fef2f2; color: #dc2626; }
+.iconWrap.warning { background: #fffbeb; color: #d97706; }
+.iconWrap.info    { background: #eff6ff; color: #2563eb; }
+
+/* text */
+.title {
+    font-size: var(--text-xl);
+    font-weight: var(--font-bold);
+    color: var(--text);
+    margin-bottom: 8px;
+}
+
+.description {
+    font-size: var(--text-base);
+    color: var(--text-light);
+    line-height: 1.65;
+    margin-bottom: 28px;
+}
+
+/* action row */
+.actions {
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+}
+
+.btnCancel {
+    padding: 10px 20px;
+    font-size: var(--text-base);
+    font-weight: var(--font-semibold);
+    background: #f3f4f6;
+    color: var(--text);
+    border: none;
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.btnCancel:hover {
+    background: #e5e7eb;
+}
+
+.btnConfirm {
+    padding: 10px 20px;
+    font-size: var(--text-base);
+    font-weight: var(--font-semibold);
+    border: none;
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.btnConfirm.danger {
+    background: var(--danger);
+    color: #fff;
+}
+.btnConfirm.danger:hover  { opacity: 0.88; }
+
+.btnConfirm.warning {
+    background: var(--warning);
+    color: #fff;
+}
+.btnConfirm.warning:hover { opacity: 0.88; }
+
+.btnConfirm.info {
+    background: var(--primary);
+    color: #fff;
+}
+.btnConfirm.info:hover { background: var(--primary-hover); }
