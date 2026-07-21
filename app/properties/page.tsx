@@ -30,12 +30,12 @@ export default function PropertiesPage() {
         }
     };
 
-    const getStatusIntent = (status: string) => {
-        switch (status.toUpperCase()) {
+    const getStatusVariant = (status: string) => {
+        switch (status?.toUpperCase()) {
             case "ACTIVE": return "success";
             case "PENDING": return "warning";
             case "REJECTED": return "danger";
-            default: return "neutral";
+            default: return "default";
         }
     };
 
@@ -122,7 +122,7 @@ export default function PropertiesPage() {
                                                 <div className={styles.propLocation}>{prop.municipality}</div>
                                             </td>
                                             <td className={styles.td}>
-                                                <Badge intent={getStatusIntent(prop.status)}>
+                                                <Badge variant={getStatusVariant(prop.status)}>
                                                     {prop.status}
                                                 </Badge>
                                             </td>

@@ -37,12 +37,7 @@ export default function LoginPage() {
         setLoading(true);
         try {
             const { access_token } = await authService.login({ identifier, password });
-            console.log("[Login] Token received:", access_token ? `${access_token.substring(0, 20)}...` : "MISSING");
-            // Store in cookie for server-side proxy auth guard
-            document.cookie = `auth_token=${access_token}; path=/; max-age=${60 * 60 * 24 * 7}; SameSite=Lax`;
-            // Also store in localStorage for client-side Axios interceptor
             localStorage.setItem("auth_token", access_token);
-            console.log("[Login] Stored in localStorage:", localStorage.getItem("auth_token") ? "OK" : "FAILED");
             window.location.href = "/";
         } catch (err: unknown) {
             const axiosError = err as { response?: { data?: { message?: string } } };
