@@ -35,14 +35,29 @@ export default function LoginPage() {
         }
 
         setLoading(true);
+        console.log("Submitting login...");
+
         try {
-            const { access_token } = await authService.login({ identifier, password });
+            const response = await authService.login({ identifier, password });
+            console.log("Login response:", response);
+
+            const { access_token } = response;
+            if (!access_token) {
+                throw new Error("No access_token returned from server.");
+            }
+
+            // Set cookie for Next.js proxy middleware route protection
+            document.cookie = `auth_token=${access_token}; path=/; max-age=${60 * 60 * 24 * 7}; SameSite=Lax`;
+
+            // Set localStorage for client-side Axios calls
             localStorage.setItem("auth_token", access_token);
+
             window.location.href = "/";
-        } catch (err: unknown) {
-            const axiosError = err as { response?: { data?: { message?: string } } };
+        } catch (err: any) {
+            console.error("Login error:", err);
             const message =
-                axiosError?.response?.data?.message ||
+                err?.response?.data?.message ||
+                err?.message ||
                 "Invalid credentials. Please check your email and password.";
             setError(message);
         } finally {
