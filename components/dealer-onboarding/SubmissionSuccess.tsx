@@ -15,9 +15,9 @@ export default function SubmissionSuccess({ submissionId, onCheckStatus }: Props
             <div className={styles.iconWrapper}>
                 <FiCheck />
             </div>
-            
+
             <h2 className={styles.title}>Application Submitted</h2>
-            
+
             <div className={styles.reference}>
                 <span>Reference Number</span>
                 {submissionId}
@@ -26,11 +26,11 @@ export default function SubmissionSuccess({ submissionId, onCheckStatus }: Props
             <div style={{ marginBottom: "24px" }}>
                 <Badge variant="success">SUBMITTED</Badge>
             </div>
-            
+
             <p className={styles.message}>
                 Our team will review your application. You will receive an email once your application has been reviewed.
             </p>
-            
+
             <div className={styles.actions}>
                 <Button size="lg" onClick={onCheckStatus}>
                     Check Status

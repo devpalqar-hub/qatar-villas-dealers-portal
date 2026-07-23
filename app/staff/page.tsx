@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
     FiPlus,
     FiSearch,
@@ -42,6 +43,7 @@ const getAvatarClass = (name: string) => {
 const MAX_VISIBLE_PERMISSIONS = 3;
 
 export default function StaffPage() {
+    const router = useRouter();
     const [staffList, setStaffList] = useState<StaffMember[]>([]);
     const [meta, setMeta] = useState<{ total: number; page: number; limit: number; totalPages: number }>({
         total: 0,
@@ -344,6 +346,7 @@ export default function StaffPage() {
                                                         <button
                                                             className={styles.actionBtn}
                                                             title="View Staff Member"
+                                                            onClick={() => router.push(`/staff/${item.id}`)}
                                                         >
                                                             <FiEye size={16} />
                                                         </button>

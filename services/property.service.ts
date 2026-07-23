@@ -74,9 +74,93 @@ export interface GetPropertiesResponse {
     };
 }
 
+export interface PropertyFilterParams {
+    page?: number;
+    limit?: number;
+    search?: string;
+    type?: string;
+    purpose?: string;
+    status?: string;
+}
+
+export interface PropertyDetailPhoto {
+    id: string;
+    url: string;
+    minioKey?: string | null;
+    caption?: string | null;
+    sortOrder: number;
+    uploadedAt?: string;
+}
+
+export interface PropertyCreatedBy {
+    id: string;
+    name: string;
+    email: string;
+    phone: string;
+    role: string;
+}
+
+export interface PropertyDetail {
+    id: string;
+    slug?: string | null;
+    propertyName: string;
+    description: string;
+    purpose: string;
+    type: string;
+    latitude: number;
+    longitude: number;
+    bedrooms: number;
+    bathrooms: number;
+    area: number;
+    livingRooms: number;
+    parkingSpaces: number;
+    floorNumber: number;
+    totalFloors: number;
+    yearBuilt?: number;
+    furnishingStatus: string;
+    extraProperties?: {
+        privatePool?: boolean;
+        gardenAreaSqm?: number;
+        [key: string]: any;
+    };
+    price: number;
+    priceNegotiable: boolean;
+    addressLine1: string;
+    addressLine2?: string;
+    areaName: string;
+    municipality: string;
+    country?: string;
+    contactPhone: string;
+    contactWhatsapp: string;
+    contactVerified?: boolean;
+    amenities: string[];
+    nearbyTags: string[];
+    otherFeatures?: string;
+    status: string;
+    submissionCount?: number;
+    createdAt: string;
+    updatedAt: string;
+    createdBy?: PropertyCreatedBy;
+    photos: PropertyDetailPhoto[];
+    featuredSubscriptions?: any[];
+    isWishlisted?: boolean;
+    isFeatured?: boolean;
+}
+
 export const propertyService = {
-    getProperties: async (page: number = 1, limit: number = 12): Promise<GetPropertiesResponse> => {
-        const response = await api.get(`/listings`, { params: { page, limit } });
+    getProperties: async (params: PropertyFilterParams = {}): Promise<GetPropertiesResponse> => {
+        const { page = 1, limit = 10, search, type, purpose, status } = params;
+        const queryParams: Record<string, any> = { page, limit };
+        if (search) queryParams.search = search;
+        if (type) queryParams.type = type;
+        if (purpose) queryParams.purpose = purpose;
+        if (status) queryParams.status = status;
+        const response = await api.get(`/listings/dealer`, { params: queryParams });
+        return response.data;
+    },
+
+    getPropertyById: async (id: string): Promise<PropertyDetail> => {
+        const response = await api.get(`/listings/${id}`);
         return response.data;
     },
 

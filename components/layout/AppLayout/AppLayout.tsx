@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import Sidebar from "../Sidebar/Sidebar";
 import Navbar from "../Navbar/Navbar";
 
@@ -10,12 +13,19 @@ interface Props {
 export default function AppLayout({
     children,
 }: Props) {
+    const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
+
     return (
         <div className={styles.layout}>
-            <Sidebar />
+            <Sidebar
+                isOpen={isMobileSidebarOpen}
+                onClose={() => setIsMobileSidebarOpen(false)}
+            />
 
             <div className={styles.main}>
-                <Navbar />
+                <Navbar
+                    onMenuClick={() => setIsMobileSidebarOpen((prev) => !prev)}
+                />
 
                 <main className={styles.content}>
                     {children}

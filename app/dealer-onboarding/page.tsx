@@ -792,18 +792,35 @@ export default function DealerOnboardingPage() {
                     </div>
 
                     {/* Right Hero Image Panel */}
-                    {/* Right Hero Image Panel */}
                     <div className={styles.rightPanel}>
-                        <div className={styles.heroImageContainer}>
-                            <Image
-                                src="/dealer-onboard-hero.jpeg"
-                                alt="Villas Qatar Onboarding"
-                                fill
-                                priority
-                                className={styles.heroImg}
-                            />
-                        </div>
+                        <>
+                            <svg width="0" height="0">
+                                <defs>
+                                    <clipPath id="heroClip" clipPathUnits="objectBoundingBox">
+                                        <path
+                                            d="
+                    M0.18,0
+                    C0.06,0.08 0,0.25 0,0.5
+                    C0,0.75 0.06,0.92 0.18,1
+                    L1,1
+                    L1,0
+                    Z
+                "
+                                        />
+                                    </clipPath>
+                                </defs>
+                            </svg>
 
+                            <div className={styles.heroImageContainer}>
+                                <Image
+                                    src="/dealer-onboard-hero.jpeg"
+                                    alt="Villas Qatar Onboarding"
+                                    fill
+                                    priority
+                                    className={styles.heroImg}
+                                />
+                            </div>
+                        </>
                     </div>
                 </div>
             )}

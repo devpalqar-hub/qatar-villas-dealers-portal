@@ -168,7 +168,7 @@ export default function BusinessDetailsForm({ onSubmit, loading }: Props) {
 
                 <div className={styles.fullWidth}>
                     <label className={styles.label}>Company Documents</label>
-                    <div 
+                    <div
                         className={styles.fileUploadArea}
                         onClick={() => fileInputRef.current?.click()}
                     >

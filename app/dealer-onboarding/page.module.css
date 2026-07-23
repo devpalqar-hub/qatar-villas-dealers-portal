@@ -242,24 +242,37 @@
 
 .heroImageContainer {
     position: absolute;
-    inset: 0;
-
+    inset: 20px;
     overflow: hidden;
 
-    border-top-left-radius: 220px;
-    border-bottom-left-radius: 220px;
+    clip-path: url(#heroClip);
 
-    border-left: 2px solid #d9b76c;
+    border-radius: 30px;
 
-    box-shadow:
-        inset 0 0 0 1px rgba(255, 255, 255, .2);
+    background: #fff;
 }
 
 /* image */
 
 .heroImg {
     object-fit: cover;
-    object-position: center right;
+    object-position: 8+5% center;
+}
+
+.heroImageContainer::before {
+    content: "";
+    position: absolute;
+    inset: -3px;
+
+    clip-path: url(#heroClip);
+
+    border: 3px solid #d9b76c;
+
+    border-radius: 30px;
+
+    pointer-events: none;
+
+    z-index: 10;
 }
 
 /* soft dark overlay */

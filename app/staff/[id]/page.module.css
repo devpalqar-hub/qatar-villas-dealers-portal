@@ -1,0 +1,545 @@
+/* ─── Container ──────────────────────────────────────────────────── */
+.container {
+    padding: 32px;
+    max-width: 1440px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+/* ─── Breadcrumbs ─────────────────────────────────────────────────── */
+.breadcrumbs {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: var(--text-sm);
+    color: var(--text-light);
+    margin-bottom: 16px;
+}
+
+.breadcrumbs a {
+    color: var(--text-light);
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.breadcrumbs a:hover {
+    color: var(--primary);
+}
+
+.breadcrumbs span {
+    color: var(--text-light);
+}
+
+/* ─── Back Button ─────────────────────────────────────────────────── */
+.backBtn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: transparent;
+    border: none;
+    color: var(--text);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    cursor: pointer;
+    margin-bottom: 20px;
+    padding: 6px 12px 6px 0;
+    transition: color 0.2s;
+}
+
+.backBtn:hover {
+    color: var(--primary);
+}
+
+/* ─── Header Card ─────────────────────────────────────────────────── */
+.headerCard {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: flex-start;
+    gap: 24px;
+    flex-wrap: wrap;
+}
+
+.headerLeft {
+    display: flex;
+    align-items: flex-start;
+    gap: 24px;
+    flex: 1;
+    min-width: 280px;
+    flex-wrap: wrap;
+}
+
+.avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    font-weight: 700;
+    color: #fff;
+    flex-shrink: 0;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+.headerInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    flex: 1;
+    min-width: 200px;
+}
+
+.titleRow {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.title {
+    font-size: var(--text-2xl);
+    font-weight: var(--font-bold);
+    color: var(--text);
+    margin: 0;
+}
+
+.badgeGroup {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.roleBadge {
+    display: inline-block;
+    padding: 4px 10px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text);
+}
+
+.metaRow {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    font-size: var(--text-sm);
+    color: var(--text-light);
+}
+
+.metaItem {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.metaSeparator {
+    color: var(--border);
+}
+
+.idRow {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: var(--text-light);
+    font-family: monospace;
+}
+
+/* ─── Layout Grid ─────────────────────────────────────────────────── */
+.layoutGrid {
+    display: grid;
+    grid-template-columns: 1fr 360px;
+    gap: 24px;
+    align-items: start;
+}
+
+@media (max-width: 1024px) {
+    .layoutGrid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.mainColumn {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.sideColumn {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    position: sticky;
+    top: 24px;
+}
+
+/* ─── Section Cards ───────────────────────────────────────────────── */
+.sectionCard {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+}
+
+.sectionTitle {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text);
+    margin: 0 0 20px 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.sectionTitle svg {
+    color: var(--primary);
+}
+
+/* ─── Info Grid (Personal Info) ───────────────────────────────────── */
+.infoGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+@media (max-width: 640px) {
+    .infoGrid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.infoItem {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.infoLabel {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--text-light);
+}
+
+.infoValue {
+    font-size: var(--text-sm);
+    font-weight: 500;
+    color: var(--text);
+}
+
+.link {
+    color: var(--primary);
+    text-decoration: none;
+    transition: opacity 0.2s;
+}
+
+.link:hover {
+    opacity: 0.8;
+    text-decoration: underline;
+}
+
+/* ─── Status chips ────────────────────────────────────────────────── */
+.activeChip {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    color: #16a34a;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.inactiveChip {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    color: #dc2626;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+/* ─── Position & Permissions Block ───────────────────────────────── */
+.positionRow {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 16px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.positionRow svg {
+    color: var(--primary);
+    flex-shrink: 0;
+}
+
+.positionLabel {
+    display: block;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--text-light);
+    margin-bottom: 2px;
+}
+
+.positionValue {
+    display: block;
+    font-size: var(--text-base);
+    font-weight: 700;
+    color: var(--text);
+}
+
+.divider {
+    height: 1px;
+    background: var(--border);
+    margin: 4px 0 20px;
+}
+
+.permissionsHeading {
+    display: block;
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--text-light);
+    margin-bottom: 14px;
+}
+
+.permGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 10px;
+}
+
+.permCard {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 14px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    font-size: var(--text-sm);
+    font-weight: 500;
+    color: var(--text);
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.permCard:hover {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(var(--primary-rgb, 99, 102, 241), 0.08);
+}
+
+.permIcon {
+    color: var(--primary);
+    flex-shrink: 0;
+}
+
+.noPerms {
+    font-size: var(--text-sm);
+    color: var(--text-light);
+    margin: 0;
+}
+
+/* ─── Status Grid (side card) ─────────────────────────────────────── */
+.statusGrid {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.statusRow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--border);
+}
+
+.statusRow:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.statusLabel {
+    font-size: var(--text-sm);
+    color: var(--text-light);
+    font-weight: 500;
+}
+
+/* ─── Timeline ────────────────────────────────────────────────────── */
+.timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.timelineItem {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+}
+
+.timelineIcon {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary);
+    flex-shrink: 0;
+}
+
+.timelineContent {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding-top: 4px;
+}
+
+.timelineLabel {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--text-light);
+}
+
+.timelineValue {
+    font-size: var(--text-sm);
+    font-weight: 500;
+    color: var(--text);
+}
+
+/* ─── System IDs Card ─────────────────────────────────────────────── */
+.idGrid {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.idItem {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--border);
+}
+
+.idItem:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.idLabel {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--text-light);
+}
+
+.idValue {
+    font-size: 12px;
+    font-family: monospace;
+    color: var(--text);
+    word-break: break-all;
+}
+
+/* ─── Error State ─────────────────────────────────────────────────── */
+.errorContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    padding: 80px 24px;
+    text-align: center;
+}
+
+.errorTitle {
+    font-size: var(--text-xl);
+    font-weight: 700;
+    color: var(--text);
+    margin: 0;
+}
+
+.errorSubtext {
+    font-size: var(--text-sm);
+    color: var(--text-light);
+    margin: 0;
+}
+
+/* ─── Loading Skeletons ───────────────────────────────────────────── */
+.skeletonAvatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: #e2e8f0;
+    flex-shrink: 0;
+    animation: shimmer 1.4s infinite;
+}
+
+.skeletonLines {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding-top: 8px;
+    flex: 1;
+}
+
+.skeletonLine {
+    height: 24px;
+    background: #e2e8f0;
+    border-radius: 6px;
+    animation: shimmer 1.4s infinite;
+}
+
+@keyframes shimmer {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+/* ─── Responsive ──────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+    .container {
+        padding: 16px;
+    }
+
+    .headerCard {
+        padding: 20px;
+    }
+
+    .avatar {
+        width: 64px;
+        height: 64px;
+        font-size: 22px;
+    }
+
+    .title {
+        font-size: var(--text-xl);
+    }
+
+    .metaRow {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+    }
+
+    .metaSeparator {
+        display: none;
+    }
+}

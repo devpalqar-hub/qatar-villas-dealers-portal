@@ -39,4 +39,9 @@ export const staffService = {
         const response = await api.get(`/dealer-staff`, { params: { page, limit } });
         return response.data;
     },
+
+    getStaffById: async (id: string): Promise<StaffMember> => {
+        const response = await api.get(`/dealer-staff/${id}`);
+        return response.data;
+    },
 };

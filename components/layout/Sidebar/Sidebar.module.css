@@ -1,79 +1,70 @@
 .sidebar {
-
     width: 260px;
-
     height: 100vh;
-
     background: var(--sidebar-bg);
-
     color: white;
-
     padding: 28px;
-
     display: flex;
-
     flex-direction: column;
-
-    position: sticky;
-
+    position: fixed;
     top: 0;
+    z-index: 100;
+}
 
+.sidebarHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 32px;
 }
 
 .logo {
-
     font-size: var(--text-2xl);
-
     font-weight: var(--font-bold);
+    margin: 0;
+}
 
-    margin-bottom: 40px;
+.closeMobileBtn {
+    display: none;
+    background: transparent;
+    border: none;
+    color: #cbd5e1;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 6px;
+    transition: 0.2s;
+}
 
+.closeMobileBtn:hover {
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.1);
 }
 
 .nav {
-
     display: flex;
-
     flex-direction: column;
-
     gap: 8px;
-
 }
 
 .link {
-
     display: flex;
-
     align-items: center;
-
     gap: 14px;
-
     padding: 14px 18px;
-
     color: #cbd5e1;
-
     text-decoration: none;
-
     border-radius: 12px;
-
     transition: .2s;
-
 }
 
 .link:hover {
-
     background: rgba(255, 255, 255, .08);
-
     color: white;
-
 }
 
 .active {
-
     background: var(--primary);
-
     color: white;
-
 }
 
 .footer {
@@ -101,4 +92,49 @@
 
 .logoutBtn:hover {
     background: rgba(239, 68, 68, 0.1);
-}
+}
+
+/* Backdrop Overlay */
+.overlay {
+    display: none;
+}
+
+/* Responsive Drawer (< 1024px) */
+@media (max-width: 1023px) {
+    .sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        z-index: 1000;
+        transform: translateX(-100%);
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 4px 0 24px rgba(0, 0, 0, 0.3);
+    }
+
+    .open {
+        transform: translateX(0);
+    }
+
+    .closeMobileBtn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .overlay {
+        display: block;
+        position: fixed;
+        inset: 0;
+        background: rgba(15, 23, 42, 0.6);
+        backdrop-filter: blur(2px);
+        z-index: 999;
+        animation: fadeIn 0.2s ease-out;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+}
+

@@ -22,25 +22,22 @@ export default function DealerOnboardingStepper({ currentStep }: StepperProps) {
                     <div key={step.id} style={{ display: "flex", alignItems: "center", flex: index === steps.length - 1 ? 0 : 1 }}>
                         <div className={styles.stepWrapper}>
                             <div
-                                className={`${styles.stepIcon} ${
-                                    isActive ? styles.active : ""
-                                } ${isCompleted ? styles.completed : ""}`}
+                                className={`${styles.stepIcon} ${isActive ? styles.active : ""
+                                    } ${isCompleted ? styles.completed : ""}`}
                             >
                                 {isCompleted ? <FiCheck /> : step.id}
                             </div>
                             <span
-                                className={`${styles.stepLabel} ${
-                                    isActive ? styles.active : ""
-                                } ${isCompleted ? styles.completed : ""}`}
+                                className={`${styles.stepLabel} ${isActive ? styles.active : ""
+                                    } ${isCompleted ? styles.completed : ""}`}
                             >
                                 {step.label}
                             </span>
                         </div>
                         {index < steps.length - 1 && (
                             <div
-                                className={`${styles.connector} ${
-                                    currentStep > step.id ? styles.completed : ""
-                                }`}
+                                className={`${styles.connector} ${currentStep > step.id ? styles.completed : ""
+                                    }`}
                             ></div>
                         )}
                     </div>

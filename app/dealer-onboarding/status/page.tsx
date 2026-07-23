@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { FiX, FiArrowLeft } from "react-icons/fi";
 import { useDealerOnboarding } from "../../../hooks/useDealerOnboarding";
-import StatusCard from "../../../components/dealer-onboarding/StatusCard";
+import StatusCard from "@/components/dealer-onboarding/StatusCard";
 import Input from "../../../components/ui/Input/Input";
 import Button from "../../../components/ui/Button/Button";
 import styles from "./page.module.css";
