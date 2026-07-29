@@ -88,3 +88,39 @@
     color: var(--danger);
     margin-left: 4px;
 }
+
+/* ─── Responsive Media Queries ─── */
+@media (max-width: 1023px) {
+    .container {
+        padding: 0;
+    }
+}
+
+@media (max-width: 768px) {
+    .header {
+        margin-bottom: 24px;
+    }
+
+    .content {
+        padding: 20px 16px;
+        border-radius: 12px;
+    }
+
+    .formGrid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .footer {
+        flex-direction: column-reverse;
+        gap: 12px;
+        margin-top: 28px;
+        padding-top: 20px;
+    }
+
+    .footer > button {
+        width: 100%;
+        justify-content: center;
+    }
+}
+

@@ -1,0 +1,133 @@
+.row {
+    display: flex;
+    margin-bottom: 14px;
+    width: 100%;
+}
+
+.incomingRow {
+    justify-content: flex-start;
+}
+
+.outgoingRow {
+    justify-content: flex-end;
+}
+
+.bubble {
+    max-width: 72%;
+    padding: 12px 16px;
+    border-radius: 16px;
+    font-size: 14px;
+    line-height: 1.5;
+    position: relative;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.incoming {
+    background: #ffffff;
+    color: #1e293b;
+    border-top-left-radius: 4px;
+    border: 1px solid #f1f5f9;
+}
+
+.outgoing {
+    background: #FDF0F3; /* Soft burgundy tint per design screenshot */
+    color: #1e293b;
+    border-top-right-radius: 4px;
+    border: 1px solid #fce7f3;
+}
+
+.textContent {
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+/* Image Message */
+.imageContainer {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.imageItem {
+    width: 100%;
+    max-height: 180px;
+    object-fit: cover;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.imageItem:hover {
+    transform: scale(1.02);
+}
+
+.imageCaption {
+    font-size: 13px;
+    color: #334155;
+    margin-top: 6px;
+}
+
+/* Location Message */
+.locationCard {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(255, 255, 255, 0.7);
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 1px solid #e2e8f0;
+    margin-bottom: 6px;
+}
+
+.locationIcon {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    background: #FDF2F4;
+    color: var(--primary, #8A1538);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.locationDetails {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.locationTitle {
+    font-size: 13px;
+    font-weight: 600;
+    color: #0f172a;
+}
+
+.locationCoords {
+    font-size: 11px;
+    color: #64748b;
+}
+
+/* Footer: Timestamp & Read Status */
+.meta {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 4px;
+    margin-top: 4px;
+    font-size: 11px;
+    color: #94a3b8;
+}
+
+.statusIcon {
+    color: var(--primary, #8A1538);
+    display: inline-flex;
+    align-items: center;
+}
+
+@media (max-width: 768px) {
+    .bubble {
+        max-width: 88%;
+    }
+}

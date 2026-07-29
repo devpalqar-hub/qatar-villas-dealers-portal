@@ -5,6 +5,7 @@ import s from "./steps.module.css";
 import { StepProps } from "./types";
 
 export default function Step2PropertyDetails({ formData, updateFormData, options }: StepProps) {
+
     return (
         <div>
             <h2 className={pageStyles.stepTitle}>Step 2: Property Details</h2>
@@ -48,7 +49,9 @@ export default function Step2PropertyDetails({ formData, updateFormData, options
                     >
                         <option value="">Select Option...</option>
                         {options?.furnishingOptions?.map((opt) => (
-                            <option key={opt} value={opt}>{opt}</option>
+                            <option key={opt.id} value={opt.title}>
+                                {opt.title}
+                            </option>
                         ))}
                     </select>
                 </div>

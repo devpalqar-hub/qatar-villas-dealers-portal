@@ -1,0 +1,44 @@
+.banner {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    background: #fff5f5;
+    border: 1px solid #fecaca;
+    border-radius: 12px;
+    padding: 18px 22px;
+    margin-bottom: 24px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+}
+
+.iconCircle {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #991b1b;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.title {
+    font-size: 15px;
+    font-weight: 700;
+    color: #991b1b;
+    margin: 0;
+}
+
+.description {
+    font-size: 13px;
+    color: #7f1d1d;
+    margin: 0;
+    line-height: 1.5;
+}

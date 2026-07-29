@@ -37,7 +37,7 @@ export function useDealerOnboarding() {
         }
     };
 
-    const submitBusinessDetails = async (data: BusinessDetailsData) => {
+    const submitBusinessDetails = async (data: BusinessDetailsData | FormData) => {
         if (!submissionId) {
             setError("No active submission ID found.");
             return;

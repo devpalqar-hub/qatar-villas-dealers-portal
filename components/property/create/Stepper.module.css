@@ -71,3 +71,28 @@
     background: var(--primary-light);
     color: var(--primary);
 }
+
+@media (max-width: 640px) {
+    .stepper {
+        overflow-x: auto;
+        padding-bottom: 28px;
+        margin-bottom: 20px;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .step {
+        padding: 0 8px;
+    }
+
+    .circle {
+        width: 28px;
+        height: 28px;
+        font-size: 12px;
+    }
+
+    .label {
+        font-size: 10px;
+        top: 34px;
+    }
+}
+

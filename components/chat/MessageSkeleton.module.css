@@ -1,0 +1,140 @@
+.skeletonWrapper {
+    padding: 20px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    flex: 1;
+}
+
+.headerSkeleton {
+    height: 16px;
+    border-radius: 6px;
+    width: 60px;
+    margin: 0 auto;
+    background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+}
+
+.incomingRow {
+    display: flex;
+    align-items: flex-end;
+    gap: 10px;
+    justify-content: flex-start;
+}
+
+.outgoingRow {
+    display: flex;
+    align-items: flex-end;
+    gap: 10px;
+    justify-content: flex-end;
+}
+
+.avatarSkeleton {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+}
+
+.bubbleSkeleton {
+    border-radius: 16px;
+    background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+}
+
+.incomingBubble {
+    border-top-left-radius: 4px;
+}
+
+.outgoingBubble {
+    border-top-right-radius: 4px;
+    background: linear-gradient(90deg, #fce7f3 25%, #fdf2f4 50%, #fce7f3 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: 200% 0;
+    }
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+.errorState {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    padding: 32px 24px;
+    text-align: center;
+    gap: 12px;
+}
+
+.errorIcon {
+    color: #ef4444;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 4px;
+}
+
+.errorTitle {
+    font-size: 15px;
+    font-weight: 600;
+    color: #1e293b;
+}
+
+.errorMessage {
+    font-size: 13px;
+    color: #64748b;
+    max-width: 320px;
+}
+
+.retryBtn {
+    margin-top: 4px;
+    padding: 8px 20px;
+    border-radius: 8px;
+    border: 1px solid var(--primary, #8A1538);
+    background: transparent;
+    color: var(--primary, #8A1538);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.retryBtn:hover {
+    background: var(--primary, #8A1538);
+    color: #ffffff;
+}
+
+.loadMoreBar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 0;
+    gap: 8px;
+    color: #64748b;
+    font-size: 13px;
+}
+
+.loadMoreSpinner {
+    width: 18px;
+    height: 18px;
+    border: 2px solid #e2e8f0;
+    border-top-color: var(--primary, #8A1538);
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}

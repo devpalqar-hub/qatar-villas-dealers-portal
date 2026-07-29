@@ -288,6 +288,17 @@
             rgba(20, 20, 30, .15));
 }
 
+.heroOverlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg,
+            rgba(20, 20, 30, 0.05) 0%,
+            rgba(20, 20, 30, 0.1) 60%,
+            rgba(20, 20, 30, 0.3) 100%);
+    pointer-events: none;
+    z-index: 5;
+}
+
 /* ===========================
    TRUSTED CARD
 =========================== */
@@ -474,6 +485,99 @@
     font-size: 11px;
     color: #94a3b8;
     margin-top: 4px;
+}
+
+/* Single Common Document Upload */
+.fileUploadArea {
+    border: 2px dashed #cbd5e1;
+    border-radius: 12px;
+    padding: 32px 20px;
+    text-align: center;
+    background: #f8fafc;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.fileUploadArea:hover {
+    border-color: #8A1538;
+    background: rgba(138, 21, 56, 0.03);
+}
+
+.uploadIcon {
+    font-size: 36px;
+    color: #8A1538;
+    margin-bottom: 4px;
+}
+
+.uploadText {
+    font-size: 14px;
+    color: #1e293b;
+    font-weight: 600;
+}
+
+.uploadHint {
+    font-size: 12px;
+    color: #64748b;
+}
+
+.fileListGrid {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.fileItemCard {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    gap: 12px;
+}
+
+.fileMetaInfo {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    overflow: hidden;
+}
+
+.fileNameText {
+    font-size: 13px;
+    font-weight: 600;
+    color: #1e293b;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.fileSizeText {
+    font-size: 11px;
+    color: #64748b;
+}
+
+.removeFileBtn {
+    background: transparent;
+    border: none;
+    color: #ef4444;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px;
+    border-radius: 6px;
+    transition: background 0.2s ease;
+}
+
+.removeFileBtn:hover {
+    background: #fee2e2;
 }
 
 /* Documents Grid */

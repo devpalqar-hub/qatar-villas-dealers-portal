@@ -1,0 +1,103 @@
+.footer {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    background: #ffffff;
+    border-top: 1px solid #e2e8f0;
+    min-height: 64px;
+}
+
+.attachBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    border: none;
+    background: #FDF2F4;
+    color: var(--primary, #8A1538);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.attachBtn:hover {
+    background: #FCE4E9;
+}
+
+.inputWrapper {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 24px;
+    padding: 4px 14px;
+    transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.inputWrapper:focus-within {
+    border-color: var(--primary, #8A1538);
+    background: #ffffff;
+}
+
+.input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    font-size: 14px;
+    color: #1e293b;
+    outline: none;
+    padding: 8px 4px;
+    resize: none;
+    max-height: 100px;
+}
+
+.input::placeholder {
+    color: #94a3b8;
+}
+
+.emojiBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    color: #94a3b8;
+    cursor: pointer;
+    padding: 6px;
+    border-radius: 50%;
+    transition: color 0.2s ease;
+}
+
+.emojiBtn:hover {
+    color: #475569;
+}
+
+.sendBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    border: none;
+    background: var(--primary, #8A1538);
+    color: #ffffff;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.sendBtn:hover {
+    background: var(--primary-hover, #770427);
+    transform: scale(1.03);
+}
+
+.sendBtn:disabled {
+    background: #cbd5e1;
+    cursor: not-allowed;
+    transform: none;
+}

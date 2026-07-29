@@ -19,7 +19,7 @@ export default function Step3FeaturesAmenities({ formData, updateFormData, optio
             <h2 className={pageStyles.stepTitle}>Step 3: Features &amp; Amenities</h2>
             <div className={pageStyles.formGrid}>
                 <div className={s.checkboxGroup}>
-                    
+
                 </div>
 
                 <Input
@@ -41,14 +41,14 @@ export default function Step3FeaturesAmenities({ formData, updateFormData, optio
                     <label className={pageStyles.label}>Amenities</label>
                     <div className={s.tagGrid}>
                         {options?.amenities?.map((amenity) => (
-                            <label key={amenity} className={s.tagLabel}>
+                            <label key={amenity.id} className={s.tagLabel}>
                                 <input
                                     type="checkbox"
                                     className={s.checkbox}
-                                    checked={(formData.amenities || []).includes(amenity)}
-                                    onChange={() => handleAmenityToggle(amenity)}
+                                    checked={(formData.amenities || []).includes(amenity.id)}
+                                    onChange={() => handleAmenityToggle(amenity.id)}
                                 />
-                                {amenity}
+                                {amenity.title}
                             </label>
                         ))}
                     </div>

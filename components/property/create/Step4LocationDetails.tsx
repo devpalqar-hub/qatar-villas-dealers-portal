@@ -5,15 +5,14 @@ import s from "./steps.module.css";
 import { StepProps } from "./types";
 
 export default function Step4LocationDetails({ formData, updateFormData, options }: StepProps) {
-    const handleNearbyTagToggle = (tag: string) => {
+    const handleNearbyTagToggle = (tagId: string) => {
         const currentTags = formData.nearbyTags || [];
-        if (currentTags.includes(tag)) {
-            updateFormData({ nearbyTags: currentTags.filter((t) => t !== tag) });
+        if (currentTags.includes(tagId)) {
+            updateFormData({ nearbyTags: currentTags.filter((t) => t !== tagId) });
         } else {
-            updateFormData({ nearbyTags: [...currentTags, tag] });
+            updateFormData({ nearbyTags: [...currentTags, tagId] });
         }
     };
-
     return (
         <div>
             <h2 className={pageStyles.stepTitle}>Step 4: Location Details</h2>
@@ -95,14 +94,14 @@ export default function Step4LocationDetails({ formData, updateFormData, options
                     <label className={pageStyles.label}>Nearby Tags</label>
                     <div className={s.nearbyGrid}>
                         {options?.nearbyTags?.map((tag) => (
-                            <label key={tag} className={s.tagLabel}>
+                            <label key={tag.id} className={s.tagLabel}>
                                 <input
                                     type="checkbox"
                                     className={s.checkbox}
-                                    checked={(formData.nearbyTags || []).includes(tag)}
-                                    onChange={() => handleNearbyTagToggle(tag)}
+                                    checked={(formData.nearbyTags || []).includes(tag.id)}
+                                    onChange={() => handleNearbyTagToggle(tag.id)}
                                 />
-                                {tag.replace(/_/g, ' ')}
+                                {tag.title}
                             </label>
                         ))}
                     </div>

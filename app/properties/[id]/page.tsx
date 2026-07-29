@@ -338,7 +338,7 @@ export default function PropertyDetailPage() {
                                 <div className={styles.chipsGrid}>
                                     {property.amenities.map((amenity, idx) => (
                                         <span key={idx} className={styles.chip}>
-                                            <FiCheck className={styles.chipIcon} /> {amenity}
+                                            <FiCheck className={styles.chipIcon} /> {typeof amenity === "string" ? amenity : amenity.title}
                                         </span>
                                     ))}
                                 </div>
@@ -352,9 +352,9 @@ export default function PropertyDetailPage() {
                                     <FiTag size={18} /> Nearby Facilities
                                 </h2>
                                 <div className={styles.chipsGrid}>
-                                    {property.nearbyTags.map((tag, idx) => (
+                                    {property.nearbyTags.map((tag: any, idx) => (
                                         <span key={idx} className={styles.chip}>
-                                            <FiMapPin className={styles.chipIcon} /> {tag}
+                                            <FiMapPin className={styles.chipIcon} /> {typeof tag === "string" ? tag : tag.title || tag.id}
                                         </span>
                                     ))}
                                 </div>

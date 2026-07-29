@@ -26,6 +26,7 @@ const menuItems = [
     { title: "Inquiries",   href: "/inquiries",    icon: FiMessageCircle },
     { title: "Analytics",   href: "/analytics",    icon: FiBarChart2     },
     { title: "Subscription",href: "/subscription", icon: FiCreditCard    },
+    { title: "Chat",        href: "/chat",         icon: FiMessageCircle },
     { title: "Settings",    href: "/settings",     icon: FiSettings      },
 ];
 

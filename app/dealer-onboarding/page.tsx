@@ -19,7 +19,7 @@ import {
 } from "react-icons/fi";
 import { useDealerOnboarding } from "@/hooks/useDealerOnboarding";
 import { BasicInfoData, BusinessDetailsData } from "@/services/dealerOnboarding.service";
-import { uploadFileToS3 } from "@/services/upload.service";
+// uploadFileToS3 not used here – files sent as multipart form-data directly
 import StatusCard from "@/components/dealer-onboarding/StatusCard";
 import SubmissionSuccess from "@/components/dealer-onboarding/SubmissionSuccess";
 import styles from "./page.module.css";
@@ -66,25 +66,10 @@ export default function DealerOnboardingPage() {
     });
     const [bizErrors, setBizErrors] = useState<Record<string, string>>({});
 
-    // Documents state per type (Trade License, RERA, Logo, Other)
-    const [docFiles, setDocFiles] = useState<{
-        tradeLicense: File | null;
-        reraCertificate: File | null;
-        companyLogo: File | null;
-        otherDoc: File | null;
-    }>({
-        tradeLicense: null,
-        reraCertificate: null,
-        companyLogo: null,
-        otherDoc: null,
-    });
-    const [uploading, setUploading] = useState(false);
-
-    // Refs for hidden file inputs
-    const tradeLicenseRef = useRef<HTMLInputElement>(null);
-    const reraRef = useRef<HTMLInputElement>(null);
-    const logoRef = useRef<HTMLInputElement>(null);
-    const otherDocRef = useRef<HTMLInputElement>(null);
+    // Documents state (single common document upload list)
+    const [documentFiles, setDocumentFiles] = useState<File[]>([]);
+    const [docError, setDocError] = useState<string | null>(null);
+    const docInputRef = useRef<HTMLInputElement>(null);
 
     // ── Handlers Page 1 ──
     const handleBasicChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -130,10 +115,23 @@ export default function DealerOnboardingPage() {
         }
     };
 
-    const handleFileSelect = (key: keyof typeof docFiles, file: File | null) => {
-        if (file) {
-            setDocFiles((prev) => ({ ...prev, [key]: file }));
-        }
+    const handleDocFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (!e.target.files) return;
+        const newFiles = Array.from(e.target.files);
+        setDocumentFiles((prev) => [...prev, ...newFiles]);
+        setDocError(null);
+        // Reset input so same file can be re-added if removed
+        e.target.value = "";
+    };
+
+    const handleRemoveDoc = (index: number) => {
+        setDocumentFiles((prev) => prev.filter((_, i) => i !== index));
+    };
+
+    const formatFileSize = (bytes: number): string => {
+        if (bytes < 1024) return `${bytes} B`;
+        if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+        return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
     };
 
     const handleBizSubmit = async (e: React.FormEvent) => {
@@ -149,36 +147,25 @@ export default function DealerOnboardingPage() {
             return;
         }
 
-        // Upload files to S3 if attached
-        let documentUrls: string[] = [];
-        const filesToUpload = Object.values(docFiles).filter(Boolean) as File[];
-
-        if (filesToUpload.length > 0) {
-            setUploading(true);
-            try {
-                documentUrls = await uploadFileToS3(filesToUpload);
-            } catch (err: any) {
-                setError(err.message || "Failed to upload documents. Please try again.");
-                setUploading(false);
-                return;
-            } finally {
-                setUploading(false);
-            }
+        // At least one document is required
+        if (documentFiles.length === 0) {
+            setDocError("Please upload at least one document before submitting.");
+            return;
         }
 
-        const payload: BusinessDetailsData = {
-            tradeNumber: bizData.tradeNumber,
-            ...(bizData.reraNumber ? { reraNumber: bizData.reraNumber } : {}),
-            address: bizData.address,
-            city: bizData.city,
-            country: bizData.country,
-            ...(bizData.website ? { website: bizData.website } : {}),
-            ...(bizData.description ? { description: bizData.description } : {}),
-            ...(documentUrls.length > 0 ? { documents: documentUrls } : {}),
-        };
+        // Build multipart FormData — backend expects documents as file uploads
+        const formData = new FormData();
+        formData.append("tradeNumber", bizData.tradeNumber);
+        if (bizData.reraNumber) formData.append("reraNumber", bizData.reraNumber);
+        formData.append("address", bizData.address);
+        formData.append("city", bizData.city);
+        formData.append("country", bizData.country);
+        if (bizData.website) formData.append("website", bizData.website);
+        if (bizData.description) formData.append("description", bizData.description);
+        documentFiles.forEach((file) => formData.append("documents", file));
 
         try {
-            await submitBusinessDetails(payload);
+            await submitBusinessDetails(formData);
         } catch (err) {
             // Error handled in hook
         }
@@ -451,184 +438,62 @@ export default function DealerOnboardingPage() {
                             </div>
                         </div>
 
-                        {/* Section 3: Documents Upload Grid */}
+                        {/* Section 3: Documents Upload */}
                         <div className={styles.sectionCard}>
-                            <h2 className={styles.sectionHeading}>Documents</h2>
+                            <h2 className={styles.sectionHeading}>
+                                Documents <span className={styles.requiredStar}>*</span>
+                            </h2>
                             <p className={styles.sectionSubHeading}>
-                                Please upload the required documents for agency verification.
+                                Upload at least one document for agency verification (Trade License, RERA Certificate, etc.)
                             </p>
 
-                            <div className={styles.docGrid}>
-                                {/* Document 1: Trade License */}
-                                <div className={styles.docCard}>
-                                    <div className={styles.docHeader}>
-                                        <span className={styles.docName}>
-                                            Trade License <span className={styles.requiredStar}>*</span>
-                                        </span>
-                                        {docFiles.tradeLicense ? (
-                                            <span className={styles.badgeApproved}>Attached</span>
-                                        ) : (
-                                            <span className={styles.badgeRequired}>Required</span>
-                                        )}
-                                    </div>
-                                    <div className={styles.filePreviewBox}>
-                                        <FiFileText className={styles.fileIcon} />
-                                        <div className={styles.fileMeta}>
-                                            <span className={styles.fileName}>
-                                                {docFiles.tradeLicense
-                                                    ? docFiles.tradeLicense.name
-                                                    : "trade_license.pdf"}
-                                            </span>
-                                            <span className={styles.fileDate}>
-                                                {docFiles.tradeLicense ? "Ready to upload" : "No file chosen"}
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <input
-                                        type="file"
-                                        ref={tradeLicenseRef}
-                                        style={{ display: "none" }}
-                                        accept=".pdf,.png,.jpg,.jpeg"
-                                        onChange={(e) =>
-                                            handleFileSelect("tradeLicense", e.target.files?.[0] || null)
-                                        }
-                                    />
-                                    <button
-                                        type="button"
-                                        className={styles.uploadActionBtn}
-                                        onClick={() => tradeLicenseRef.current?.click()}
-                                    >
-                                        {docFiles.tradeLicense ? "Replace File" : "Upload File"}
-                                    </button>
-                                    <span className={styles.docHint}>PDF, PNG, JPG (Max. 10MB)</span>
-                                </div>
-
-                                {/* Document 2: RERA Certificate */}
-                                <div className={styles.docCard}>
-                                    <div className={styles.docHeader}>
-                                        <span className={styles.docName}>RERA Certificate</span>
-                                        {docFiles.reraCertificate ? (
-                                            <span className={styles.badgeApproved}>Attached</span>
-                                        ) : (
-                                            <span className={styles.badgePending}>Optional</span>
-                                        )}
-                                    </div>
-                                    <div className={styles.filePreviewBox}>
-                                        <FiFileText className={styles.fileIcon} />
-                                        <div className={styles.fileMeta}>
-                                            <span className={styles.fileName}>
-                                                {docFiles.reraCertificate
-                                                    ? docFiles.reraCertificate.name
-                                                    : "rera_certificate.pdf"}
-                                            </span>
-                                            <span className={styles.fileDate}>
-                                                {docFiles.reraCertificate ? "Ready to upload" : "No file chosen"}
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <input
-                                        type="file"
-                                        ref={reraRef}
-                                        style={{ display: "none" }}
-                                        accept=".pdf,.png,.jpg,.jpeg"
-                                        onChange={(e) =>
-                                            handleFileSelect("reraCertificate", e.target.files?.[0] || null)
-                                        }
-                                    />
-                                    <button
-                                        type="button"
-                                        className={styles.uploadActionBtn}
-                                        onClick={() => reraRef.current?.click()}
-                                    >
-                                        {docFiles.reraCertificate ? "Replace File" : "Upload File"}
-                                    </button>
-                                    <span className={styles.docHint}>PDF, PNG, JPG (Max. 10MB)</span>
-                                </div>
-
-                                {/* Document 3: Company Logo */}
-                                <div className={styles.docCard}>
-                                    <div className={styles.docHeader}>
-                                        <span className={styles.docName}>Company Logo</span>
-                                        {docFiles.companyLogo ? (
-                                            <span className={styles.badgeApproved}>Attached</span>
-                                        ) : (
-                                            <span className={styles.badgePending}>Optional</span>
-                                        )}
-                                    </div>
-                                    <div className={styles.filePreviewBox}>
-                                        <FiFileText className={styles.fileIcon} />
-                                        <div className={styles.fileMeta}>
-                                            <span className={styles.fileName}>
-                                                {docFiles.companyLogo
-                                                    ? docFiles.companyLogo.name
-                                                    : "company_logo.png"}
-                                            </span>
-                                            <span className={styles.fileDate}>
-                                                {docFiles.companyLogo ? "Ready to upload" : "No file chosen"}
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <input
-                                        type="file"
-                                        ref={logoRef}
-                                        style={{ display: "none" }}
-                                        accept=".png,.jpg,.jpeg,.svg"
-                                        onChange={(e) =>
-                                            handleFileSelect("companyLogo", e.target.files?.[0] || null)
-                                        }
-                                    />
-                                    <button
-                                        type="button"
-                                        className={styles.uploadActionBtn}
-                                        onClick={() => logoRef.current?.click()}
-                                    >
-                                        {docFiles.companyLogo ? "Replace File" : "Upload File"}
-                                    </button>
-                                    <span className={styles.docHint}>PNG, JPG (Max. 5MB)</span>
-                                </div>
-
-                                {/* Document 4: Other Documents */}
-                                <div className={styles.docCard}>
-                                    <div className={styles.docHeader}>
-                                        <span className={styles.docName}>Other Documents</span>
-                                        {docFiles.otherDoc ? (
-                                            <span className={styles.badgeApproved}>Attached</span>
-                                        ) : (
-                                            <span className={styles.badgePending}>Optional</span>
-                                        )}
-                                    </div>
-                                    <div className={styles.filePreviewBox}>
-                                        <FiFileText className={styles.fileIcon} />
-                                        <div className={styles.fileMeta}>
-                                            <span className={styles.fileName}>
-                                                {docFiles.otherDoc
-                                                    ? docFiles.otherDoc.name
-                                                    : "other_document.pdf"}
-                                            </span>
-                                            <span className={styles.fileDate}>
-                                                {docFiles.otherDoc ? "Ready to upload" : "No file chosen"}
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <input
-                                        type="file"
-                                        ref={otherDocRef}
-                                        style={{ display: "none" }}
-                                        accept=".pdf,.png,.jpg,.jpeg"
-                                        onChange={(e) =>
-                                            handleFileSelect("otherDoc", e.target.files?.[0] || null)
-                                        }
-                                    />
-                                    <button
-                                        type="button"
-                                        className={styles.uploadActionBtn}
-                                        onClick={() => otherDocRef.current?.click()}
-                                    >
-                                        {docFiles.otherDoc ? "Replace File" : "Upload File"}
-                                    </button>
-                                    <span className={styles.docHint}>PDF, PNG, JPG (Max. 10MB)</span>
-                                </div>
+                            {/* Drop Zone */}
+                            <div
+                                className={styles.fileUploadArea}
+                                onClick={() => docInputRef.current?.click()}
+                                style={docError ? { borderColor: "#dc2626" } : undefined}
+                            >
+                                <FiUploadCloud className={styles.uploadIcon} />
+                                <span className={styles.uploadText}>Click to upload documents</span>
+                                <span className={styles.uploadHint}>PDF, PNG, JPG — you can add multiple files</span>
+                                <input
+                                    ref={docInputRef}
+                                    type="file"
+                                    multiple
+                                    accept=".pdf,.png,.jpg,.jpeg"
+                                    style={{ display: "none" }}
+                                    onChange={handleDocFileChange}
+                                />
                             </div>
+
+                            {docError && (
+                                <p style={{ color: "#dc2626", fontSize: "13px", marginTop: "8px" }}>
+                                    {docError}
+                                </p>
+                            )}
+
+                            {/* Uploaded file list */}
+                            {documentFiles.length > 0 && (
+                                <div className={styles.fileListGrid} style={{ marginTop: "16px" }}>
+                                    {documentFiles.map((file, idx) => (
+                                        <div key={idx} className={styles.fileItemCard}>
+                                            <FiFileText style={{ color: "#8A1538", fontSize: "20px", flexShrink: 0 }} />
+                                            <div className={styles.fileMetaInfo}>
+                                                <span className={styles.fileNameText}>{file.name}</span>
+                                                <span className={styles.fileSizeText}>{formatFileSize(file.size)}</span>
+                                            </div>
+                                            <button
+                                                type="button"
+                                                className={styles.removeFileBtn}
+                                                onClick={() => handleRemoveDoc(idx)}
+                                                aria-label="Remove file"
+                                            >
+                                                <FiX size={16} />
+                                            </button>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
                         </div>
 
                         {/* Footer Buttons */}
@@ -644,9 +509,9 @@ export default function DealerOnboardingPage() {
                             <button
                                 type="submit"
                                 className={styles.resubmitBtn}
-                                disabled={loading || uploading}
+                                disabled={loading}
                             >
-                                {loading || uploading ? (
+                                {loading ? (
                                     "Submitting Application..."
                                 ) : (
                                     <>
@@ -659,7 +524,7 @@ export default function DealerOnboardingPage() {
 
                     {/* Site Footer */}
                     <footer className={styles.siteFooter}>
-                        <span>© 2024 Villas Qatar. All rights reserved.</span> |{" "}
+                        <span>© 2026 Villas Qatar. All rights reserved.</span> |{" "}
                         <a href="#">Terms of Service</a> | <a href="#">Privacy Policy</a> |{" "}
                         <a href="#">Contact Us</a>
                     </footer>
@@ -799,9 +664,9 @@ export default function DealerOnboardingPage() {
                                     <clipPath id="heroClip" clipPathUnits="objectBoundingBox">
                                         <path
                                             d="
-                    M0.18,0
-                    C0.06,0.08 0,0.25 0,0.5
-                    C0,0.75 0.06,0.92 0.18,1
+                    M0.22,0
+                    C0.18,0.08 0,0.47 0,0.5
+                    C0,0.68 0.5,1.7 0.22,1
                     L1,1
                     L1,0
                     Z
@@ -819,6 +684,7 @@ export default function DealerOnboardingPage() {
                                     priority
                                     className={styles.heroImg}
                                 />
+                                <div className={styles.heroOverlay} />
                             </div>
                         </>
                     </div>

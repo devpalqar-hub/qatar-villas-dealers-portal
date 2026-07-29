@@ -6,6 +6,12 @@ export interface PropertyPhoto {
     sortOrder: number;
 }
 
+interface Amenity {
+    id: string;
+    title: string;
+    image: string | null;
+}
+
 export interface CreatePropertyPayload {
     propertyName: string;
     description: string;
@@ -42,10 +48,21 @@ export interface CreatePropertyPayload {
     photos: PropertyPhoto[];
 }
 
+interface FurnishingOption {
+    id: string;
+    title: string;
+}
+
+interface NearbyTagOption {
+    id: string;
+    title: string;
+    image: string | null;
+}
+    
 export interface PropertyOptionsResponse {
-    amenities: string[];
-    nearbyTags: string[];
-    furnishingOptions: string[];
+    amenities: Amenity[];
+    nearbyTags: NearbyTagOption[];
+    furnishingOptions: FurnishingOption[];
     areaSuggestions: string[];
 }
 
@@ -133,7 +150,7 @@ export interface PropertyDetail {
     contactPhone: string;
     contactWhatsapp: string;
     contactVerified?: boolean;
-    amenities: string[];
+    amenities: Amenity[];
     nearbyTags: string[];
     otherFeatures?: string;
     status: string;
