@@ -30,18 +30,20 @@ export default function CreatePropertyPage() {
     const [error, setError] = useState<string | null>(null);
     const [success, setSuccess] = useState(false);
 
-    // Initial empty state matching payload
+    // Initial state matching backend payload structure
     const [formData, setFormData] = useState<Partial<CreatePropertyPayload>>({
         purpose: "SALE",
-        type: "VILLA",
-        furnishingStatus: "",
+        typeId: "cuid_villa",
+        furnishingId: "cuid_furnished",
+        municipalityId: "cuid_doha",
         priceNegotiable: false,
         contactVerified: false,
+        contactPhone: "",
+        contactWhatsapp: "",
         extraProperties: { privatePool: false },
         amenities: [],
         nearbyTags: [],
         photos: [],
-        municipality: "DOHA",
     });
 
     useEffect(() => {
@@ -49,6 +51,18 @@ export default function CreatePropertyPage() {
             try {
                 const res = await propertyService.getPropertyOptions();
                 setOptions(res);
+                // If backend options provide defaults, set default IDs
+                if (res) {
+                    const firstType = res.types?.[0]?.id || res.propertyTypes?.[0]?.id;
+                    const firstFurnish = res.furnishingOptions?.[0]?.id;
+                    const firstMuni = res.municipalities?.[0]?.id;
+                    setFormData((prev) => ({
+                        ...prev,
+                        typeId: prev.typeId || firstType || "cuid_villa",
+                        furnishingId: prev.furnishingId || firstFurnish || "cuid_furnished",
+                        municipalityId: prev.municipalityId || firstMuni || "cuid_doha",
+                    }));
+                }
             } catch (err) {
                 console.error("Failed to load options", err);
             }
@@ -61,7 +75,6 @@ export default function CreatePropertyPage() {
     };
 
     const handleNext = () => {
-        // Basic validation can be added here
         if (currentStep < STEPS.length - 1) {
             setCurrentStep((prev) => prev + 1);
             window.scrollTo(0, 0);
@@ -79,13 +92,37 @@ export default function CreatePropertyPage() {
         setLoading(true);
         setError(null);
         try {
-            // Need to append default contact info since it's required by backend 
-            // In a real app this might come from the dealer's profile
-            const finalData = {
-                ...formData,
-                contactPhone: formData.contactPhone || "+97400000000",
-                contactWhatsapp: formData.contactWhatsapp || "+97400000000",
-            } as CreatePropertyPayload;
+            const finalData: CreatePropertyPayload = {
+                propertyName: formData.propertyName || "",
+                description: formData.description || "",
+                purpose: formData.purpose || "SALE",
+                typeId: formData.typeId || "cuid_villa",
+                latitude: formData.latitude ?? 25.3548,
+                longitude: formData.longitude ?? 51.1839,
+                bedrooms: formData.bedrooms ?? 0,
+                bathrooms: formData.bathrooms ?? 0,
+                area: formData.area ?? 0,
+                livingRooms: formData.livingRooms ?? 0,
+                parkingSpaces: formData.parkingSpaces ?? 0,
+                floorNumber: formData.floorNumber ?? 0,
+                totalFloors: formData.totalFloors ?? 0,
+                yearBuilt: formData.yearBuilt,
+                furnishingId: formData.furnishingId || "cuid_furnished",
+                extraProperties: formData.extraProperties || { privatePool: false },
+                price: formData.price ?? 0,
+                priceNegotiable: formData.priceNegotiable ?? false,
+                addressLine1: formData.addressLine1 || "",
+                addressLine2: formData.addressLine2 || "",
+                areaName: formData.areaName || "",
+                municipalityId: formData.municipalityId || "cuid_doha",
+                contactPhone: formData.contactPhone || "+97455512345",
+                contactWhatsapp: formData.contactWhatsapp || "+97455512345",
+                contactVerified: formData.contactVerified ?? false,
+                amenities: formData.amenities || [],
+                nearbyTags: formData.nearbyTags || [],
+                otherFeatures: formData.otherFeatures || "",
+                photos: formData.photos || [],
+            };
 
             await propertyService.createProperty(finalData);
             setSuccess(true);

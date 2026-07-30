@@ -16,7 +16,7 @@ export interface CreatePropertyPayload {
     propertyName: string;
     description: string;
     purpose: "SALE" | "RENT";
-    type: "VILLA" | "APARTMENT" | "PENTHOUSE" | "LAND";
+    typeId: string;
     latitude: number;
     longitude: number;
     bedrooms: number;
@@ -27,7 +27,7 @@ export interface CreatePropertyPayload {
     floorNumber: number;
     totalFloors: number;
     yearBuilt?: number;
-    furnishingStatus: string;
+    furnishingId: string;
     extraProperties: {
         privatePool?: boolean;
         gardenAreaSqm?: number;
@@ -38,7 +38,7 @@ export interface CreatePropertyPayload {
     addressLine1: string;
     addressLine2?: string;
     areaName: string;
-    municipality: string;
+    municipalityId: string;
     contactPhone: string;
     contactWhatsapp: string;
     contactVerified: boolean;
@@ -48,9 +48,22 @@ export interface CreatePropertyPayload {
     photos: PropertyPhoto[];
 }
 
-interface FurnishingOption {
+export interface PropertyTypeOption {
+    id: string;
+    name?: string;
+    title?: string;
+}
+
+export interface FurnishingOption {
     id: string;
     title: string;
+    name?: string;
+}
+
+export interface MunicipalityOption {
+    id: string;
+    name?: string;
+    title?: string;
 }
 
 interface NearbyTagOption {
@@ -60,6 +73,9 @@ interface NearbyTagOption {
 }
     
 export interface PropertyOptionsResponse {
+    types?: PropertyTypeOption[];
+    propertyTypes?: PropertyTypeOption[];
+    municipalities?: MunicipalityOption[];
     amenities: Amenity[];
     nearbyTags: NearbyTagOption[];
     furnishingOptions: FurnishingOption[];

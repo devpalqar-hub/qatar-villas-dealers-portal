@@ -4,7 +4,20 @@ import pageStyles from "../../../app/properties/create/page.module.css";
 import s from "./steps.module.css";
 import { StepProps } from "./types";
 
-export default function Step1BasicInfo({ formData, updateFormData }: StepProps) {
+const DEFAULT_TYPES = [
+    { id: "cuid_villa", name: "Villa" },
+    { id: "cuid_apartment", name: "Apartment" },
+    { id: "cuid_penthouse", name: "Penthouse" },
+    { id: "cuid_land", name: "Land" },
+];
+
+export default function Step1BasicInfo({ formData, updateFormData, options }: StepProps) {
+    const availableTypes = (options?.types && options.types.length > 0)
+        ? options.types
+        : (options?.propertyTypes && options.propertyTypes.length > 0)
+            ? options.propertyTypes
+            : DEFAULT_TYPES;
+
     return (
         <div>
             <h2 className={pageStyles.stepTitle}>Step 1: Basic Information</h2>
@@ -53,14 +66,44 @@ export default function Step1BasicInfo({ formData, updateFormData }: StepProps) 
                     </label>
                     <select
                         className={s.select}
-                        value={formData.type || "VILLA"}
-                        onChange={(e) => updateFormData({ type: e.target.value as any })}
+                        value={formData.typeId || (availableTypes[0]?.id || "")}
+                        onChange={(e) => updateFormData({ typeId: e.target.value })}
+                        required
                     >
-                        <option value="VILLA">Villa</option>
-                        <option value="APARTMENT">Apartment</option>
-                        <option value="PENTHOUSE">Penthouse</option>
-                        <option value="LAND">Land</option>
+                        <option value="" disabled>Select Property Type</option>
+                        {availableTypes.map((opt: any) => (
+                            <option key={opt.id} value={opt.id}>
+                                {opt.name || opt.title || opt.id}
+                            </option>
+                        ))}
                     </select>
+                </div>
+
+                <Input
+                    label="Contact Phone"
+                    placeholder="e.g. +97455512345"
+                    value={formData.contactPhone || ""}
+                    onChange={(e) => updateFormData({ contactPhone: e.target.value })}
+                    required
+                />
+
+                <Input
+                    label="Contact WhatsApp"
+                    placeholder="e.g. +97455512345"
+                    value={formData.contactWhatsapp || ""}
+                    onChange={(e) => updateFormData({ contactWhatsapp: e.target.value })}
+                />
+
+                <div className={s.checkboxGroup}>
+                    <label className={s.checkboxLabel}>
+                        <input
+                            type="checkbox"
+                            className={s.checkbox}
+                            checked={formData.contactVerified || false}
+                            onChange={(e) => updateFormData({ contactVerified: e.target.checked })}
+                        />
+                        Contact Verified
+                    </label>
                 </div>
             </div>
         </div>

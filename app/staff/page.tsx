@@ -7,7 +7,7 @@ import {
     FiPlus,
     FiSearch,
     FiEye,
-    FiMoreVertical,
+    FiEdit2,
     FiUsers,
     FiCheckCircle,
     FiClock,
@@ -17,8 +17,10 @@ import {
     FiChevronRight,
     FiUserX,
 } from "react-icons/fi";
-import { AppLayout, Button, Badge } from "@/components/ui";
+import { AppLayout, Button, Badge, ConfirmModal } from "@/components/ui";
 import { staffService, StaffMember, GetStaffResponse } from "@/services/staff.service";
+import AddStaffModal from "@/components/staff/AddStaffModal";
+import EditStaffModal from "@/components/staff/EditStaffModal";
 import styles from "./page.module.css";
 
 const AVATAR_CLASSES = [
@@ -55,6 +57,10 @@ export default function StaffPage() {
     const [searchQuery, setSearchQuery] = useState<string>("");
     const [page, setPage] = useState<number>(1);
     const [limit, setLimit] = useState<number>(20);
+    const [isAddModalOpen, setIsAddModalOpen] = useState<boolean>(false);
+    const [staffToDeactivate, setStaffToDeactivate] = useState<StaffMember | null>(null);
+    const [isDeactivating, setIsDeactivating] = useState<boolean>(false);
+    const [staffToEdit, setStaffToEdit] = useState<StaffMember | null>(null);
 
     useEffect(() => {
         fetchStaff(page, limit);
@@ -72,6 +78,20 @@ export default function StaffPage() {
             console.error("Failed to fetch staff members:", error);
         } finally {
             setLoading(false);
+        }
+    };
+
+    const handleConfirmDeactivate = async () => {
+        if (!staffToDeactivate) return;
+        setIsDeactivating(true);
+        try {
+            await staffService.deleteStaff(staffToDeactivate.id);
+            setStaffToDeactivate(null);
+            fetchStaff(page, limit);
+        } catch (error) {
+            console.error("Failed to deactivate staff member:", error);
+        } finally {
+            setIsDeactivating(false);
         }
     };
 
@@ -130,7 +150,7 @@ export default function StaffPage() {
                     </div>
 
                     <div className={styles.headerActions}>
-                        <Button leftIcon={<FiPlus size={16} />}>
+                        <Button leftIcon={<FiPlus size={16} />} onClick={() => setIsAddModalOpen(true)}>
                             Add Staff
                         </Button>
 
@@ -352,9 +372,18 @@ export default function StaffPage() {
                                                         </button>
                                                         <button
                                                             className={styles.actionBtn}
-                                                            title="More Options"
+                                                            title="Edit Staff Member"
+                                                            onClick={() => setStaffToEdit(item)}
                                                         >
-                                                            <FiMoreVertical size={16} />
+                                                            <FiEdit2 size={16} />
+                                                        </button>
+                                                        <button
+                                                            className={`${styles.actionBtn} ${styles.dangerActionBtn}`}
+                                                            title={isItemActive ? "Deactivate Staff Member" : "Staff Member Deactivated"}
+                                                            onClick={() => setStaffToDeactivate(item)}
+                                                            disabled={!isItemActive}
+                                                        >
+                                                            <FiUserX size={16} />
                                                         </button>
                                                     </div>
                                                 </td>
@@ -412,6 +441,33 @@ export default function StaffPage() {
                     </div>
                 </div>
             </div>
+
+            <AddStaffModal
+                open={isAddModalOpen}
+                onClose={() => setIsAddModalOpen(false)}
+                onSuccess={() => fetchStaff(page, limit)}
+            />
+
+            <EditStaffModal
+                open={!!staffToEdit}
+                staffMember={staffToEdit}
+                onClose={() => setStaffToEdit(null)}
+                onSuccess={() => {
+                    setStaffToEdit(null);
+                    fetchStaff(page, limit);
+                }}
+            />
+
+            <ConfirmModal
+                open={!!staffToDeactivate}
+                title="Deactivate Staff Member"
+                description={`Are you sure you want to deactivate ${staffToDeactivate?.staffUser?.name || "this staff member"}? They will lose access to the dealer portal.`}
+                confirmLabel={isDeactivating ? "Deactivating..." : "Deactivate"}
+                cancelLabel="Cancel"
+                intent="danger"
+                onConfirm={handleConfirmDeactivate}
+                onCancel={() => setStaffToDeactivate(null)}
+            />
         </AppLayout>
     );
 }

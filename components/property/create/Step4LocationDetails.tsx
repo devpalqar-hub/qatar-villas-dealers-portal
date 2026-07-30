@@ -4,7 +4,32 @@ import pageStyles from "../../../app/properties/create/page.module.css";
 import s from "./steps.module.css";
 import { StepProps } from "./types";
 
+const DEFAULT_MUNICIPALITIES = [
+    { id: "cuid_doha", name: "Doha" },
+    { id: "cuid_al_rayyan", name: "Al Rayyan" },
+    { id: "cuid_al_wakrah", name: "Al Wakrah" },
+    { id: "cuid_al_khor", name: "Al Khor" },
+    { id: "cuid_al_shamal", name: "Al Shamal" },
+    { id: "cuid_umm_salal", name: "Umm Salal" },
+    { id: "cuid_al_daayen", name: "Al Daayen" },
+];
+
+const DEFAULT_NEARBY_TAGS = [
+    { id: "cuid3", title: "Near Metro Station" },
+    { id: "cuid4", title: "Beach Access" },
+    { id: "cuid5", title: "Shopping Mall" },
+    { id: "cuid6", title: "International School" },
+];
+
 export default function Step4LocationDetails({ formData, updateFormData, options }: StepProps) {
+    const availableMunicipalities = (options?.municipalities && options.municipalities.length > 0)
+        ? options.municipalities
+        : DEFAULT_MUNICIPALITIES;
+
+    const availableNearby = (options?.nearbyTags && options.nearbyTags.length > 0)
+        ? options.nearbyTags
+        : DEFAULT_NEARBY_TAGS;
+
     const handleNearbyTagToggle = (tagId: string) => {
         const currentTags = formData.nearbyTags || [];
         if (currentTags.includes(tagId)) {
@@ -13,6 +38,7 @@ export default function Step4LocationDetails({ formData, updateFormData, options
             updateFormData({ nearbyTags: [...currentTags, tagId] });
         }
     };
+
     return (
         <div>
             <h2 className={pageStyles.stepTitle}>Step 4: Location Details</h2>
@@ -40,17 +66,27 @@ export default function Step4LocationDetails({ formData, updateFormData, options
                     <label className={pageStyles.label}>
                         Area Name <span className={pageStyles.required}>*</span>
                     </label>
-                    <select
-                        className={s.select}
+                    <Input
+                        placeholder="e.g. The Pearl Qatar"
                         value={formData.areaName || ""}
                         onChange={(e) => updateFormData({ areaName: e.target.value })}
                         required
-                    >
-                        <option value="">Select area...</option>
-                        {options?.areaSuggestions?.map((area) => (
-                            <option key={area} value={area}>{area}</option>
-                        ))}
-                    </select>
+                    />
+                    {options?.areaSuggestions && options.areaSuggestions.length > 0 && (
+                        <div className={s.areaSuggestions}>
+                            <span className={s.suggestionLabel}>Suggestions: </span>
+                            {options.areaSuggestions.map((area) => (
+                                <button
+                                    type="button"
+                                    key={area}
+                                    className={s.suggestionChip}
+                                    onClick={() => updateFormData({ areaName: area })}
+                                >
+                                    {area}
+                                </button>
+                            ))}
+                        </div>
+                    )}
                 </div>
 
                 <div>
@@ -59,16 +95,16 @@ export default function Step4LocationDetails({ formData, updateFormData, options
                     </label>
                     <select
                         className={s.select}
-                        value={formData.municipality || "DOHA"}
-                        onChange={(e) => updateFormData({ municipality: e.target.value })}
+                        value={formData.municipalityId || (availableMunicipalities[0]?.id || "")}
+                        onChange={(e) => updateFormData({ municipalityId: e.target.value })}
+                        required
                     >
-                        <option value="DOHA">Doha</option>
-                        <option value="AL_RAYYAN">Al Rayyan</option>
-                        <option value="AL_WAKRAH">Al Wakrah</option>
-                        <option value="AL_KHOR">Al Khor</option>
-                        <option value="AL_SHAMAL">Al Shamal</option>
-                        <option value="UMM_SALAL">Umm Salal</option>
-                        <option value="AL_DAAYEN">Al Daayen</option>
+                        <option value="" disabled>Select Municipality</option>
+                        {availableMunicipalities.map((m: any) => (
+                            <option key={m.id} value={m.id}>
+                                {m.name || m.title || m.id}
+                            </option>
+                        ))}
                     </select>
                 </div>
 
@@ -76,7 +112,7 @@ export default function Step4LocationDetails({ formData, updateFormData, options
                     label="Latitude"
                     type="number"
                     placeholder="e.g. 25.3548"
-                    value={formData.latitude || ""}
+                    value={formData.latitude ?? ""}
                     onChange={(e) => updateFormData({ latitude: Number(e.target.value) })}
                     required
                 />
@@ -85,7 +121,7 @@ export default function Step4LocationDetails({ formData, updateFormData, options
                     label="Longitude"
                     type="number"
                     placeholder="e.g. 51.1839"
-                    value={formData.longitude || ""}
+                    value={formData.longitude ?? ""}
                     onChange={(e) => updateFormData({ longitude: Number(e.target.value) })}
                     required
                 />
@@ -93,7 +129,7 @@ export default function Step4LocationDetails({ formData, updateFormData, options
                 <div className={pageStyles.fullWidth}>
                     <label className={pageStyles.label}>Nearby Tags</label>
                     <div className={s.nearbyGrid}>
-                        {options?.nearbyTags?.map((tag) => (
+                        {availableNearby.map((tag) => (
                             <label key={tag.id} className={s.tagLabel}>
                                 <input
                                     type="checkbox"

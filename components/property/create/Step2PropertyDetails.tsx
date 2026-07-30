@@ -4,7 +4,16 @@ import pageStyles from "../../../app/properties/create/page.module.css";
 import s from "./steps.module.css";
 import { StepProps } from "./types";
 
+const DEFAULT_FURNISHING_OPTIONS = [
+    { id: "cuid_furnished", title: "Fully Furnished" },
+    { id: "cuid_semi_furnished", title: "Semi-Furnished" },
+    { id: "cuid_unfurnished", title: "Unfurnished" },
+];
+
 export default function Step2PropertyDetails({ formData, updateFormData, options }: StepProps) {
+    const availableFurnishing = (options?.furnishingOptions && options.furnishingOptions.length > 0)
+        ? options.furnishingOptions
+        : DEFAULT_FURNISHING_OPTIONS;
 
     return (
         <div>
@@ -41,16 +50,19 @@ export default function Step2PropertyDetails({ formData, updateFormData, options
                 />
 
                 <div>
-                    <label className={pageStyles.label}>Furnishing Status</label>
+                    <label className={pageStyles.label}>
+                        Furnishing Status <span className={pageStyles.required}>*</span>
+                    </label>
                     <select
                         className={s.select}
-                        value={formData.furnishingStatus || ""}
-                        onChange={(e) => updateFormData({ furnishingStatus: e.target.value })}
+                        value={formData.furnishingId || ""}
+                        onChange={(e) => updateFormData({ furnishingId: e.target.value })}
+                        required
                     >
                         <option value="">Select Option...</option>
-                        {options?.furnishingOptions?.map((opt) => (
-                            <option key={opt.id} value={opt.title}>
-                                {opt.title}
+                        {availableFurnishing.map((opt: any) => (
+                            <option key={opt.id} value={opt.id}>
+                                {opt.title || opt.name || opt.id}
                             </option>
                         ))}
                     </select>

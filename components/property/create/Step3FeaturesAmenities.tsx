@@ -4,13 +4,26 @@ import pageStyles from "../../../app/properties/create/page.module.css";
 import s from "./steps.module.css";
 import { StepProps } from "./types";
 
+const DEFAULT_AMENITIES = [
+    { id: "cuid1", title: "Private Swimming Pool" },
+    { id: "cuid2", title: "Landscaped Garden" },
+    { id: "cuid3", title: "Gym / Fitness Center" },
+    { id: "cuid4", title: "Security System" },
+    { id: "cuid5", title: "Maid's Room" },
+    { id: "cuid6", title: "Central AC" },
+];
+
 export default function Step3FeaturesAmenities({ formData, updateFormData, options }: StepProps) {
-    const handleAmenityToggle = (amenity: string) => {
+    const availableAmenities = (options?.amenities && options.amenities.length > 0)
+        ? options.amenities
+        : DEFAULT_AMENITIES;
+
+    const handleAmenityToggle = (amenityId: string) => {
         const currentAmenities = formData.amenities || [];
-        if (currentAmenities.includes(amenity)) {
-            updateFormData({ amenities: currentAmenities.filter((a) => a !== amenity) });
+        if (currentAmenities.includes(amenityId)) {
+            updateFormData({ amenities: currentAmenities.filter((a) => a !== amenityId) });
         } else {
-            updateFormData({ amenities: [...currentAmenities, amenity] });
+            updateFormData({ amenities: [...currentAmenities, amenityId] });
         }
     };
 
@@ -19,7 +32,22 @@ export default function Step3FeaturesAmenities({ formData, updateFormData, optio
             <h2 className={pageStyles.stepTitle}>Step 3: Features &amp; Amenities</h2>
             <div className={pageStyles.formGrid}>
                 <div className={s.checkboxGroup}>
-
+                    <label className={s.checkboxLabel}>
+                        <input
+                            type="checkbox"
+                            className={s.checkbox}
+                            checked={formData.extraProperties?.privatePool || false}
+                            onChange={(e) =>
+                                updateFormData({
+                                    extraProperties: {
+                                        ...formData.extraProperties,
+                                        privatePool: e.target.checked,
+                                    },
+                                })
+                            }
+                        />
+                        Private Pool
+                    </label>
                 </div>
 
                 <Input
@@ -40,7 +68,7 @@ export default function Step3FeaturesAmenities({ formData, updateFormData, optio
                 <div className={pageStyles.fullWidth}>
                     <label className={pageStyles.label}>Amenities</label>
                     <div className={s.tagGrid}>
-                        {options?.amenities?.map((amenity) => (
+                        {availableAmenities.map((amenity) => (
                             <label key={amenity.id} className={s.tagLabel}>
                                 <input
                                     type="checkbox"
