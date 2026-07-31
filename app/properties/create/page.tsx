@@ -30,12 +30,8 @@ export default function CreatePropertyPage() {
     const [error, setError] = useState<string | null>(null);
     const [success, setSuccess] = useState(false);
 
-    // Initial state matching backend payload structure
     const [formData, setFormData] = useState<Partial<CreatePropertyPayload>>({
         purpose: "SALE",
-        typeId: "cuid_villa",
-        furnishingId: "cuid_furnished",
-        municipalityId: "cuid_doha",
         priceNegotiable: false,
         contactVerified: false,
         contactPhone: "",
@@ -50,23 +46,22 @@ export default function CreatePropertyPage() {
         const fetchOptions = async () => {
             try {
                 const res = await propertyService.getPropertyOptions();
+
                 setOptions(res);
-                // If backend options provide defaults, set default IDs
-                if (res) {
-                    const firstType = res.types?.[0]?.id || res.propertyTypes?.[0]?.id;
-                    const firstFurnish = res.furnishingOptions?.[0]?.id;
-                    const firstMuni = res.municipalities?.[0]?.id;
-                    setFormData((prev) => ({
-                        ...prev,
-                        typeId: prev.typeId || firstType || "cuid_villa",
-                        furnishingId: prev.furnishingId || firstFurnish || "cuid_furnished",
-                        municipalityId: prev.municipalityId || firstMuni || "cuid_doha",
-                    }));
-                }
+
+                setFormData((prev) => ({
+                    ...prev,
+                    typeId: prev.typeId || res.listingTypes?.[0]?.id,
+                    furnishingId:
+                        prev.furnishingId || res.furnishingOptions?.[0]?.id,
+                    municipalityId:
+                        prev.municipalityId || res.municipalities?.[0]?.id,
+                }));
             } catch (err) {
-                console.error("Failed to load options", err);
+                console.error("Failed to load property options:", err);
             }
         };
+
         fetchOptions();
     }, []);
 
@@ -197,9 +192,9 @@ export default function CreatePropertyPage() {
                     )}
 
                     <div className={styles.footer}>
-                        <Button 
-                            variant="secondary" 
-                            onClick={handlePrev} 
+                        <Button
+                            variant="secondary"
+                            onClick={handlePrev}
                             disabled={currentStep === 0 || loading}
                         >
                             Back

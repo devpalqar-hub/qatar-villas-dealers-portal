@@ -165,7 +165,7 @@ export default function PropertyDetailPage() {
                                     {property.status}
                                 </Badge>
                                 <span className={styles.purposeBadge}>{property.purpose}</span>
-                                <span className={styles.typeBadge}>{property.type}</span>
+                                <span className={styles.typeBadge}>{property.type?.title}</span>
                             </div>
                         </div>
 
@@ -173,11 +173,19 @@ export default function PropertyDetailPage() {
                             <FiMapPin size={16} />
                             <span>
                                 {property.addressLine1}
-                                {property.addressLine2 ? `, ${property.addressLine2}` : ""}, {property.areaName}, {property.municipality}
-                                {property.country ? `, ${property.country}` : ""}
+                                {property.addressLine2
+                                    ? `, ${property.addressLine2}`
+                                    : ""}
+                                , {property.areaName}
+                                {property.municipality?.name
+                                    ? `, ${property.municipality.name}`
+                                    : ""}
+                                {property.country
+                                    ? `, ${property.country}`
+                                    : ""}
                             </span>
                             <span style={{ color: "var(--text-light)", marginLeft: 8 }}>
-                                (REF: {property.id.substring(0, 10)})
+                                (REF: {property.referenceCode})
                             </span>
                         </div>
                     </div>
@@ -315,7 +323,7 @@ export default function PropertyDetailPage() {
                                     <div className={styles.specIcon}><FiShield /></div>
                                     <div className={styles.specInfo}>
                                         <span className={styles.specLabel}>Furnishing</span>
-                                        <span className={styles.specValue}>{property.furnishingStatus || "N/A"}</span>
+                                        <span className={styles.specValue}>{property.furnishing?.title || "N/A"}</span>
                                     </div>
                                 </div>
                             </div>
@@ -352,9 +360,10 @@ export default function PropertyDetailPage() {
                                     <FiTag size={18} /> Nearby Facilities
                                 </h2>
                                 <div className={styles.chipsGrid}>
-                                    {property.nearbyTags.map((tag: any, idx) => (
-                                        <span key={idx} className={styles.chip}>
-                                            <FiMapPin className={styles.chipIcon} /> {typeof tag === "string" ? tag : tag.title || tag.id}
+                                    {property.nearbyTags.map((tag) => (
+                                        <span key={tag.id} className={styles.chip}>
+                                            <FiMapPin className={styles.chipIcon} />
+                                            {tag.title}
                                         </span>
                                     ))}
                                 </div>

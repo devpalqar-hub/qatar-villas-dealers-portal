@@ -4,16 +4,10 @@ import pageStyles from "../../../app/properties/create/page.module.css";
 import s from "./steps.module.css";
 import { StepProps } from "./types";
 
-const DEFAULT_FURNISHING_OPTIONS = [
-    { id: "cuid_furnished", title: "Fully Furnished" },
-    { id: "cuid_semi_furnished", title: "Semi-Furnished" },
-    { id: "cuid_unfurnished", title: "Unfurnished" },
-];
-
 export default function Step2PropertyDetails({ formData, updateFormData, options }: StepProps) {
-    const availableFurnishing = (options?.furnishingOptions && options.furnishingOptions.length > 0)
+    const availableFurnishing = options?.furnishingOptions
         ? options.furnishingOptions
-        : DEFAULT_FURNISHING_OPTIONS;
+        : [];
 
     return (
         <div>
@@ -60,9 +54,9 @@ export default function Step2PropertyDetails({ formData, updateFormData, options
                         required
                     >
                         <option value="">Select Option...</option>
-                        {availableFurnishing.map((opt: any) => (
+                        {availableFurnishing.map((opt) => (
                             <option key={opt.id} value={opt.id}>
-                                {opt.title || opt.name || opt.id}
+                                {opt.title}
                             </option>
                         ))}
                     </select>

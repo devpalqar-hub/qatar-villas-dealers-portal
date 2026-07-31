@@ -68,6 +68,7 @@ export default function PropertiesPage() {
                 status: selectedStatus || undefined,
             };
             const res = await propertyService.getProperties(params);
+            
             setPropertiesList(res.data || []);
             if (res.meta) {
                 setMeta(res.meta);
@@ -93,9 +94,8 @@ export default function PropertiesPage() {
 
     const activeFilterCount = [selectedType, selectedPurpose, selectedStatus].filter(Boolean).length;
 
-    // Optional client-side filter fallback to ensure UI strictly reflects filters
     const displayedProperties = propertiesList.filter((prop) => {
-        if (selectedType && prop.type?.toUpperCase() !== selectedType.toUpperCase()) return false;
+        if (selectedType && prop.type?.title?.toUpperCase() !== selectedType.toUpperCase()) return false;
         if (selectedPurpose && prop.purpose?.toUpperCase() !== selectedPurpose.toUpperCase()) return false;
         if (selectedStatus && prop.status?.toUpperCase() !== selectedStatus.toUpperCase()) return false;
         return true;
@@ -367,14 +367,14 @@ export default function PropertiesPage() {
                                                 <div className={styles.propLocation}>REF: {prop.id.substring(0, 8)}</div>
                                             </td>
                                             <td className={styles.td}>
-                                                <span className={styles.typeBadge}>{prop.type}</span>
+                                                <span className={styles.typeBadge}>{prop.type?.title}</span>
                                             </td>
                                             <td className={styles.td}>
                                                 <span className={styles.price}>{prop.price.toLocaleString()}</span>
                                             </td>
                                             <td className={styles.td}>
                                                 <div className={styles.propName}>{prop.areaName}</div>
-                                                <div className={styles.propLocation}>{prop.municipality}</div>
+                                                <div className={styles.propLocation}>{prop.municipality?.name}</div>
                                             </td>
                                             <td className={styles.td}>
                                                 <Badge variant={getStatusVariant(prop.status)}>

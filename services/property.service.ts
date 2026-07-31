@@ -6,11 +6,6 @@ export interface PropertyPhoto {
     sortOrder: number;
 }
 
-interface Amenity {
-    id: string;
-    title: string;
-    image: string | null;
-}
 
 export interface CreatePropertyPayload {
     propertyName: string;
@@ -50,20 +45,25 @@ export interface CreatePropertyPayload {
 
 export interface PropertyTypeOption {
     id: string;
-    name?: string;
-    title?: string;
+    title: string;
+    image: string | null;
+    listingCount: number;
 }
 
 export interface FurnishingOption {
     id: string;
     title: string;
-    name?: string;
 }
 
 export interface MunicipalityOption {
     id: string;
-    name?: string;
-    title?: string;
+    name: string;
+    image: string | null;
+    latitude: number;
+    longitude: number;
+    isPopular: boolean;
+    listingCount: number;
+    cheapestListingPrice: number | null;
 }
 
 interface NearbyTagOption {
@@ -71,30 +71,69 @@ interface NearbyTagOption {
     title: string;
     image: string | null;
 }
-    
+
+interface Amenity {
+    id: string;
+    title: string;
+    image: string | null;
+}
+
 export interface PropertyOptionsResponse {
-    types?: PropertyTypeOption[];
-    propertyTypes?: PropertyTypeOption[];
-    municipalities?: MunicipalityOption[];
     amenities: Amenity[];
     nearbyTags: NearbyTagOption[];
     furnishingOptions: FurnishingOption[];
-    areaSuggestions: string[];
+    listingTypes: PropertyTypeOption[];
+    municipalities: MunicipalityOption[];
+}
+
+export interface PropertyListingType {
+    id: string;
+    title: string;
+}
+
+export interface PropertyListingMunicipality {
+    id: string;
+    name: string;
+    image?: string | null;
+    latitude?: number;
+    longitude?: number;
+}
+
+export interface PropertyListingFurnishing {
+    id: string;
+    title: string;
+    createdAt?: string;
+    updatedAt?: string;
 }
 
 export interface PropertyListing {
     id: string;
+    referenceCode: string;
     slug: string | null;
     propertyName: string;
     description: string;
-    purpose: string;
-    type: string;
+    purpose: "SALE" | "RENT";
+
+    typeId: string;
+    type: PropertyListingType;
+
     price: number;
     areaName: string;
-    municipality: string;
+
+    municipalityId: string;
+    municipality: PropertyListingMunicipality;
+
+    furnishingId: string;
+    furnishing: PropertyListingFurnishing;
+
     status: string;
-    photos: { url: string; sortOrder: number }[];
-    [key: string]: any; // other fields
+
+    photos: {
+        url: string;
+        sortOrder: number;
+    }[];
+
+    [key: string]: any;
 }
 
 export interface GetPropertiesResponse {
@@ -133,15 +172,41 @@ export interface PropertyCreatedBy {
     role: string;
 }
 
+export interface PropertyDetailType {
+    id: string;
+    title: string;
+}
+
+export interface PropertyDetailFurnishing {
+    id: string;
+    title: string;
+    createdAt?: string;
+    updatedAt?: string;
+}
+
+export interface PropertyDetailMunicipality {
+    id: string;
+    name: string;
+    image?: string | null;
+    latitude?: number;
+    longitude?: number;
+}
+
 export interface PropertyDetail {
     id: string;
+    referenceCode: string;
     slug?: string | null;
+
     propertyName: string;
     description: string;
-    purpose: string;
-    type: string;
+    purpose: "SALE" | "RENT";
+
+    typeId: string;
+    type: PropertyDetailType;
+
     latitude: number;
     longitude: number;
+
     bedrooms: number;
     bathrooms: number;
     area: number;
@@ -150,31 +215,47 @@ export interface PropertyDetail {
     floorNumber: number;
     totalFloors: number;
     yearBuilt?: number;
-    furnishingStatus: string;
+
+    furnishingId: string;
+    furnishing: PropertyDetailFurnishing;
+
     extraProperties?: {
         privatePool?: boolean;
         gardenAreaSqm?: number;
         [key: string]: any;
     };
+
     price: number;
     priceNegotiable: boolean;
+
     addressLine1: string;
     addressLine2?: string;
     areaName: string;
-    municipality: string;
+
+    municipalityId: string;
+    municipality: PropertyDetailMunicipality;
+
     country?: string;
+
     contactPhone: string;
     contactWhatsapp: string;
     contactVerified?: boolean;
+
     amenities: Amenity[];
-    nearbyTags: string[];
+    nearbyTags: NearbyTagOption[];
+
     otherFeatures?: string;
+
     status: string;
     submissionCount?: number;
+
     createdAt: string;
     updatedAt: string;
+
     createdBy?: PropertyCreatedBy;
+
     photos: PropertyDetailPhoto[];
+
     featuredSubscriptions?: any[];
     isWishlisted?: boolean;
     isFeatured?: boolean;

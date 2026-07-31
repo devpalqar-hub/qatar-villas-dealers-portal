@@ -4,19 +4,8 @@ import pageStyles from "../../../app/properties/create/page.module.css";
 import s from "./steps.module.css";
 import { StepProps } from "./types";
 
-const DEFAULT_TYPES = [
-    { id: "cuid_villa", name: "Villa" },
-    { id: "cuid_apartment", name: "Apartment" },
-    { id: "cuid_penthouse", name: "Penthouse" },
-    { id: "cuid_land", name: "Land" },
-];
-
 export default function Step1BasicInfo({ formData, updateFormData, options }: StepProps) {
-    const availableTypes = (options?.types && options.types.length > 0)
-        ? options.types
-        : (options?.propertyTypes && options.propertyTypes.length > 0)
-            ? options.propertyTypes
-            : DEFAULT_TYPES;
+    const availableTypes = options?.listingTypes ?? [];
 
     return (
         <div>
@@ -65,15 +54,21 @@ export default function Step1BasicInfo({ formData, updateFormData, options }: St
                         Property Type <span className={pageStyles.required}>*</span>
                     </label>
                     <select
-                        className={s.select}
-                        value={formData.typeId || (availableTypes[0]?.id || "")}
-                        onChange={(e) => updateFormData({ typeId: e.target.value })}
-                        required
+                    className={s.select}
+                        value={formData.typeId || ""}
+                        onChange={(e) =>
+                            updateFormData({
+                                typeId: e.target.value,
+                            })
+                        }
                     >
-                        <option value="" disabled>Select Property Type</option>
-                        {availableTypes.map((opt: any) => (
-                            <option key={opt.id} value={opt.id}>
-                                {opt.name || opt.title || opt.id}
+                        <option value="" disabled>
+                            Select property type
+                        </option>
+
+                        {options?.listingTypes?.map((type) => (
+                            <option key={type.id} value={type.id}>
+                                {type.title}
                             </option>
                         ))}
                     </select>

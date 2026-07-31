@@ -4,31 +4,14 @@ import pageStyles from "../../../app/properties/create/page.module.css";
 import s from "./steps.module.css";
 import { StepProps } from "./types";
 
-const DEFAULT_MUNICIPALITIES = [
-    { id: "cuid_doha", name: "Doha" },
-    { id: "cuid_al_rayyan", name: "Al Rayyan" },
-    { id: "cuid_al_wakrah", name: "Al Wakrah" },
-    { id: "cuid_al_khor", name: "Al Khor" },
-    { id: "cuid_al_shamal", name: "Al Shamal" },
-    { id: "cuid_umm_salal", name: "Umm Salal" },
-    { id: "cuid_al_daayen", name: "Al Daayen" },
-];
-
-const DEFAULT_NEARBY_TAGS = [
-    { id: "cuid3", title: "Near Metro Station" },
-    { id: "cuid4", title: "Beach Access" },
-    { id: "cuid5", title: "Shopping Mall" },
-    { id: "cuid6", title: "International School" },
-];
-
 export default function Step4LocationDetails({ formData, updateFormData, options }: StepProps) {
     const availableMunicipalities = (options?.municipalities && options.municipalities.length > 0)
         ? options.municipalities
-        : DEFAULT_MUNICIPALITIES;
+        : [];
 
     const availableNearby = (options?.nearbyTags && options.nearbyTags.length > 0)
         ? options.nearbyTags
-        : DEFAULT_NEARBY_TAGS;
+        : [];
 
     const handleNearbyTagToggle = (tagId: string) => {
         const currentTags = formData.nearbyTags || [];
@@ -72,21 +55,6 @@ export default function Step4LocationDetails({ formData, updateFormData, options
                         onChange={(e) => updateFormData({ areaName: e.target.value })}
                         required
                     />
-                    {options?.areaSuggestions && options.areaSuggestions.length > 0 && (
-                        <div className={s.areaSuggestions}>
-                            <span className={s.suggestionLabel}>Suggestions: </span>
-                            {options.areaSuggestions.map((area) => (
-                                <button
-                                    type="button"
-                                    key={area}
-                                    className={s.suggestionChip}
-                                    onClick={() => updateFormData({ areaName: area })}
-                                >
-                                    {area}
-                                </button>
-                            ))}
-                        </div>
-                    )}
                 </div>
 
                 <div>
@@ -95,14 +63,14 @@ export default function Step4LocationDetails({ formData, updateFormData, options
                     </label>
                     <select
                         className={s.select}
-                        value={formData.municipalityId || (availableMunicipalities[0]?.id || "")}
+                        value={formData.municipalityId || ""}
                         onChange={(e) => updateFormData({ municipalityId: e.target.value })}
                         required
                     >
                         <option value="" disabled>Select Municipality</option>
-                        {availableMunicipalities.map((m: any) => (
-                            <option key={m.id} value={m.id}>
-                                {m.name || m.title || m.id}
+                        {availableMunicipalities.map((municipalities: any) => (
+                            <option key={municipalities.id} value={municipalities.id}>
+                                {municipalities.name}
                             </option>
                         ))}
                     </select>
@@ -127,7 +95,7 @@ export default function Step4LocationDetails({ formData, updateFormData, options
                 />
 
                 <div className={pageStyles.fullWidth}>
-                    <label className={pageStyles.label}>Nearby Tags</label>
+                    <label className={pageStyles.label}>Nearby Facilities</label>
                     <div className={s.nearbyGrid}>
                         {availableNearby.map((tag) => (
                             <label key={tag.id} className={s.tagLabel}>
