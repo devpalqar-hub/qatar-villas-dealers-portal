@@ -1,20 +1,17 @@
 "use client";
 
-import React, { useState } from "react";
+import React, {useState} from "react";
 import Image from "next/image";
-import {
-    RiEyeLine,
-    RiEyeOffLine,
-    RiLockPasswordLine,
-    RiMailLine,
-    RiAlertLine,
-    RiArrowRightLine,
-} from "react-icons/ri";
-import { Input } from "@/components/ui";
-import { authService } from "@/services/auth.service";
+import {RiEyeLine, RiEyeOffLine, RiLockPasswordLine, RiMailLine, RiAlertLine, RiArrowRightLine} from "react-icons/ri";
+import {useLocale, useTranslations} from "next-intl";
+import {Input} from "@/components/ui";
+import {authService} from "@/services/auth.service";
 import styles from "./page.module.css";
 
 export default function LoginPage() {
+    const t = useTranslations("login");
+    const tCommon = useTranslations("common");
+    const locale = useLocale();
     const [identifier, setIdentifier] = useState("");
     const [password, setPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
@@ -26,39 +23,29 @@ export default function LoginPage() {
         setError(null);
 
         if (!identifier.trim()) {
-            setError("Please enter your email address.");
+            setError(t("errors.emailRequired"));
             return;
         }
         if (!password) {
-            setError("Please enter your password.");
+            setError(t("errors.passwordRequired"));
             return;
         }
 
         setLoading(true);
-        console.log("Submitting login...");
 
         try {
-            const response = await authService.login({ identifier, password });
-            console.log("Login response:", response);
-
-            const { access_token } = response;
+            const response = await authService.login({identifier, password});
+            const {access_token} = response;
             if (!access_token) {
-                throw new Error("No access_token returned from server.");
+                throw new Error(t("errors.missingToken"));
             }
 
-            // Set cookie for Next.js proxy middleware route protection
             document.cookie = `auth_token=${access_token}; path=/; max-age=${60 * 60 * 24 * 7}; SameSite=Lax`;
-
-            // Set localStorage for client-side Axios calls
             localStorage.setItem("auth_token", access_token);
-
-            window.location.href = "/";
-        } catch (err: any) {
-            console.error("Login error:", err);
-            const message =
-                err?.response?.data?.message ||
-                err?.message ||
-                "Invalid credentials. Please check your email and password.";
+            window.location.href = `/${locale}`;
+        } catch (err: unknown) {
+            const serviceError = err as {response?: {data?: {message?: string}}, message?: string};
+            const message = serviceError?.response?.data?.message || serviceError?.message || t("errors.invalidCredentials");
             setError(message);
         } finally {
             setLoading(false);
@@ -67,30 +54,25 @@ export default function LoginPage() {
 
     return (
         <div className={styles.page}>
-            {/* ── Left: background image panel ── */}
             <aside className={styles.imagePanel}>
                 <Image
                     src="/login-bg.jpeg"
-                    alt="Villas Qatar"
+                    alt={tCommon("appName")}
                     fill
                     priority
                     className={styles.bgImage}
                 />
-                {/* dark overlay */}
                 <div className={styles.overlay} />
 
                 <h1 className={styles.brandTitle}>
-                    Villas Qatar<br />Dealers Portal
+                    {tCommon("appName")}<br />{tCommon("dealerPortal")}
                 </h1>
             </aside>
 
-            {/* ── Right: form panel ── */}
             <section className={styles.formPanel}>
                 <div className={styles.formInner}>
-                    <h2 className={styles.heading}>Welcome back</h2>
-                    <p className={styles.subheading}>
-                        Sign in to your dealer account to continue.
-                    </p>
+                    <h2 className={styles.heading}>{t("title")}</h2>
+                    <p className={styles.subheading}>{t("subtitle")}</p>
 
                     {error && (
                         <div className={styles.alert} role="alert">
@@ -103,13 +85,13 @@ export default function LoginPage() {
                         className={styles.form}
                         onSubmit={handleSubmit}
                         noValidate
-                        aria-label="Login form"
+                        aria-label={t("formLabel")}
                     >
                         <Input
                             id="identifier"
-                            label="Email address"
+                            label={t("emailLabel")}
                             type="email"
-                            placeholder="you@example.com"
+                            placeholder={t("emailPlaceholder")}
                             value={identifier}
                             onChange={(e) => setIdentifier(e.target.value)}
                             leftIcon={<RiMailLine size={17} />}
@@ -121,9 +103,9 @@ export default function LoginPage() {
 
                         <Input
                             id="password"
-                            label="Password"
+                            label={t("passwordLabel")}
                             type={showPassword ? "text" : "password"}
-                            placeholder="Enter your password"
+                            placeholder={t("passwordPlaceholder")}
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             leftIcon={<RiLockPasswordLine size={17} />}
@@ -131,7 +113,7 @@ export default function LoginPage() {
                                 <button
                                     type="button"
                                     onClick={() => setShowPassword((v) => !v)}
-                                    aria-label={showPassword ? "Hide password" : "Show password"}
+                                    aria-label={showPassword ? t("hidePassword") : t("showPassword")}
                                     style={{
                                         background: "none",
                                         border: "none",
@@ -142,11 +124,7 @@ export default function LoginPage() {
                                         padding: 0,
                                     }}
                                 >
-                                    {showPassword ? (
-                                        <RiEyeOffLine size={17} />
-                                    ) : (
-                                        <RiEyeLine size={17} />
-                                    )}
+                                    {showPassword ? <RiEyeOffLine size={17} /> : <RiEyeLine size={17} />}
                                 </button>
                             }
                             required
@@ -163,11 +141,11 @@ export default function LoginPage() {
                             {loading ? (
                                 <>
                                     <span className={styles.spinner} aria-hidden="true" />
-                                    Signing in…
+                                    {t("submitting")}
                                 </>
                             ) : (
                                 <>
-                                    Sign in
+                                    {t("submit")}
                                     <RiArrowRightLine size={17} />
                                 </>
                             )}
@@ -175,12 +153,12 @@ export default function LoginPage() {
                     </form>
 
                     <p className={styles.footerNote}>
-                        Having trouble?{" "}
+                        {t("supportPrompt")} {" "}
                         <a
                             href="mailto:support@palqar.cloud"
-                            style={{ color: "var(--primary)", textDecoration: "none" }}
+                            style={{color: "var(--primary)", textDecoration: "none"}}
                         >
-                            Contact support
+                            {t("supportLink")}
                         </a>
                     </p>
                 </div>

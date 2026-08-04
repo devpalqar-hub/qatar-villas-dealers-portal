@@ -47,7 +47,6 @@
     color: var(--primary);
 }
 
-/* Header Section */
 .headerCard {
     background: var(--surface);
     border: 1px solid var(--border);
@@ -149,18 +148,17 @@
     font-weight: 500;
 }
 
-/* Layout Grid */
+.contentStack {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
 .layoutGrid {
     display: grid;
     grid-template-columns: 1fr 360px;
     gap: 24px;
     align-items: start;
-}
-
-@media (max-width: 1024px) {
-    .layoutGrid {
-        grid-template-columns: 1fr;
-    }
 }
 
 .mainColumn {
@@ -177,7 +175,6 @@
     top: 24px;
 }
 
-/* Card Section Styles */
 .sectionCard {
     background: var(--surface);
     border: 1px solid var(--border);
@@ -199,7 +196,6 @@
     color: var(--primary);
 }
 
-/* Photo Gallery */
 .galleryWrapper {
     display: flex;
     flex-direction: column;
@@ -280,7 +276,6 @@
     object-fit: cover;
 }
 
-/* Specs Grid */
 .specsGrid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
@@ -330,7 +325,6 @@
     color: var(--text);
 }
 
-/* Description Text */
 .descriptionText {
     font-size: 14px;
     line-height: 1.7;
@@ -338,7 +332,6 @@
     white-space: pre-line;
 }
 
-/* Tags & Chips */
 .chipsGrid {
     display: flex;
     flex-wrap: wrap;
@@ -362,11 +355,54 @@
     color: var(--primary);
 }
 
-/* Location Box */
 .locationBox {
     display: flex;
     flex-direction: column;
     gap: 12px;
+}
+
+.locationMapContent {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.locationAddressBlock {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.locationAddressLine {
+    font-size: var(--text-sm);
+    color: var(--text);
+    line-height: 1.6;
+}
+
+.locationActions {
+    display: flex;
+    justify-content: center;
+}
+
+.locationMapLink {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    color: var(--text);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    text-decoration: none;
+    transition: color 0.2s, border-color 0.2s, background 0.2s;
+}
+
+.locationMapLink:hover {
+    color: var(--primary);
+    border-color: var(--primary);
+    background: var(--surface);
 }
 
 .locationRow {
@@ -391,7 +427,6 @@
     font-weight: 600;
 }
 
-/* Sidebar Contact Card */
 .contactCard {
     display: flex;
     flex-direction: column;
@@ -506,7 +541,6 @@
     opacity: 0.9;
 }
 
-/* Meta List */
 .metaList {
     display: flex;
     flex-direction: column;
@@ -525,7 +559,6 @@
     font-weight: 600;
 }
 
-/* Empty & Error State */
 .errorContainer {
     text-align: center;
     padding: 60px 20px;
@@ -547,4 +580,48 @@
 .errorSubtext {
     font-size: 14px;
     color: var(--text-light);
+}
+
+@media (max-width: 1024px) {
+    .layoutGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .sideColumn {
+        position: static;
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 20px 16px 32px;
+    }
+
+    .headerCard,
+    .sectionCard {
+        padding: 18px;
+    }
+
+    .mainPhotoView {
+        height: 300px;
+    }
+
+    .locationSub {
+        align-items: flex-start;
+    }
+
+    .locationActions {
+        justify-content: stretch;
+    }
+
+    .locationMapLink {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .locationRow,
+    .metaRow {
+        flex-direction: column;
+        gap: 4px;
+    }
 }

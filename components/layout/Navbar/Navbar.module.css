@@ -5,7 +5,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0 30px;
+    padding-inline: 30px;
     position: sticky;
     top: 0;
     z-index: 90;
@@ -40,7 +40,8 @@
     align-items: center;
     gap: 12px;
     background: #f3f4f6;
-    padding: 10px 16px;
+    padding-block: 10px;
+    padding-inline: 16px;
     border-radius: 12px;
     transition: width 0.2s;
 }
@@ -52,6 +53,7 @@
     background: transparent;
     font-size: var(--text-sm);
     color: var(--text);
+    text-align: start;
 }
 
 .right {
@@ -87,6 +89,7 @@
 .profileInfo {
     display: flex;
     flex-direction: column;
+    text-align: start;
 }
 
 .profileInfo h4 {
@@ -122,10 +125,19 @@
     white-space: nowrap;
 }
 
-/* Responsive Media Queries */
+:global([dir="rtl"]) .navbar {
+    flex-direction: row-reverse;
+}
+
+:global([dir="rtl"]) .left,
+:global([dir="rtl"]) .right,
+:global([dir="rtl"]) .profile {
+    flex-direction: row-reverse;
+}
+
 @media (max-width: 1023px) {
     .navbar {
-        padding: 0 16px;
+        padding-inline: 16px;
         height: 64px;
     }
 
@@ -157,4 +169,3 @@
         display: none;
     }
 }
-

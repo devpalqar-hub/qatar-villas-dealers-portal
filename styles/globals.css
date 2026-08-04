@@ -6,12 +6,22 @@
   box-sizing: border-box;
 }
 
+html,
+body {
+  min-height: 100%;
+}
+
 body {
   font-family: var(--font-inter), sans-serif;
   font-size: var(--text-base);
   font-weight: var(--font-regular);
   background: var(--background);
   color: var(--text);
+  text-align: start;
+}
+
+html[dir="rtl"] body {
+  font-family: var(--font-arabic), sans-serif;
 }
 
 button,
@@ -19,4 +29,14 @@ input,
 select,
 textarea {
   font-family: inherit;
+}
+
+input,
+select,
+textarea {
+  text-align: start;
+}
+
+a {
+  color: inherit;
 }

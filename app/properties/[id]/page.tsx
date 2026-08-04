@@ -22,9 +22,13 @@ import {
     FiGrid,
     FiCompass,
     FiClock,
+    FiExternalLink,
+    FiClipboard,
 } from "react-icons/fi";
 import { AppLayout, Button, Badge } from "@/components/ui";
+import PropertyMap from "@/components/property/PropertyMap";
 import { propertyService, PropertyDetail } from "@/services/property.service";
+import InquiriesSection from "@/components/inquiry/InquiriesSection";
 import styles from "./page.module.css";
 
 export default function PropertyDetailPage() {
@@ -39,7 +43,7 @@ export default function PropertyDetailPage() {
 
     useEffect(() => {
         if (id) {
-            fetchPropertyDetail(id);
+            void fetchPropertyDetail(id);
         }
     }, [id]);
 
@@ -50,9 +54,10 @@ export default function PropertyDetailPage() {
             const data = await propertyService.getPropertyById(propertyId);
             setProperty(data);
             setSelectedPhotoIndex(0);
-        } catch (err: any) {
+        } catch (err: unknown) {
+            const serviceError = err as { response?: { data?: { message?: string } } };
             console.error("Failed to fetch property details:", err);
-            setError(err.response?.data?.message || "Failed to load property details.");
+            setError(serviceError.response?.data?.message || "Failed to load property details.");
         } finally {
             setLoading(false);
         }
@@ -133,16 +138,22 @@ export default function PropertyDetailPage() {
     const creatorInitials = creator?.name
         ? creator.name
             .split(" ")
-            .map((n) => n[0])
+            .map((namePart) => namePart[0])
             .join("")
             .toUpperCase()
             .substring(0, 2)
         : "DE";
 
+    const fullAddressLine = [property.addressLine1, property.addressLine2].filter(Boolean).join(", ");
+    const localityLine = [property.areaName, property.municipality?.name, property.country].filter(Boolean).join(", ");
+    const hasCoordinates = property.latitude !== undefined && property.longitude !== undefined;
+    const openInMapsHref = hasCoordinates
+        ? `https://www.google.com/maps/search/?api=1&query=${property.latitude},${property.longitude}`
+        : "#";
+
     return (
         <AppLayout>
             <div className={styles.container}>
-                {/* Breadcrumbs & Navigation */}
                 <nav className={styles.breadcrumbs} aria-label="Breadcrumb">
                     <Link href="/dashboard">Dashboard</Link>
                     <span>&gt;</span>
@@ -155,7 +166,6 @@ export default function PropertyDetailPage() {
                     <FiArrowLeft size={16} /> Back to Properties
                 </button>
 
-                {/* Header Card */}
                 <div className={styles.headerCard}>
                     <div className={styles.headerMain}>
                         <div className={styles.titleRow}>
@@ -172,17 +182,8 @@ export default function PropertyDetailPage() {
                         <div className={styles.locationSub}>
                             <FiMapPin size={16} />
                             <span>
-                                {property.addressLine1}
-                                {property.addressLine2
-                                    ? `, ${property.addressLine2}`
-                                    : ""}
-                                , {property.areaName}
-                                {property.municipality?.name
-                                    ? `, ${property.municipality.name}`
-                                    : ""}
-                                {property.country
-                                    ? `, ${property.country}`
-                                    : ""}
+                                {fullAddressLine}
+                                {localityLine ? `, ${localityLine}` : ""}
                             </span>
                             <span style={{ color: "var(--text-light)", marginLeft: 8 }}>
                                 (REF: {property.referenceCode})
@@ -201,11 +202,10 @@ export default function PropertyDetailPage() {
                     </div>
                 </div>
 
-                {/* Main 2-Column Grid */}
+                <div className={styles.contentStack}>
                 <div className={styles.layoutGrid}>
-                    {/* Left Column: Gallery & Details */}
                     <div className={styles.mainColumn}>
-                        {/* Media Photo Gallery Showcase */}
+
                         <div className={styles.sectionCard}>
                             <h2 className={styles.sectionTitle}>
                                 <FiImage size={18} /> Property Gallery ({photos.length})
@@ -238,8 +238,7 @@ export default function PropertyDetailPage() {
                                             <button
                                                 key={photo.id || index}
                                                 type="button"
-                                                className={`${styles.thumbnailBtn} ${selectedPhotoIndex === index ? styles.thumbnailBtnActive : ""
-                                                    }`}
+                                                className={`${styles.thumbnailBtn} ${selectedPhotoIndex === index ? styles.thumbnailBtnActive : ""}`}
                                                 onClick={() => setSelectedPhotoIndex(index)}
                                             >
                                                 <img
@@ -254,7 +253,6 @@ export default function PropertyDetailPage() {
                             </div>
                         </div>
 
-                        {/* Specifications Grid */}
                         <div className={styles.sectionCard}>
                             <h2 className={styles.sectionTitle}>
                                 <FiGrid size={18} /> Key Specifications
@@ -329,7 +327,6 @@ export default function PropertyDetailPage() {
                             </div>
                         </div>
 
-                        {/* Description Section */}
                         <div className={styles.sectionCard}>
                             <h2 className={styles.sectionTitle}>
                                 <FiInfo size={18} /> Property Description
@@ -337,23 +334,53 @@ export default function PropertyDetailPage() {
                             <p className={styles.descriptionText}>{property.description}</p>
                         </div>
 
-                        {/* Amenities & Features */}
+                        {hasCoordinates && (
+                            <div className={styles.sectionCard}>
+                                <h2 className={styles.sectionTitle}>
+                                    <FiMapPin size={18} /> Property Location
+                                </h2>
+
+                                <div className={styles.locationMapContent}>
+                                    <div className={styles.locationAddressBlock}>
+                                        {fullAddressLine && <span className={styles.locationAddressLine}>{fullAddressLine}</span>}
+                                        {localityLine && <span className={styles.locationAddressLine}>{localityLine}</span>}
+                                    </div>
+
+                                    <PropertyMap
+                                        latitude={property.latitude}
+                                        longitude={property.longitude}
+                                        propertyName={property.propertyName}
+                                    />
+
+                                    <div className={styles.locationActions}>
+                                        <a
+                                            href={openInMapsHref}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className={styles.locationMapLink}
+                                        >
+                                            <FiExternalLink /> Open in Maps
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
                         {property.amenities && property.amenities.length > 0 && (
                             <div className={styles.sectionCard}>
                                 <h2 className={styles.sectionTitle}>
                                     <FiCheckCircle size={18} /> Amenities & Features
                                 </h2>
                                 <div className={styles.chipsGrid}>
-                                    {property.amenities.map((amenity, idx) => (
-                                        <span key={idx} className={styles.chip}>
-                                            <FiCheck className={styles.chipIcon} /> {typeof amenity === "string" ? amenity : amenity.title}
+                                    {property.amenities.map((amenity, index) => (
+                                        <span key={index} className={styles.chip}>
+                                            <FiCheck className={styles.chipIcon} /> {amenity.title}
                                         </span>
                                     ))}
                                 </div>
                             </div>
                         )}
 
-                        {/* Nearby Places */}
                         {property.nearbyTags && property.nearbyTags.length > 0 && (
                             <div className={styles.sectionCard}>
                                 <h2 className={styles.sectionTitle}>
@@ -370,7 +397,6 @@ export default function PropertyDetailPage() {
                             </div>
                         )}
 
-                        {/* Extra Properties & Features */}
                         {(property.extraProperties || property.otherFeatures) && (
                             <div className={styles.sectionCard}>
                                 <h2 className={styles.sectionTitle}>
@@ -400,9 +426,7 @@ export default function PropertyDetailPage() {
                         )}
                     </div>
 
-                    {/* Right Column: Contact & Metadata Sidebar */}
                     <div className={styles.sideColumn}>
-                        {/* Contact & Dealer Card */}
                         <div className={styles.sectionCard}>
                             <h2 className={styles.sectionTitle}>
                                 <FiUser size={18} /> Contact Information
@@ -460,7 +484,6 @@ export default function PropertyDetailPage() {
                             </div>
                         </div>
 
-                        {/* Listing Metadata Card */}
                         <div className={styles.sectionCard}>
                             <h2 className={styles.sectionTitle}>
                                 <FiClock size={18} /> Listing Details
@@ -485,16 +508,19 @@ export default function PropertyDetailPage() {
                                     <span>Last Updated</span>
                                     <span>{new Date(property.updatedAt).toLocaleDateString()}</span>
                                 </div>
-                                {property.latitude && property.longitude && (
-                                    <div className={styles.metaRow}>
-                                        <span>Coordinates</span>
-                                        <span>{property.latitude}, {property.longitude}</span>
-                                    </div>
-                                )}
                             </div>
                         </div>
                     </div>
                 </div>
+
+                {/* ── Inquiries Section ── */}
+                <div className={styles.sectionCard}>
+                    <h2 className={styles.sectionTitle}>
+                        <FiClipboard size={18} /> Visit Inquiries
+                    </h2>
+                    <InquiriesSection />
+                </div>
+                </div>{/* end contentStack */}
             </div>
         </AppLayout>
     );

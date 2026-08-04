@@ -1,41 +1,29 @@
 "use client";
 
-import Link from "next/link";
+import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
-import { useState, useEffect } from "react";
-
-import {
-    FiHome,
-    FiGrid,
-    FiUsers,
-    FiMessageCircle,
-    FiBarChart2,
-    FiSettings,
-    FiCreditCard,
-    FiLogOut,
-    FiX,
-} from "react-icons/fi";
-
+import { FiHome, FiGrid, FiUsers, FiMessageCircle, FiBarChart2, FiSettings, FiCreditCard, FiLogOut, FiX } from "react-icons/fi";
+import { useLocale, useTranslations } from "next-intl";
 import ConfirmModal from "@/components/ui/ConfirmModal/ConfirmModal";
+import { Link } from "@/i18n/navigation";
+import { stripLocaleFromPathname } from "@/i18n/config";
 import styles from "./Sidebar.module.css";
+import Image from "next/image";
 
 const menuItems = [
-    { title: "Dashboard",   href: "/dashboard",    icon: FiHome          },
-    { title: "Properties",  href: "/properties",   icon: FiGrid          },
-    { title: "Staff",       href: "/staff",        icon: FiUsers         },
-    { title: "Inquiries",   href: "/inquiries",    icon: FiMessageCircle },
-    { title: "Analytics",   href: "/analytics",    icon: FiBarChart2     },
-    { title: "Subscription",href: "/subscription", icon: FiCreditCard    },
-    { title: "Chat",        href: "/chat",         icon: FiMessageCircle },
-    { title: "Settings",    href: "/settings",     icon: FiSettings      },
-];
+    { titleKey: "dashboard", href: "/dashboard", icon: FiHome },
+    { titleKey: "properties", href: "/properties", icon: FiGrid },
+    { titleKey: "staff", href: "/staff", icon: FiUsers },
+    { titleKey: "inquiries", href: "/inquiries", icon: FiMessageCircle },
+    { titleKey: "analytics", href: "/analytics", icon: FiBarChart2 },
+    { titleKey: "subscription", href: "/subscription", icon: FiCreditCard },
+    { titleKey: "chat", href: "/chat", icon: FiMessageCircle },
+    { titleKey: "settings", href: "/settings", icon: FiSettings }
+] as const;
 
-function handleLogout() {
-    // Clear cookie
-    document.cookie = "auth_token=; path=/; max-age=0";
-    // Clear localStorage
-    localStorage.removeItem("auth_token");
-    window.location.href = "/login";
+function isActivePath(currentPathname: string, href: string) {
+    const normalized = stripLocaleFromPathname(currentPathname);
+    return href === "/dashboard" ? normalized === "/dashboard" || normalized === "/" : normalized === href;
 }
 
 interface SidebarProps {
@@ -44,10 +32,12 @@ interface SidebarProps {
 }
 
 export default function Sidebar({ isOpen = false, onClose }: SidebarProps) {
+    const t = useTranslations("sidebar");
+    const tCommon = useTranslations("common");
+    const locale = useLocale();
     const pathname = usePathname();
     const [showLogout, setShowLogout] = useState(false);
 
-    // Lock body scroll when mobile drawer is open
     useEffect(() => {
         if (isOpen) {
             document.body.style.overflow = "hidden";
@@ -59,9 +49,14 @@ export default function Sidebar({ isOpen = false, onClose }: SidebarProps) {
         };
     }, [isOpen]);
 
+    const handleLogout = () => {
+        document.cookie = "auth_token=; path=/; max-age=0";
+        localStorage.removeItem("auth_token");
+        window.location.href = `/${locale}/login`;
+    };
+
     return (
         <>
-            {/* Backdrop overlay for mobile drawer */}
             {isOpen && (
                 <div
                     className={styles.overlay}
@@ -72,12 +67,22 @@ export default function Sidebar({ isOpen = false, onClose }: SidebarProps) {
 
             <aside className={`${styles.sidebar} ${isOpen ? styles.open : ""}`}>
                 <div className={styles.sidebarHeader}>
-                    <h2 className={styles.logo}>Villas Qatar</h2>
+                    <div className={styles.logoWrapper}>
+                        <Image
+                            src="/villasLogo.png"
+                            alt="Villas Qatar"
+                            width={56}
+                            height={56}
+                            priority
+                        />
+                        <h2 className={styles.logo}>{tCommon("appName")}</h2>
+                    </div>
+
                     <button
                         type="button"
                         className={styles.closeMobileBtn}
                         onClick={onClose}
-                        aria-label="Close menu"
+                        aria-label={t("closeMenu")}
                     >
                         <FiX size={20} />
                     </button>
@@ -86,23 +91,23 @@ export default function Sidebar({ isOpen = false, onClose }: SidebarProps) {
                 <nav className={styles.nav}>
                     {menuItems.map((item) => {
                         const Icon = item.icon;
+                        const active = isActivePath(pathname, item.href);
+                        const href = item.href === "/dashboard" ? "/" : item.href;
+
                         return (
                             <Link
                                 key={item.href}
-                                href={item.href}
-                                className={`${styles.link} ${
-                                    pathname === item.href ? styles.active : ""
-                                }`}
+                                href={href}
+                                className={`${styles.link} ${active ? styles.active : ""}`}
                                 onClick={onClose}
                             >
                                 <Icon />
-                                {item.title}
+                                {t(item.titleKey)}
                             </Link>
                         );
                     })}
                 </nav>
 
-                {/* ── Logout button pinned to the bottom ── */}
                 <div className={styles.footer}>
                     <button
                         className={styles.logoutBtn}
@@ -114,7 +119,7 @@ export default function Sidebar({ isOpen = false, onClose }: SidebarProps) {
                         id="sidebar-logout-btn"
                     >
                         <FiLogOut />
-                        Log out
+                        {t("logout")}
                     </button>
                 </div>
             </aside>
@@ -122,10 +127,10 @@ export default function Sidebar({ isOpen = false, onClose }: SidebarProps) {
             <ConfirmModal
                 open={showLogout}
                 intent="danger"
-                title="Log out?"
-                description="You'll be signed out of your dealer account and returned to the login page."
-                confirmLabel="Log out"
-                cancelLabel="Stay logged in"
+                title={t("logoutTitle")}
+                description={t("logoutDescription")}
+                confirmLabel={t("logout")}
+                cancelLabel={t("stayLoggedIn")}
                 onConfirm={handleLogout}
                 onCancel={() => setShowLogout(false)}
             />

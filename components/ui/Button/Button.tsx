@@ -9,6 +9,7 @@ interface ButtonProps
     variant?: ButtonVariant;
     size?: ButtonSize;
     loading?: boolean;
+    loadingLabel?: React.ReactNode;
     leftIcon?: React.ReactNode;
     rightIcon?: React.ReactNode;
 }
@@ -18,6 +19,7 @@ export default function Button({
     variant = "primary",
     size = "md",
     loading = false,
+    loadingLabel = "Loading...",
     leftIcon,
     rightIcon,
     className = "",
@@ -31,7 +33,7 @@ export default function Button({
             {...props}
         >
             {loading ? (
-                <span>Loading...</span>
+                <span>{loadingLabel}</span>
             ) : (
                 <>
                     {leftIcon}

@@ -1,0 +1,36 @@
+.switcher {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 10px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: var(--surface);
+}
+
+.optionWrap {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.option {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-light);
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.option:hover {
+    color: var(--primary);
+}
+
+.active {
+    color: var(--primary);
+}
+
+.divider {
+    color: var(--border);
+    font-size: 12px;
+}

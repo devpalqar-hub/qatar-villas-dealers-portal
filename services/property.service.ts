@@ -287,4 +287,9 @@ export const propertyService = {
         const response = await api.post(`/listings`, data);
         return response.data;
     },
+
+    markPropertyAsSold: async (id: string): Promise<any> => {
+        const response = await api.post(`/listings/${id}/sold`);
+        return response.data;
+    },
 };

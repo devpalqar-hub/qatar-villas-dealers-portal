@@ -1,13 +1,18 @@
 "use client";
 
-import { FiBell, FiSearch, FiMenu } from "react-icons/fi";
+import {FiBell, FiSearch, FiMenu} from "react-icons/fi";
+import {useTranslations} from "next-intl";
+import LanguageSwitcher from "@/components/layout/LanguageSwitcher/LanguageSwitcher";
 import styles from "./Navbar.module.css";
 
 interface NavbarProps {
     onMenuClick?: () => void;
 }
 
-export default function Navbar({ onMenuClick }: NavbarProps) {
+export default function Navbar({onMenuClick}: NavbarProps) {
+    const t = useTranslations("navbar");
+    const tCommon = useTranslations("common");
+
     return (
         <header className={styles.navbar}>
             <div className={styles.left}>
@@ -15,24 +20,27 @@ export default function Navbar({ onMenuClick }: NavbarProps) {
                     type="button"
                     className={styles.menuBtn}
                     onClick={onMenuClick}
-                    aria-label="Open navigation menu"
+                    aria-label={t("openMenu")}
                 >
                     <FiMenu size={22} />
                 </button>
 
-                <span className={styles.mobileLogo}>Villas Qatar</span>
+                <span className={styles.mobileLogo}>{tCommon("appName")}</span>
 
                 <div className={styles.search}>
                     <FiSearch />
                     <input
                         type="text"
-                        placeholder="Search..."
+                        placeholder={t("searchPlaceholder")}
+                        aria-label={tCommon("search")}
                     />
                 </div>
             </div>
 
             <div className={styles.right}>
-                <button className={styles.notification} aria-label="Notifications">
+                <LanguageSwitcher />
+
+                <button className={styles.notification} aria-label={t("notifications")}>
                     <FiBell />
                 </button>
 
@@ -43,7 +51,7 @@ export default function Navbar({ onMenuClick }: NavbarProps) {
 
                     <div className={styles.profileInfo}>
                         <h4>Fayaz</h4>
-                        <span>Agency Admin</span>
+                        <span>{t("role")}</span>
                     </div>
                 </div>
             </div>
