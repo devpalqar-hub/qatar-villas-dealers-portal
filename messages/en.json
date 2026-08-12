@@ -394,5 +394,69 @@
     "MANAGE_CHATS": "Manage Chats",
     "VIEW_ANALYTICS": "View Analytics",
     "MANAGE_STAFF": "Manage Staff"
+  },
+  "analyticsPage": {
+    "title": "Dealer Analytics & Performance",
+    "subtitle": "Track your listing reach, visitor engagement, conversion funnels, and staff performance.",
+    "filters": {
+      "title": "Analytics Filters",
+      "startDate": "Start Date",
+      "endDate": "End Date",
+      "searchPlaceholder": "Search property name or slug...",
+      "status": "Listing Status",
+      "purpose": "Purpose",
+      "sortBy": "Sort By",
+      "sortOrder": "Sort Order",
+      "allStatus": "All Statuses",
+      "allPurpose": "All Purposes",
+      "reset": "Reset Filters",
+      "quickPresets": "Quick Presets",
+      "allTime": "All Time",
+      "last7Days": "Last 7 Days",
+      "last30Days": "Last 30 Days",
+      "thisMonth": "This Month"
+    },
+    "metrics": {
+      "totalImpressions": "Total Impressions",
+      "totalViews": "Total Views",
+      "totalReach": "Total Reach",
+      "totalListings": "Total Portfolio",
+      "leadEngagement": "Lead Engagement",
+      "teamCapacity": "Team Staff",
+      "periodStats": "In selected period",
+      "conversionRate": "CTR Conversion"
+    },
+    "funnel": {
+      "title": "Engagement Conversion Funnel",
+      "subtitle": "Visualizing how users discover, view, and interact with your listings",
+      "impressions": "Impressions",
+      "impressionsDesc": "Listings shown in search & feeds",
+      "reach": "Unique Reach",
+      "reachDesc": "Distinct users reached",
+      "views": "Property Views",
+      "viewsDesc": "Detailed listing page visits",
+      "conversions": "Direct Inquiries",
+      "conversionsDesc": "Visits & active conversations"
+    },
+    "charts": {
+      "statusTitle": "Listings Status Breakdown",
+      "purposeTitle": "Purpose & Portfolio Split",
+      "topListingsTitle": "Top Performing Listings",
+      "viewsCount": "Views",
+      "impressionsCount": "Impressions",
+      "reachCount": "Reach",
+      "createdAt": "Date Created",
+      "price": "Price"
+    },
+    "table": {
+      "title": "Listing Performance Breakdown",
+      "property": "Property Details",
+      "status": "Status",
+      "purpose": "Purpose",
+      "metrics": "Views / Imp / Reach",
+      "price": "Price",
+      "agent": "Listed By",
+      "created": "Created Date"
+    }
   }
 }

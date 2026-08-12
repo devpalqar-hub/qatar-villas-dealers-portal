@@ -12,8 +12,10 @@ export default function TypingIndicator({
     name = "Customer",
     avatar,
 }: TypingIndicatorProps) {
-    const initials = name
+    const displayName = name || "Customer";
+    const initials = displayName
         .split(" ")
+        .filter(Boolean)
         .map((n) => n[0])
         .join("")
         .toUpperCase()
@@ -22,12 +24,12 @@ export default function TypingIndicator({
     return (
         <div className={styles.wrapper}>
             {avatar ? (
-                <img src={avatar} alt={name} className={styles.avatar} />
+                <img src={avatar} alt={displayName} className={styles.avatar} />
             ) : (
-                <div className={styles.avatarFallback}>{initials}</div>
+                <div className={styles.avatarFallback}>{initials || "C"}</div>
             )}
             <div className={styles.bubble}>
-                <span className={styles.text}>{name} is typing...</span>
+                <span className={styles.text}>{displayName} is typing...</span>
                 <div className={styles.dots}>
                     <span className={styles.dot} />
                     <span className={styles.dot} />

@@ -49,7 +49,7 @@ const ChatWindow = memo(function ChatWindow({ conversation, messages, currentUse
     const renderBody = () => {
         if (loading) return <MessageSkeleton />;
         if (error) return <MessageError message={error} onRetry={onRetry} />;
-        return <>{loadingMore && <LoadMoreBar />}{messages.length === 0 ? <div className={styles.noMessages}>{t("noMessages")}</div> : dateGroups.map((group) => <React.Fragment key={group.label}><div className={styles.dateSeparator}><span className={styles.dateLabel}>{group.label}</span></div>{group.messages.map((msg) => <MessageBubble key={msg.id} message={msg} currentUserId={currentUserId} />)}</React.Fragment>)}{isTyping && <TypingIndicator name={conversation.user.name} avatar={conversation.user.avatar} />}<div ref={messagesEndRef} /></>;
+        return <>{loadingMore && <LoadMoreBar />}{messages.length === 0 ? <div className={styles.noMessages}>{t("noMessages")}</div> : dateGroups.map((group) => <React.Fragment key={group.label}><div className={styles.dateSeparator}><span className={styles.dateLabel}>{group.label}</span></div>{group.messages.map((msg) => <MessageBubble key={msg.id} message={msg} currentUserId={currentUserId} />)}</React.Fragment>)}{isTyping && <TypingIndicator name={conversation?.user?.name || "Customer"} avatar={conversation?.user?.avatar} />}<div ref={messagesEndRef} /></>;
     };
 
     return <div className={styles.container}><ChatHeader conversation={conversation} onBack={onBack} /><div className={styles.messagesArea} ref={scrollContainerRef} onScroll={handleScroll}>{renderBody()}</div><MessageInput onSendMessage={onSendMessage} onAttachImage={onAttachImage} disabled={loading || !!error} /></div>;

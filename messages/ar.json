@@ -394,5 +394,69 @@
     "MANAGE_CHATS": "إدارة المحادثات",
     "VIEW_ANALYTICS": "عرض التحليلات",
     "MANAGE_STAFF": "إدارة الموظفين"
+  },
+  "analyticsPage": {
+    "title": "تحليلات وأداء التاجر",
+    "subtitle": "تتبع وصول عقاراتك، تفاعل الزوار، مسارات التحويل، وأداء فريق العمل.",
+    "filters": {
+      "title": "تصفية التحليلات",
+      "startDate": "تاريخ البدء",
+      "endDate": "تاريخ الانتهاء",
+      "searchPlaceholder": "البحث برقم أو اسم العقار...",
+      "status": "حالة العقار",
+      "purpose": "الغرض",
+      "sortBy": "ترتيب حسب",
+      "sortOrder": "اتجاه الترتيب",
+      "allStatus": "جميع الحالات",
+      "allPurpose": "جميع الأغراض",
+      "reset": "إعادة ضبط الفلاتر",
+      "quickPresets": "اختصارات سريعة",
+      "allTime": "كل الأوقات",
+      "last7Days": "آخر 7 أيام",
+      "last30Days": "آخر 30 يومًا",
+      "thisMonth": "هذا الشهر"
+    },
+    "metrics": {
+      "totalImpressions": "إجمالي الظهور",
+      "totalViews": "إجمالي المشاهدات",
+      "totalReach": "إجمالي الوصول",
+      "totalListings": "إجمالي العقارات",
+      "leadEngagement": "تفاعل العملاء",
+      "teamCapacity": "أعضاء الفريق",
+      "periodStats": "في الفترة المحددة",
+      "conversionRate": "معدل التحويل"
+    },
+    "funnel": {
+      "title": "مسار التحويل والتفاعل",
+      "subtitle": "توضيح كيفية اكتشاف المستخدمين لعقاراتك ومشاهدتها والتفاعل معها",
+      "impressions": "الظهور",
+      "impressionsDesc": "ظهور العقارات في البحث والقوائم",
+      "reach": "الوصول الفريد",
+      "reachDesc": "عدد المستخدمين الفريدين",
+      "views": "مشاهدات العقار",
+      "viewsDesc": "زيارات صفحة تفاصيل العقار",
+      "conversions": "الاستفسارات المباشرة",
+      "conversionsDesc": "الزيارات والمحادثات النشطة"
+    },
+    "charts": {
+      "statusTitle": "توزيع حالات العقارات",
+      "purposeTitle": "توزيع الغرض من العقار",
+      "topListingsTitle": "العقارات الأعلى أداءً",
+      "viewsCount": "المشاهدات",
+      "impressionsCount": "الظهور",
+      "reachCount": "الوصول",
+      "createdAt": "تاريخ الإنشاء",
+      "price": "السعر"
+    },
+    "table": {
+      "title": "تفاصيل أداء العقارات",
+      "property": "تفاصيل العقار",
+      "status": "الحالة",
+      "purpose": "الغرض",
+      "metrics": "مشاهدات / ظهور / وصول",
+      "price": "السعر",
+      "agent": "أضيف بواسطة",
+      "created": "تاريخ الإضافة"
+    }
   }
 }

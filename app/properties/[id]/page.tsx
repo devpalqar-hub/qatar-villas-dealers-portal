@@ -24,9 +24,11 @@ import {
     FiClock,
     FiExternalLink,
     FiClipboard,
+    FiStar,
 } from "react-icons/fi";
 import { AppLayout, Button, Badge } from "@/components/ui";
 import PropertyMap from "@/components/property/PropertyMap";
+import FeaturePropertyModal from "@/components/property/FeaturePropertyModal/FeaturePropertyModal";
 import { propertyService, PropertyDetail } from "@/services/property.service";
 import InquiriesSection from "@/components/inquiry/InquiriesSection";
 import styles from "./page.module.css";
@@ -40,6 +42,7 @@ export default function PropertyDetailPage() {
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
     const [selectedPhotoIndex, setSelectedPhotoIndex] = useState<number>(0);
+    const [isFeatureModalOpen, setIsFeatureModalOpen] = useState<boolean>(false);
 
     useEffect(() => {
         if (id) {
@@ -176,6 +179,11 @@ export default function PropertyDetailPage() {
                                 </Badge>
                                 <span className={styles.purposeBadge}>{property.purpose}</span>
                                 <span className={styles.typeBadge}>{property.type?.title}</span>
+                                {property.isFeatured && (
+                                    <span className={styles.featuredBadge}>
+                                        <FiStar size={12} /> Featured
+                                    </span>
+                                )}
                             </div>
                         </div>
 
@@ -198,6 +206,17 @@ export default function PropertyDetailPage() {
                         </div>
                         {property.priceNegotiable && (
                             <span className={styles.negotiableChip}>Negotiable</span>
+                        )}
+
+                        {property.status?.toUpperCase() === "ACTIVE" && (
+                            <button
+                                type="button"
+                                className={styles.featureBtn}
+                                onClick={() => setIsFeatureModalOpen(true)}
+                            >
+                                <FiStar size={14} />
+                                {property.isFeatured ? "Extend Featured Status" : "Feature This Property"}
+                            </button>
                         )}
                     </div>
                 </div>
@@ -522,6 +541,15 @@ export default function PropertyDetailPage() {
                 </div>
                 </div>{/* end contentStack */}
             </div>
+
+            <FeaturePropertyModal
+                isOpen={isFeatureModalOpen}
+                onClose={() => setIsFeatureModalOpen(false)}
+                listingId={property.id}
+                propertyName={property.propertyName}
+                isCurrentlyFeatured={property.isFeatured}
+                onFeatured={() => void fetchPropertyDetail(id)}
+            />
         </AppLayout>
     );
 }
