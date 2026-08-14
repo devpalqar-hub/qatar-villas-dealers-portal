@@ -2,10 +2,10 @@
 
 import React, { useEffect } from "react";
 import { createPortal } from "react-dom";
-import { RiAlertLine, RiInformationLine, RiErrorWarningLine } from "react-icons/ri";
+import { RiAlertLine, RiInformationLine, RiErrorWarningLine, RiCheckLine } from "react-icons/ri";
 import styles from "./ConfirmModal.module.css";
 
-type Intent = "danger" | "warning" | "info";
+type Intent = "danger" | "warning" | "info" | "success";
 
 interface ConfirmModalProps {
     open: boolean;
@@ -22,6 +22,7 @@ const INTENT_ICONS: Record<Intent, React.ReactNode> = {
     danger:  <RiAlertLine />,
     warning: <RiErrorWarningLine />,
     info:    <RiInformationLine />,
+    success: <RiCheckLine />,
 };
 
 export default function ConfirmModal({

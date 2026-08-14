@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import {
     FiArrowLeft,
     FiMapPin,
@@ -30,6 +31,7 @@ import {
 import { AppLayout, Button, Badge } from "@/components/ui";
 import PropertyMap from "@/components/property/PropertyMap";
 import FeaturePropertyModal from "@/components/property/FeaturePropertyModal/FeaturePropertyModal";
+import PropertyAnalyticsSection from "@/components/property/PropertyAnalyticsSection";
 import { propertyService, PropertyDetail } from "@/services/property.service";
 import InquiriesSection from "@/components/inquiry/InquiriesSection";
 import styles from "./page.module.css";
@@ -38,6 +40,7 @@ export default function PropertyDetailPage() {
     const params = useParams();
     const router = useRouter();
     const id = params?.id as string;
+    const t = useTranslations("property.detail");
 
     const [property, setProperty] = useState<PropertyDetail | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
@@ -64,7 +67,7 @@ export default function PropertyDetailPage() {
         } catch (err: unknown) {
             const serviceError = err as { response?: { data?: { message?: string } } };
             console.error("Failed to fetch property details:", err);
-            setError(serviceError.response?.data?.message || "Failed to load property details.");
+            setError(serviceError.response?.data?.message || t("loadError"));
         } finally {
             setLoading(false);
         }
@@ -96,17 +99,17 @@ export default function PropertyDetailPage() {
                 failedUrl: `${origin}/payments/failed?listingId=${property.id}`,
             });
             if (result.activated) {
-                setPaymentNotice("Payment not required — this property is now live.");
+                setPaymentNotice(t("paymentActivated"));
                 void fetchPropertyDetail(property.id);
             } else if (result.paymentUrl) {
                 window.location.assign(result.paymentUrl);
                 return;
             } else {
-                setPaymentError("Unable to process the payment right now. Please try again.");
+                setPaymentError(t("paymentGenericError"));
             }
         } catch (err: unknown) {
             const serviceError = err as { response?: { data?: { message?: string } } };
-            setPaymentError(serviceError.response?.data?.message || "Unable to process the payment right now. Please try again.");
+            setPaymentError(serviceError.response?.data?.message || t("paymentGenericError"));
         } finally {
             setIsPaying(false);
         }
@@ -117,11 +120,11 @@ export default function PropertyDetailPage() {
             <AppLayout>
                 <div className={styles.container}>
                     <div className={styles.breadcrumbs}>
-                        <Link href="/dashboard">Dashboard</Link>
+                        <Link href="/dashboard">{t("breadcrumb.dashboard")}</Link>
                         <span>&gt;</span>
-                        <Link href="/properties">Properties</Link>
+                        <Link href="/properties">{t("breadcrumb.properties")}</Link>
                         <span>&gt;</span>
-                        <span>Loading...</span>
+                        <span>{t("breadcrumb.loading")}</span>
                     </div>
 
                     <div className={styles.headerCard}>
@@ -149,19 +152,19 @@ export default function PropertyDetailPage() {
             <AppLayout>
                 <div className={styles.container}>
                     <div className={styles.breadcrumbs}>
-                        <Link href="/dashboard">Dashboard</Link>
+                        <Link href="/dashboard">{t("breadcrumb.dashboard")}</Link>
                         <span>&gt;</span>
-                        <Link href="/properties">Properties</Link>
+                        <Link href="/properties">{t("breadcrumb.properties")}</Link>
                         <span>&gt;</span>
-                        <span>Error</span>
+                        <span>{t("breadcrumb.error")}</span>
                     </div>
 
                     <div className={styles.errorContainer}>
                         <FiInfo size={48} color="var(--primary)" />
-                        <h2 className={styles.errorTitle}>Property Not Found</h2>
-                        <p className={styles.errorSubtext}>{error || "The requested property listing could not be found."}</p>
+                        <h2 className={styles.errorTitle}>{t("notFoundTitle")}</h2>
+                        <p className={styles.errorSubtext}>{error || t("notFoundSubtext")}</p>
                         <Button onClick={() => router.push("/properties")} leftIcon={<FiArrowLeft />}>
-                            Back to Properties
+                            {t("backToProperties")}
                         </Button>
                     </div>
                 </div>
@@ -192,15 +195,15 @@ export default function PropertyDetailPage() {
         <AppLayout>
             <div className={styles.container}>
                 <nav className={styles.breadcrumbs} aria-label="Breadcrumb">
-                    <Link href="/dashboard">Dashboard</Link>
+                    <Link href="/dashboard">{t("breadcrumb.dashboard")}</Link>
                     <span>&gt;</span>
-                    <Link href="/properties">Properties</Link>
+                    <Link href="/properties">{t("breadcrumb.properties")}</Link>
                     <span>&gt;</span>
                     <span style={{ color: "var(--text)", fontWeight: 500 }}>{property.propertyName}</span>
                 </nav>
 
                 <button className={styles.backBtn} onClick={() => router.push("/properties")}>
-                    <FiArrowLeft size={16} /> Back to Properties
+                    <FiArrowLeft size={16} /> {t("backToProperties")}
                 </button>
 
                 <div className={styles.headerCard}>
@@ -215,7 +218,7 @@ export default function PropertyDetailPage() {
                                 <span className={styles.typeBadge}>{property.type?.title}</span>
                                 {property.isFeatured && (
                                     <span className={styles.featuredBadge}>
-                                        <FiStar size={12} /> Featured
+                                        <FiStar size={12} /> {t("featured")}
                                     </span>
                                 )}
                             </div>
@@ -228,18 +231,18 @@ export default function PropertyDetailPage() {
                                 {localityLine ? `, ${localityLine}` : ""}
                             </span>
                             <span style={{ color: "var(--text-light)", marginLeft: 8 }}>
-                                (REF: {property.referenceCode})
+                                ({t("referenceLabel", { code: property.referenceCode })})
                             </span>
                         </div>
                     </div>
 
                     <div className={styles.priceSection}>
-                        <span className={styles.priceLabel}>Listed Price</span>
+                        <span className={styles.priceLabel}>{t("listedPrice")}</span>
                         <div className={styles.priceValue}>
                             {property.price?.toLocaleString()} QAR
                         </div>
                         {property.priceNegotiable && (
-                            <span className={styles.negotiableChip}>Negotiable</span>
+                            <span className={styles.negotiableChip}>{t("negotiable")}</span>
                         )}
 
                         {property.status?.toUpperCase() === "ACTIVE" && (
@@ -249,7 +252,7 @@ export default function PropertyDetailPage() {
                                 onClick={() => setIsFeatureModalOpen(true)}
                             >
                                 <FiStar size={14} />
-                                {property.isFeatured ? "Extend Featured Status" : "Feature This Property"}
+                                {property.isFeatured ? t("extendFeatured") : t("featureThis")}
                             </button>
                         )}
 
@@ -261,7 +264,7 @@ export default function PropertyDetailPage() {
                                 disabled={isPaying}
                             >
                                 <FiCreditCard size={14} />
-                                {isPaying ? "Processing..." : "Make Payment"}
+                                {isPaying ? t("processing") : t("makePayment")}
                             </button>
                         )}
                     </div>
@@ -276,7 +279,7 @@ export default function PropertyDetailPage() {
 
                         <div className={styles.sectionCard}>
                             <h2 className={styles.sectionTitle}>
-                                <FiImage size={18} /> Property Gallery ({photos.length})
+                                <FiImage size={18} /> {t("gallery", { count: photos.length })}
                             </h2>
 
                             <div className={styles.galleryWrapper}>
@@ -290,7 +293,7 @@ export default function PropertyDetailPage() {
                                     ) : (
                                         <div className={styles.photoPlaceholder}>
                                             <FiImage size={48} />
-                                            <span>No Image Available</span>
+                                            <span>{t("noImage")}</span>
                                         </div>
                                     )}
                                     {activePhoto?.caption && (
@@ -311,7 +314,7 @@ export default function PropertyDetailPage() {
                                             >
                                                 <img
                                                     src={photo.url}
-                                                    alt={photo.caption || `Thumbnail ${index + 1}`}
+                                                    alt={photo.caption || t("thumbnailAlt", { number: index + 1 })}
                                                     className={styles.thumbnailImg}
                                                 />
                                             </button>
@@ -323,38 +326,38 @@ export default function PropertyDetailPage() {
 
                         <div className={styles.sectionCard}>
                             <h2 className={styles.sectionTitle}>
-                                <FiGrid size={18} /> Key Specifications
+                                <FiGrid size={18} /> {t("specs")}
                             </h2>
 
                             <div className={styles.specsGrid}>
                                 <div className={styles.specItem}>
                                     <div className={styles.specIcon}><FiHome /></div>
                                     <div className={styles.specInfo}>
-                                        <span className={styles.specLabel}>Bedrooms</span>
-                                        <span className={styles.specValue}>{property.bedrooms} Beds</span>
+                                        <span className={styles.specLabel}>{t("bedrooms")}</span>
+                                        <span className={styles.specValue}>{t("bedsSuffix", { count: property.bedrooms })}</span>
                                     </div>
                                 </div>
 
                                 <div className={styles.specItem}>
                                     <div className={styles.specIcon}><FiHome /></div>
                                     <div className={styles.specInfo}>
-                                        <span className={styles.specLabel}>Bathrooms</span>
-                                        <span className={styles.specValue}>{property.bathrooms} Baths</span>
+                                        <span className={styles.specLabel}>{t("bathrooms")}</span>
+                                        <span className={styles.specValue}>{t("bathsSuffix", { count: property.bathrooms })}</span>
                                     </div>
                                 </div>
 
                                 <div className={styles.specItem}>
                                     <div className={styles.specIcon}><FiMaximize2 /></div>
                                     <div className={styles.specInfo}>
-                                        <span className={styles.specLabel}>Area</span>
-                                        <span className={styles.specValue}>{property.area} sqm</span>
+                                        <span className={styles.specLabel}>{t("area")}</span>
+                                        <span className={styles.specValue}>{t("areaSuffix", { value: property.area })}</span>
                                     </div>
                                 </div>
 
                                 <div className={styles.specItem}>
                                     <div className={styles.specIcon}><FiLayers /></div>
                                     <div className={styles.specInfo}>
-                                        <span className={styles.specLabel}>Living Rooms</span>
+                                        <span className={styles.specLabel}>{t("livingRooms")}</span>
                                         <span className={styles.specValue}>{property.livingRooms}</span>
                                     </div>
                                 </div>
@@ -362,16 +365,16 @@ export default function PropertyDetailPage() {
                                 <div className={styles.specItem}>
                                     <div className={styles.specIcon}><FiCompass /></div>
                                     <div className={styles.specInfo}>
-                                        <span className={styles.specLabel}>Parking</span>
-                                        <span className={styles.specValue}>{property.parkingSpaces} Spaces</span>
+                                        <span className={styles.specLabel}>{t("parking")}</span>
+                                        <span className={styles.specValue}>{t("parkingSuffix", { count: property.parkingSpaces })}</span>
                                     </div>
                                 </div>
 
                                 <div className={styles.specItem}>
                                     <div className={styles.specIcon}><FiGrid /></div>
                                     <div className={styles.specInfo}>
-                                        <span className={styles.specLabel}>Floor Info</span>
-                                        <span className={styles.specValue}>Floor {property.floorNumber} / {property.totalFloors}</span>
+                                        <span className={styles.specLabel}>{t("floorInfo")}</span>
+                                        <span className={styles.specValue}>{t("floorSuffix", { floor: property.floorNumber, total: property.totalFloors })}</span>
                                     </div>
                                 </div>
 
@@ -379,7 +382,7 @@ export default function PropertyDetailPage() {
                                     <div className={styles.specItem}>
                                         <div className={styles.specIcon}><FiCalendar /></div>
                                         <div className={styles.specInfo}>
-                                            <span className={styles.specLabel}>Year Built</span>
+                                            <span className={styles.specLabel}>{t("yearBuilt")}</span>
                                             <span className={styles.specValue}>{property.yearBuilt}</span>
                                         </div>
                                     </div>
@@ -388,8 +391,8 @@ export default function PropertyDetailPage() {
                                 <div className={styles.specItem}>
                                     <div className={styles.specIcon}><FiShield /></div>
                                     <div className={styles.specInfo}>
-                                        <span className={styles.specLabel}>Furnishing</span>
-                                        <span className={styles.specValue}>{property.furnishing?.title || "N/A"}</span>
+                                        <span className={styles.specLabel}>{t("furnishing")}</span>
+                                        <span className={styles.specValue}>{property.furnishing?.title || t("notAvailable")}</span>
                                     </div>
                                 </div>
                             </div>
@@ -397,7 +400,7 @@ export default function PropertyDetailPage() {
 
                         <div className={styles.sectionCard}>
                             <h2 className={styles.sectionTitle}>
-                                <FiInfo size={18} /> Property Description
+                                <FiInfo size={18} /> {t("description")}
                             </h2>
                             <p className={styles.descriptionText}>{property.description}</p>
                         </div>
@@ -405,7 +408,7 @@ export default function PropertyDetailPage() {
                         {hasCoordinates && (
                             <div className={styles.sectionCard}>
                                 <h2 className={styles.sectionTitle}>
-                                    <FiMapPin size={18} /> Property Location
+                                    <FiMapPin size={18} /> {t("location")}
                                 </h2>
 
                                 <div className={styles.locationMapContent}>
@@ -427,7 +430,7 @@ export default function PropertyDetailPage() {
                                             rel="noopener noreferrer"
                                             className={styles.locationMapLink}
                                         >
-                                            <FiExternalLink /> Open in Maps
+                                            <FiExternalLink /> {t("openInMaps")}
                                         </a>
                                     </div>
                                 </div>
@@ -437,7 +440,7 @@ export default function PropertyDetailPage() {
                         {property.amenities && property.amenities.length > 0 && (
                             <div className={styles.sectionCard}>
                                 <h2 className={styles.sectionTitle}>
-                                    <FiCheckCircle size={18} /> Amenities & Features
+                                    <FiCheckCircle size={18} /> {t("amenities")}
                                 </h2>
                                 <div className={styles.chipsGrid}>
                                     {property.amenities.map((amenity, index) => (
@@ -452,7 +455,7 @@ export default function PropertyDetailPage() {
                         {property.nearbyTags && property.nearbyTags.length > 0 && (
                             <div className={styles.sectionCard}>
                                 <h2 className={styles.sectionTitle}>
-                                    <FiTag size={18} /> Nearby Facilities
+                                    <FiTag size={18} /> {t("nearby")}
                                 </h2>
                                 <div className={styles.chipsGrid}>
                                     {property.nearbyTags.map((tag) => (
@@ -468,24 +471,24 @@ export default function PropertyDetailPage() {
                         {(property.extraProperties || property.otherFeatures) && (
                             <div className={styles.sectionCard}>
                                 <h2 className={styles.sectionTitle}>
-                                    <FiLayers size={18} /> Additional Features
+                                    <FiLayers size={18} /> {t("additionalFeatures")}
                                 </h2>
                                 <div className={styles.locationBox}>
                                     {property.extraProperties?.privatePool !== undefined && (
                                         <div className={styles.locationRow}>
-                                            <span className={styles.locationLabel}>Private Pool</span>
-                                            <span className={styles.locationVal}>{property.extraProperties.privatePool ? "Yes" : "No"}</span>
+                                            <span className={styles.locationLabel}>{t("privatePool")}</span>
+                                            <span className={styles.locationVal}>{property.extraProperties.privatePool ? t("yes") : t("no")}</span>
                                         </div>
                                     )}
                                     {property.extraProperties?.gardenAreaSqm !== undefined && (
                                         <div className={styles.locationRow}>
-                                            <span className={styles.locationLabel}>Garden Area</span>
-                                            <span className={styles.locationVal}>{property.extraProperties.gardenAreaSqm} sqm</span>
+                                            <span className={styles.locationLabel}>{t("gardenArea")}</span>
+                                            <span className={styles.locationVal}>{t("areaSuffix", { value: property.extraProperties.gardenAreaSqm })}</span>
                                         </div>
                                     )}
                                     {property.otherFeatures && (
                                         <div className={styles.locationRow}>
-                                            <span className={styles.locationLabel}>Other Features</span>
+                                            <span className={styles.locationLabel}>{t("otherFeatures")}</span>
                                             <span className={styles.locationVal}>{property.otherFeatures}</span>
                                         </div>
                                     )}
@@ -497,7 +500,7 @@ export default function PropertyDetailPage() {
                     <div className={styles.sideColumn}>
                         <div className={styles.sectionCard}>
                             <h2 className={styles.sectionTitle}>
-                                <FiUser size={18} /> Contact Information
+                                <FiUser size={18} /> {t("contactInfo")}
                             </h2>
 
                             <div className={styles.contactCard}>
@@ -515,19 +518,19 @@ export default function PropertyDetailPage() {
                                     {property.contactPhone && (
                                         <div className={styles.contactItem}>
                                             <FiPhone className={styles.contactIcon} />
-                                            <span>Phone: <strong>{property.contactPhone}</strong></span>
+                                            <span>{t("phone")}: <strong>{property.contactPhone}</strong></span>
                                         </div>
                                     )}
                                     {property.contactWhatsapp && (
                                         <div className={styles.contactItem}>
                                             <FiMessageSquare className={styles.contactIcon} />
-                                            <span>WhatsApp: <strong>{property.contactWhatsapp}</strong></span>
+                                            <span>{t("whatsapp")}: <strong>{property.contactWhatsapp}</strong></span>
                                         </div>
                                     )}
                                     {property.contactVerified !== undefined && (
                                         <div className={styles.contactItem}>
                                             <FiCheckCircle className={styles.contactIcon} />
-                                            <span>Contact Verified: <strong>{property.contactVerified ? "Yes" : "No"}</strong></span>
+                                            <span>{t("contactVerified")}: <strong>{property.contactVerified ? t("yes") : t("no")}</strong></span>
                                         </div>
                                     )}
                                 </div>
@@ -535,7 +538,7 @@ export default function PropertyDetailPage() {
                                 <div className={styles.contactBtnGroup}>
                                     {property.contactPhone && (
                                         <a href={`tel:${property.contactPhone}`} className={styles.callBtn}>
-                                            <FiPhone /> Call Contact
+                                            <FiPhone /> {t("callContact")}
                                         </a>
                                     )}
                                     {property.contactWhatsapp && (
@@ -545,7 +548,7 @@ export default function PropertyDetailPage() {
                                             rel="noopener noreferrer"
                                             className={styles.whatsappBtn}
                                         >
-                                            <FiMessageSquare /> WhatsApp
+                                            <FiMessageSquare /> {t("whatsapp")}
                                         </a>
                                     )}
                                 </div>
@@ -554,26 +557,26 @@ export default function PropertyDetailPage() {
 
                         <div className={styles.sectionCard}>
                             <h2 className={styles.sectionTitle}>
-                                <FiClock size={18} /> Listing Details
+                                <FiClock size={18} /> {t("listingDetails")}
                             </h2>
 
                             <div className={styles.metaList}>
                                 <div className={styles.metaRow}>
-                                    <span>Listing Status</span>
+                                    <span>{t("listingStatus")}</span>
                                     <span>{property.status}</span>
                                 </div>
                                 {property.submissionCount !== undefined && (
                                     <div className={styles.metaRow}>
-                                        <span>Submission Count</span>
+                                        <span>{t("submissionCount")}</span>
                                         <span>{property.submissionCount}</span>
                                     </div>
                                 )}
                                 <div className={styles.metaRow}>
-                                    <span>Created Date</span>
+                                    <span>{t("createdDate")}</span>
                                     <span>{new Date(property.createdAt).toLocaleDateString()}</span>
                                 </div>
                                 <div className={styles.metaRow}>
-                                    <span>Last Updated</span>
+                                    <span>{t("lastUpdated")}</span>
                                     <span>{new Date(property.updatedAt).toLocaleDateString()}</span>
                                 </div>
                             </div>
@@ -581,10 +584,13 @@ export default function PropertyDetailPage() {
                     </div>
                 </div>
 
+                {/* ── Analytics Section ── */}
+                <PropertyAnalyticsSection listingId={property.id} />
+
                 {/* ── Inquiries Section ── */}
                 <div className={styles.sectionCard}>
                     <h2 className={styles.sectionTitle}>
-                        <FiClipboard size={18} /> Visit Inquiries
+                        <FiClipboard size={18} /> {t("visitInquiries")}
                     </h2>
                     <InquiriesSection />
                 </div>

@@ -2,6 +2,7 @@
 
 import React from "react";
 import { FiAlertCircle, FiArrowRight } from "react-icons/fi";
+import { useTranslations } from "next-intl";
 import { ApiReview } from "@/services/dealerOnboarding.service";
 import styles from "./EditSidebar.module.css";
 
@@ -19,6 +20,8 @@ export default function EditSidebar({
     reviews = [],
     submittedAt,
 }: Props) {
+    const t = useTranslations("onboarding.editSidebar");
+    const tStatus = useTranslations("statusEnum");
     const formatDate = (dateStr?: string | null) => {
         if (!dateStr) return "";
         try {
@@ -51,7 +54,7 @@ export default function EditSidebar({
         <div className={styles.sidebarContainer}>
             {/* ── CARD 1: Review History ── */}
             <div className={styles.card}>
-                <h3 className={styles.cardTitle}>Review History</h3>
+                <h3 className={styles.cardTitle}>{t("reviewHistory")}</h3>
 
                 <div className={styles.timeline}>
                     {/* Dynamic review entries from API */}
@@ -76,18 +79,18 @@ export default function EditSidebar({
                                             isRejected ? styles.badgeRejected : styles.badgeSubmitted
                                         }
                                     >
-                                        {review.action.charAt(0) + review.action.slice(1).toLowerCase()}
+                                        {isRejected ? tStatus("REJECTED") : tStatus("SUBMITTED")}
                                     </span>
                                     <span className={styles.itemDate}>
                                         {formatDate(review.reviewedAt)}
                                     </span>
                                 </div>
 
-                                <div className={styles.reviewedBy}>Reviewed by: Admin</div>
+                                <div className={styles.reviewedBy}>{t("reviewedBy")}</div>
 
                                 {review.message && (
                                     <>
-                                        <div className={styles.reasonHeading}>Reason:</div>
+                                        <div className={styles.reasonHeading}>{t("reason")}</div>
                                         <div className={styles.notesList}>
                                             {review.message
                                                 .split("\n")
@@ -109,11 +112,11 @@ export default function EditSidebar({
                     <div className={styles.timelineItem}>
                         <div className={styles.timelineNodeSubmitted} />
                         <div className={styles.itemHeader}>
-                            <span className={styles.badgeSubmitted}>Submitted</span>
+                            <span className={styles.badgeSubmitted}>{t("submittedBadge")}</span>
                             <span className={styles.itemDate}>{formatDate(submittedAt)}</span>
                         </div>
                         <div className={styles.subText}>
-                            Your application was submitted successfully.
+                            {t("submittedNote")}
                         </div>
                     </div>
                 </div>
@@ -121,28 +124,28 @@ export default function EditSidebar({
 
             {/* ── CARD 2: Before Resubmitting ── */}
             <div className={styles.checklistCard}>
-                <h3 className={styles.checklistTitle}>Before Resubmitting</h3>
+                <h3 className={styles.checklistTitle}>{t("beforeResubmitting")}</h3>
                 <div className={styles.checkList}>
                     <div className={styles.checkItem}>
                         <FiAlertCircle className={styles.checkIcon} />
-                        <span>Ensure all required fields are updated</span>
+                        <span>{t("checklist.fields")}</span>
                     </div>
                     <div className={styles.checkItem}>
                         <FiAlertCircle className={styles.checkIcon} />
-                        <span>Upload valid documents</span>
+                        <span>{t("checklist.documents")}</span>
                     </div>
                     <div className={styles.checkItem}>
                         <FiAlertCircle className={styles.checkIcon} />
-                        <span>Check information for accuracy</span>
+                        <span>{t("checklist.accuracy")}</span>
                     </div>
                 </div>
             </div>
 
             {/* ── CARD 3: Need Help? ── */}
             <div className={styles.card}>
-                <h3 className={styles.cardTitle}>Need Help?</h3>
+                <h3 className={styles.cardTitle}>{t("needHelp")}</h3>
                 <p className={styles.helpDescription}>
-                    If you have any questions, our support team is ready to assist you.
+                    {t("helpDescription")}
                 </p>
                 <button
                     type="button"
@@ -151,7 +154,7 @@ export default function EditSidebar({
                         window.location.href = "mailto:support@villasqatar.qa";
                     }}
                 >
-                    Contact Support <FiArrowRight size={14} />
+                    {t("contactSupport")} <FiArrowRight size={14} />
                 </button>
             </div>
         </div>

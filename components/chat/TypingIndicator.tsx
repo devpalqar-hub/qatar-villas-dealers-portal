@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { useTranslations } from "next-intl";
 import styles from "./TypingIndicator.module.css";
 
 interface TypingIndicatorProps {
@@ -9,10 +10,11 @@ interface TypingIndicatorProps {
 }
 
 export default function TypingIndicator({
-    name = "Customer",
+    name,
     avatar,
 }: TypingIndicatorProps) {
-    const displayName = name || "Customer";
+    const t = useTranslations("chat");
+    const displayName = name || t("defaultCustomerName");
     const initials = displayName
         .split(" ")
         .filter(Boolean)
@@ -26,10 +28,10 @@ export default function TypingIndicator({
             {avatar ? (
                 <img src={avatar} alt={displayName} className={styles.avatar} />
             ) : (
-                <div className={styles.avatarFallback}>{initials || "C"}</div>
+                <div className={styles.avatarFallback}>{initials || displayName[0]}</div>
             )}
             <div className={styles.bubble}>
-                <span className={styles.text}>{displayName} is typing...</span>
+                <span className={styles.text}>{t("isTyping", { name: displayName })}</span>
                 <div className={styles.dots}>
                     <span className={styles.dot} />
                     <span className={styles.dot} />

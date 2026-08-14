@@ -2,6 +2,7 @@
 
 import React from "react";
 import { FiAlertCircle } from "react-icons/fi";
+import { useTranslations } from "next-intl";
 import styles from "./MessageSkeleton.module.css";
 
 // ─── Message Skeleton ─────────────────────────────────────────────────────────
@@ -59,23 +60,24 @@ interface MessageErrorProps {
 }
 
 export function MessageError({
-    message = "Failed to load messages.",
+    message,
     onRetry,
 }: MessageErrorProps) {
+    const t = useTranslations("chat");
     return (
         <div className={styles.errorState}>
             <div className={styles.errorIcon}>
                 <FiAlertCircle size={36} />
             </div>
-            <p className={styles.errorTitle}>Something went wrong</p>
-            <p className={styles.errorMessage}>{message}</p>
+            <p className={styles.errorTitle}>{t("somethingWentWrong")}</p>
+            <p className={styles.errorMessage}>{message ?? t("failedToLoadMessages")}</p>
             {onRetry && (
                 <button
                     type="button"
                     className={styles.retryBtn}
                     onClick={onRetry}
                 >
-                    Try again
+                    {t("tryAgain")}
                 </button>
             )}
         </div>
@@ -85,10 +87,11 @@ export function MessageError({
 // ─── Load More Bar ─────────────────────────────────────────────────────────────
 
 export function LoadMoreBar() {
+    const t = useTranslations("chat");
     return (
         <div className={styles.loadMoreBar}>
             <div className={styles.loadMoreSpinner} />
-            <span>Loading older messages…</span>
+            <span>{t("loadingOlderMessages")}</span>
         </div>
     );
 }

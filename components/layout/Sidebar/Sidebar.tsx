@@ -8,12 +8,12 @@ import {
   FiUsers,
   FiMessageCircle,
   FiBarChart2,
-  FiSettings,
   FiCreditCard,
   FiLogOut,
   FiX,
   FiUpload,
   FiUser,
+  FiFileText,
 } from "react-icons/fi";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
@@ -29,6 +29,7 @@ const menuItems = [
   { titleKey: "bulkUpload", href: "/bulk-upload", icon: FiUpload },
   { titleKey: "analytics", href: "/analytics", icon: FiBarChart2 },
   { titleKey: "subscription", href: "/subscription", icon: FiCreditCard },
+  { titleKey: "invoices", href: "/invoices", icon: FiFileText },
   { titleKey: "chat", href: "/chat", icon: FiMessageCircle },
   { titleKey: "profile", href: "/profile", icon: FiUser },
 ] as const;

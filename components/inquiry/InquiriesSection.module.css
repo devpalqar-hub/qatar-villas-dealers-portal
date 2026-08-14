@@ -164,6 +164,13 @@
 }
 
 /* Actions */
+.actionsGroup {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
 .actionBtn {
     display: inline-flex;
     align-items: center;
@@ -181,6 +188,26 @@
 }
 
 .actionBtn:hover {
+    opacity: 0.87;
+}
+
+.acceptBtn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 14px;
+    background: #16a34a;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.18s;
+    white-space: nowrap;
+}
+
+.acceptBtn:hover {
     opacity: 0.87;
 }
 

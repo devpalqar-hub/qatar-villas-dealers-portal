@@ -3,19 +3,23 @@
 import React from "react";
 import Link from "next/link";
 import { FiClipboard } from "react-icons/fi";
+import { useTranslations } from "next-intl";
 import { AppLayout } from "@/components/ui";
 import InquiriesSection from "@/components/inquiry/InquiriesSection";
 import styles from "./page.module.css";
 
 export default function InquiriesPage() {
+    const t = useTranslations("inquiries");
+    const tSidebar = useTranslations("sidebar");
+
     return (
         <AppLayout>
             <div className={styles.container}>
                 {/* Breadcrumbs */}
                 <nav className={styles.breadcrumbs} aria-label="Breadcrumb">
-                    <Link href="/dashboard">Dashboard</Link>
+                    <Link href="/dashboard">{tSidebar("dashboard")}</Link>
                     <span>&gt;</span>
-                    <span style={{ color: "var(--text)", fontWeight: 500 }}>Inquiries</span>
+                    <span style={{ color: "var(--text)", fontWeight: 500 }}>{tSidebar("inquiries")}</span>
                 </nav>
 
                 {/* Page Header */}
@@ -25,9 +29,9 @@ export default function InquiriesPage() {
                             <FiClipboard size={22} />
                         </div>
                         <div>
-                            <h1 className={styles.title}>Visit Inquiries</h1>
+                            <h1 className={styles.title}>{t("pageTitle")}</h1>
                             <p className={styles.subtitle}>
-                                Manage visit requests from potential buyers and renters for your listings.
+                                {t("pageSubtitle")}
                             </p>
                         </div>
                     </div>

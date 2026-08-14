@@ -115,7 +115,7 @@ export interface Inquiry {
     ownerId: string;
     scheduledAt: string;
     proposedAt?: string | null;
-    status: "PENDING" | "APPROVED" | "REJECTED" | "COMPLETED" | "CANCELLED";
+    status: "PENDING" | "APPROVED" | "ACCEPTED" | "REJECTED" | "COMPLETED" | "CANCELLED";
     notes?: string | null;
     createdAt: string;
     updatedAt: string;
@@ -126,6 +126,11 @@ export interface Inquiry {
 export const inquiryService = {
     getInquiriesAsOwner: async (): Promise<Inquiry[]> => {
         const response = await api.get("/visits/as-owner");
+        return response.data;
+    },
+
+    acceptVisit: async (visitId: string): Promise<Inquiry> => {
+        const response = await api.patch(`/visits/${visitId}/accept`);
         return response.data;
     },
 };

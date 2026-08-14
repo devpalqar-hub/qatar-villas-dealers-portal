@@ -1,5 +1,6 @@
 import React from "react";
 import { FiCheck } from "react-icons/fi";
+import { useTranslations } from "next-intl";
 import Button from "../ui/Button/Button";
 import styles from "./SubmissionSuccess.module.css";
 import Badge from "../ui/Badge/Badge";
@@ -10,30 +11,31 @@ interface Props {
 }
 
 export default function SubmissionSuccess({ submissionId, onCheckStatus }: Props) {
+    const t = useTranslations("onboarding.success");
     return (
         <div className={styles.container}>
             <div className={styles.iconWrapper}>
                 <FiCheck />
             </div>
 
-            <h2 className={styles.title}>Application Submitted</h2>
+            <h2 className={styles.title}>{t("title")}</h2>
 
             <div className={styles.reference}>
-                <span>Reference Number</span>
+                <span>{t("referenceNumber")}</span>
                 {submissionId}
             </div>
 
             <div style={{ marginBottom: "24px" }}>
-                <Badge variant="success">SUBMITTED</Badge>
+                <Badge variant="success">{t("submittedBadge")}</Badge>
             </div>
 
             <p className={styles.message}>
-                Our team will review your application. You will receive an email once your application has been reviewed.
+                {t("message")}
             </p>
 
             <div className={styles.actions}>
                 <Button size="lg" onClick={onCheckStatus}>
-                    Check Status
+                    {t("checkStatus")}
                 </Button>
             </div>
         </div>

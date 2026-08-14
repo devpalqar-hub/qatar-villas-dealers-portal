@@ -8,27 +8,6 @@ import { Input } from "@/components/ui";
 import { authService } from "@/services/auth.service";
 import styles from "./page.module.css";
 
-/**
- * Abstract faceted logomark (four triangles forming a stylised "V").
- * Reused for the top-left wordmark and the floating badge on the form card.
- */
-function LogoMark({ className }: { className?: string }) {
-    return (
-        <svg viewBox="0 0 48 48" className={className} aria-hidden="true">
-            <defs>
-                <linearGradient id="vqGoldFill" x1="0" y1="0" x2="48" y2="48" gradientUnits="userSpaceOnUse">
-                    <stop offset="0%" stopColor="#e9cd8f" />
-                    <stop offset="100%" stopColor="#b3893f" />
-                </linearGradient>
-            </defs>
-            <path d="M6 7 L24 7 L14 23 Z" fill="url(#vqGoldFill)" />
-            <path d="M24 7 L42 7 L34 23 Z" fill="url(#vqGoldFill)" opacity="0.85" />
-            <path d="M14 23 L24 41 L6 41 Z" fill="url(#vqGoldFill)" opacity="0.7" />
-            <path d="M34 23 L42 41 L24 41 Z" fill="url(#vqGoldFill)" opacity="0.55" />
-        </svg>
-    );
-}
-
 export default function LoginPage() {
     const t = useTranslations("login");
     const tCommon = useTranslations("common");
@@ -119,11 +98,14 @@ Z"
 
                     <div className={styles.imageContent}>
                         <div className={styles.logoRow}>
-                            <LogoMark className={styles.logoMark} />
-                            <div className={styles.logoTextGroup}>
-                                <span className={styles.logoBrand}>{tCommon("appName")}</span>
-                                <span className={styles.logoTag}>Living Simplified</span>
-                            </div>
+                            <Image
+                                src="/VillasLogo.png"
+                                alt={tCommon("appName")}
+                                width={200}
+                                height={120}
+                                className={styles.logoImage}
+                                priority
+                            />
                         </div>
 
                         <div className={styles.heroText}>
@@ -141,7 +123,13 @@ Z"
                 <section className={styles.formPanel}>
                     <div className={styles.formCard}>
                         <div className={styles.badgeCircle}>
-                            <LogoMark className={styles.badgeMark} />
+                            <Image
+                                src="/VillasLogo.png"
+                                alt={tCommon("appName")}
+                                width={100}
+                                height={60}
+                                className={styles.badgeImage}
+                            />
                         </div>
 
                         <div className={styles.formInner}>

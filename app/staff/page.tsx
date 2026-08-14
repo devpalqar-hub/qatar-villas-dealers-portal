@@ -17,6 +17,7 @@ import {
     FiChevronRight,
     FiUserX,
 } from "react-icons/fi";
+import { useTranslations } from "next-intl";
 import { AppLayout, Button, Badge, ConfirmModal } from "@/components/ui";
 import { staffService, StaffMember, GetStaffResponse } from "@/services/staff.service";
 import AddStaffModal from "@/components/staff/AddStaffModal";
@@ -46,6 +47,11 @@ const MAX_VISIBLE_PERMISSIONS = 3;
 
 export default function StaffPage() {
     const router = useRouter();
+    const t = useTranslations("staff");
+    const tCommon = useTranslations("common");
+    const tSidebar = useTranslations("sidebar");
+    const tPerm = useTranslations("permissionEnum");
+    const tPagination = useTranslations("pagination");
     const [staffList, setStaffList] = useState<StaffMember[]>([]);
     const [meta, setMeta] = useState<{ total: number; page: number; limit: number; totalPages: number }>({
         total: 0,
@@ -111,14 +117,6 @@ export default function StaffPage() {
         );
     });
 
-    // Format permission text e.g. "MANAGE_LISTINGS" -> "Manage Listings"
-    const formatPermission = (perm: string) => {
-        return perm
-            .split("_")
-            .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-            .join(" ");
-    };
-
     // Calculate stats
     const totalStaff = meta.total || staffList.length;
     const activeStaff = staffList.filter((s) => s.isActive || s.staffUser?.isActive).length;
@@ -135,30 +133,30 @@ export default function StaffPage() {
             <div className={styles.container}>
                 {/* Breadcrumbs */}
                 <nav className={styles.breadcrumbs} aria-label="Breadcrumb">
-                    <Link href="/dashboard">Dashboard</Link>
+                    <Link href="/dashboard">{tSidebar("dashboard")}</Link>
                     <span>&gt;</span>
-                    <span style={{ color: "var(--text)", fontWeight: 500 }}>Staff</span>
+                    <span style={{ color: "var(--text)", fontWeight: 500 }}>{t("title")}</span>
                 </nav>
 
                 {/* Header */}
                 <div className={styles.header}>
                     <div className={styles.headerLeft}>
-                        <h1 className={styles.title}>Staff</h1>
+                        <h1 className={styles.title}>{t("title")}</h1>
                         <p className={styles.subtitle}>
-                            Manage your team members and their access.
+                            {t("subtitle")}
                         </p>
                     </div>
 
                     <div className={styles.headerActions}>
                         <Button leftIcon={<FiPlus size={16} />} onClick={() => setIsAddModalOpen(true)}>
-                            Add Staff
+                            {t("addStaff")}
                         </Button>
 
                         <Button
                             variant="secondary"
                             leftIcon={<FiDownload size={16} />}
                         >
-                            Export
+                            {t("export")}
                         </Button>
                     </div>
                 </div>
@@ -170,9 +168,9 @@ export default function StaffPage() {
                             <FiUsers />
                         </div>
                         <div className={styles.statInfo}>
-                            <span className={styles.statLabel}>Total Staff</span>
+                            <span className={styles.statLabel}>{t("stats.total")}</span>
                             <span className={styles.statValue}>{totalStaff}</span>
-                            <span className={styles.statSubtext}>All team members</span>
+                            <span className={styles.statSubtext}>{t("stats.totalSubtext")}</span>
                         </div>
                     </div>
 
@@ -181,9 +179,9 @@ export default function StaffPage() {
                             <FiCheckCircle />
                         </div>
                         <div className={styles.statInfo}>
-                            <span className={styles.statLabel}>Active Staff</span>
+                            <span className={styles.statLabel}>{t("stats.active")}</span>
                             <span className={styles.statValue}>{activeStaff}</span>
-                            <span className={styles.statSubtext}>Currently active</span>
+                            <span className={styles.statSubtext}>{t("stats.activeSubtext")}</span>
                         </div>
                     </div>
 
@@ -192,9 +190,9 @@ export default function StaffPage() {
                             <FiClock />
                         </div>
                         <div className={styles.statInfo}>
-                            <span className={styles.statLabel}>Inactive / On Leave</span>
+                            <span className={styles.statLabel}>{t("stats.inactive")}</span>
                             <span className={styles.statValue}>{inactiveStaff}</span>
-                            <span className={styles.statSubtext}>Currently inactive</span>
+                            <span className={styles.statSubtext}>{t("stats.inactiveSubtext")}</span>
                         </div>
                     </div>
 
@@ -203,9 +201,9 @@ export default function StaffPage() {
                             <FiShield />
                         </div>
                         <div className={styles.statInfo}>
-                            <span className={styles.statLabel}>Permissions Active</span>
+                            <span className={styles.statLabel}>{t("stats.permissions")}</span>
                             <span className={styles.statValue}>{uniquePermissionsCount}</span>
-                            <span className={styles.statSubtext}>Across organization</span>
+                            <span className={styles.statSubtext}>{t("stats.permissionsSubtext")}</span>
                         </div>
                     </div>
                 </div>
@@ -219,14 +217,14 @@ export default function StaffPage() {
                             <input
                                 type="text"
                                 className={styles.searchInput}
-                                placeholder="Search by name, email, position..."
+                                placeholder={t("searchPlaceholder")}
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
                             />
                         </div>
                         {!loading && searchQuery.trim() && (
                             <span className={styles.resultCount}>
-                                {filteredStaff.length} result{filteredStaff.length === 1 ? "" : "s"}
+                                {tPagination("results", { count: filteredStaff.length })}
                             </span>
                         )}
                     </div>
@@ -236,13 +234,13 @@ export default function StaffPage() {
                         <table className={styles.table}>
                             <thead>
                                 <tr>
-                                    <th className={styles.th}>Staff Member</th>
-                                    <th className={styles.th}>Role</th>
-                                    <th className={styles.th}>Permissions</th>
-                                    <th className={styles.th}>Email</th>
-                                    <th className={styles.th}>Phone</th>
-                                    <th className={styles.th}>Status</th>
-                                    <th className={styles.th} style={{ textAlign: "right" }}>Actions</th>
+                                    <th className={styles.th}>{t("table.member")}</th>
+                                    <th className={styles.th}>{t("table.role")}</th>
+                                    <th className={styles.th}>{t("table.permissions")}</th>
+                                    <th className={styles.th}>{t("table.email")}</th>
+                                    <th className={styles.th}>{t("table.phone")}</th>
+                                    <th className={styles.th}>{t("table.status")}</th>
+                                    <th className={styles.th} style={{ textAlign: "right" }}>{t("table.actions")}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -274,11 +272,11 @@ export default function StaffPage() {
                                             <div className={styles.emptyStateIcon}>
                                                 <FiUserX />
                                             </div>
-                                            <div className={styles.emptyStateTitle}>No staff members found</div>
+                                            <div className={styles.emptyStateTitle}>{t("emptyTitle")}</div>
                                             <div className={styles.emptyStateSubtext}>
                                                 {searchQuery.trim()
-                                                    ? "Try a different name, email, or position."
-                                                    : "Add your first team member to get started."}
+                                                    ? t("emptySearch")
+                                                    : t("emptyDefault")}
                                             </div>
                                         </td>
                                     </tr>
@@ -309,10 +307,10 @@ export default function StaffPage() {
                                                         </div>
                                                         <div className={styles.staffDetails}>
                                                             <span className={styles.staffName}>
-                                                                {user.name || "N/A"}
+                                                                {user.name || tCommon("notAvailable")}
                                                             </span>
                                                             <span className={styles.staffId}>
-                                                                ID: {displayId}
+                                                                {t("idPrefix")} {displayId}
                                                             </span>
                                                         </div>
                                                     </div>
@@ -321,7 +319,7 @@ export default function StaffPage() {
                                                 {/* Position / Role */}
                                                 <td className={styles.td}>
                                                     <span className={styles.positionBadge}>
-                                                        {item.position || user.role || "Staff"}
+                                                        {item.position || user.role || t("title")}
                                                     </span>
                                                 </td>
 
@@ -332,17 +330,17 @@ export default function StaffPage() {
                                                             <>
                                                                 {visiblePermissions.map((perm) => (
                                                                     <span key={perm} className={styles.permChip}>
-                                                                        {formatPermission(perm)}
+                                                                        {tPerm(perm)}
                                                                     </span>
                                                                 ))}
                                                                 {extraPermissionsCount > 0 && (
                                                                     <span className={styles.permChipMore}>
-                                                                        +{extraPermissionsCount} more
+                                                                        {t("morePermissions", { count: extraPermissionsCount })}
                                                                     </span>
                                                                 )}
                                                             </>
                                                         ) : (
-                                                            <span className={styles.permChip}>No Permissions</span>
+                                                            <span className={styles.permChip}>{t("noPermissions")}</span>
                                                         )}
                                                     </div>
                                                 </td>
@@ -356,7 +354,7 @@ export default function StaffPage() {
                                                 {/* Status */}
                                                 <td className={styles.td}>
                                                     <Badge variant={isItemActive ? "success" : "danger"}>
-                                                        {isItemActive ? "Active" : "Inactive"}
+                                                        {isItemActive ? t("statusActive") : t("statusInactive")}
                                                     </Badge>
                                                 </td>
 
@@ -365,21 +363,21 @@ export default function StaffPage() {
                                                     <div className={styles.actionsGroup}>
                                                         <button
                                                             className={styles.actionBtn}
-                                                            title="View Staff Member"
+                                                            title={t("view")}
                                                             onClick={() => router.push(`/staff/${item.id}`)}
                                                         >
                                                             <FiEye size={16} />
                                                         </button>
                                                         <button
                                                             className={styles.actionBtn}
-                                                            title="Edit Staff Member"
+                                                            title={t("edit")}
                                                             onClick={() => setStaffToEdit(item)}
                                                         >
                                                             <FiEdit2 size={16} />
                                                         </button>
                                                         <button
                                                             className={`${styles.actionBtn} ${styles.dangerActionBtn}`}
-                                                            title={isItemActive ? "Deactivate Staff Member" : "Staff Member Deactivated"}
+                                                            title={isItemActive ? t("deactivate") : t("deactivated")}
                                                             onClick={() => setStaffToDeactivate(item)}
                                                             disabled={!isItemActive}
                                                         >
@@ -398,7 +396,7 @@ export default function StaffPage() {
                     {/* Pagination */}
                     <div className={styles.pagination}>
                         <div className={styles.pageInfo}>
-                            Showing {startItem} to {endItem} of {meta.total || filteredStaff.length} staff members
+                            {tPagination("showingStaff", { start: startItem, end: endItem, total: meta.total || filteredStaff.length })}
                         </div>
 
                         <div className={styles.paginationRight}>
@@ -408,7 +406,7 @@ export default function StaffPage() {
                                     className={styles.pageBtn}
                                     onClick={() => setPage((p) => Math.max(1, p - 1))}
                                     disabled={page <= 1}
-                                    aria-label="Previous Page"
+                                    aria-label={tPagination("previous")}
                                 >
                                     <FiChevronLeft size={16} />
                                 </button>
@@ -432,7 +430,7 @@ export default function StaffPage() {
                                         setPage((p) => Math.min(meta.totalPages || 1, p + 1))
                                     }
                                     disabled={page >= (meta.totalPages || 1)}
-                                    aria-label="Next Page"
+                                    aria-label={tPagination("next")}
                                 >
                                     <FiChevronRight size={16} />
                                 </button>
@@ -460,10 +458,10 @@ export default function StaffPage() {
 
             <ConfirmModal
                 open={!!staffToDeactivate}
-                title="Deactivate Staff Member"
-                description={`Are you sure you want to deactivate ${staffToDeactivate?.staffUser?.name || "this staff member"}? They will lose access to the dealer portal.`}
-                confirmLabel={isDeactivating ? "Deactivating..." : "Deactivate"}
-                cancelLabel="Cancel"
+                title={t("deactivateTitle")}
+                description={t("deactivateDescription", { name: staffToDeactivate?.staffUser?.name || t("title") })}
+                confirmLabel={isDeactivating ? t("deactivating") : t("deactivate")}
+                cancelLabel={tCommon("cancel")}
                 intent="danger"
                 onConfirm={handleConfirmDeactivate}
                 onCancel={() => setStaffToDeactivate(null)}

@@ -2,6 +2,7 @@
 
 import React from "react";
 import { FiX } from "react-icons/fi";
+import { useTranslations } from "next-intl";
 import styles from "./ActionRequiredBanner.module.css";
 
 interface Props {
@@ -10,17 +11,20 @@ interface Props {
 }
 
 export default function ActionRequiredBanner({
-    title = "Action Required",
-    description = "Your application has been rejected. Please review the feedback below, update the required information, and resubmit your application.",
+    title,
+    description,
 }: Props) {
+    const t = useTranslations("onboarding.actionRequired");
+    const resolvedTitle = title ?? t("title");
+    const resolvedDescription = description ?? t("description");
     return (
         <div className={styles.banner}>
             <div className={styles.iconCircle}>
                 <FiX size={18} />
             </div>
             <div className={styles.content}>
-                <h3 className={styles.title}>{title}</h3>
-                <p className={styles.description}>{description}</p>
+                <h3 className={styles.title}>{resolvedTitle}</h3>
+                <p className={styles.description}>{resolvedDescription}</p>
             </div>
         </div>
     );

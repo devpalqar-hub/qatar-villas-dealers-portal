@@ -16,6 +16,7 @@ import {
     FiArrowRight,
     FiRefreshCw,
 } from "react-icons/fi";
+import { useTranslations } from "next-intl";
 import { featuredService } from "@/services/featured.service";
 import { FeaturedLocation, FeaturedPlan } from "@/types/featured";
 import styles from "./FeaturePropertyModal.module.css";
@@ -29,10 +30,10 @@ interface FeaturePropertyModalProps {
     onFeatured?: () => void;
 }
 
-const LOCATION_META: Record<FeaturedLocation, { label: string; icon: React.ReactNode }> = {
-    HOME_PAGE: { label: "Home Page", icon: <FiHome /> },
-    LISTING_PAGE: { label: "Listings Page", icon: <FiList /> },
-    PROPERTY_DETAIL_PAGE: { label: "Property Detail Page", icon: <FiFileText /> },
+const LOCATION_ICONS: Record<FeaturedLocation, React.ReactNode> = {
+    HOME_PAGE: <FiHome />,
+    LISTING_PAGE: <FiList />,
+    PROPERTY_DETAIL_PAGE: <FiFileText />,
 };
 
 const formatQar = (amount: number) => `QAR ${amount.toLocaleString()}`;
@@ -48,6 +49,8 @@ export default function FeaturePropertyModal({
     isCurrentlyFeatured = false,
     onFeatured,
 }: FeaturePropertyModalProps) {
+    const t = useTranslations("property.featureModal");
+    const tLocations = useTranslations("property.featureModal.locations");
     const [plans, setPlans] = useState<FeaturedPlan[]>([]);
     const [loading, setLoading] = useState(true);
     const [loadError, setLoadError] = useState<string | null>(null);
@@ -70,7 +73,7 @@ export default function FeaturePropertyModal({
             }
         } catch (err: unknown) {
             const serviceError = err as { response?: { data?: { message?: string | string[] } } };
-            const apiMessage = serviceError?.response?.data?.message || "Failed to load featured plans. Please try again.";
+            const apiMessage = serviceError?.response?.data?.message || t("loadPlansError");
             setLoadError(Array.isArray(apiMessage) ? apiMessage.join(", ") : apiMessage);
         } finally {
             setLoading(false);
@@ -120,13 +123,13 @@ export default function FeaturePropertyModal({
                 if (redirectUrl) {
                     window.location.assign(redirectUrl);
                 } else {
-                    setSubmitError("Could not start checkout. Please try again.");
+                    setSubmitError(t("checkoutError"));
                     setSubmitting(false);
                 }
             }
         } catch (err: unknown) {
             const serviceError = err as { response?: { data?: { message?: string | string[] } } };
-            const apiMessage = serviceError?.response?.data?.message || "Something went wrong. Please try again.";
+            const apiMessage = serviceError?.response?.data?.message || t("genericError");
             setSubmitError(Array.isArray(apiMessage) ? apiMessage.join(", ") : apiMessage);
             setSubmitting(false);
         }
@@ -150,10 +153,10 @@ export default function FeaturePropertyModal({
                         </div>
                         <div>
                             <h2 id="feature-modal-title" className={styles.title}>
-                                Feature This Property
+                                {t("title")}
                             </h2>
                             <p className={styles.subtitle}>
-                                Boost visibility for <span className={styles.propertyName}>{propertyName}</span>
+                                {t("subtitlePrefix")} <span className={styles.propertyName}>{propertyName}</span>
                             </p>
                         </div>
                     </div>
@@ -162,7 +165,7 @@ export default function FeaturePropertyModal({
                         className={styles.closeBtn}
                         onClick={handleClose}
                         disabled={submitting}
-                        aria-label="Close"
+                        aria-label={t("close")}
                     >
                         <FiX size={20} />
                     </button>
@@ -171,10 +174,9 @@ export default function FeaturePropertyModal({
                 {success ? (
                     <div className={styles.successState}>
                         <FiCheckCircle size={48} className={styles.successIcon} />
-                        <h3>Property Featured!</h3>
+                        <h3>{t("featuredSuccessTitle")}</h3>
                         <p>
-                            <strong>{propertyName}</strong> is now featured with the{" "}
-                            <strong>{selectedPlan?.name}</strong> plan.
+                            <strong>{propertyName}</strong> {t("featuredSuccessBodySuffix", { plan: selectedPlan?.name ?? "" })}
                         </p>
                     </div>
                 ) : (
@@ -184,8 +186,7 @@ export default function FeaturePropertyModal({
                                 <div className={styles.infoBanner}>
                                     <FiStar size={16} />
                                     <span>
-                                        This property is already featured. Choosing a plan below will extend or
-                                        renew its featured placement.
+                                        {t("alreadyFeaturedNotice")}
                                     </span>
                                 </div>
                             )}
@@ -208,7 +209,7 @@ export default function FeaturePropertyModal({
                                     <FiAlertTriangle size={28} />
                                     <p>{loadError}</p>
                                     <button type="button" className={styles.retryBtn} onClick={fetchPlans}>
-                                        <FiRefreshCw size={14} /> Try Again
+                                        <FiRefreshCw size={14} /> {t("tryAgain")}
                                     </button>
                                 </div>
                             )}
@@ -216,7 +217,7 @@ export default function FeaturePropertyModal({
                             {!loading && !loadError && plans.length === 0 && (
                                 <div className={styles.loadErrorState}>
                                     <FiAlertTriangle size={28} />
-                                    <p>No featured plans are available right now.</p>
+                                    <p>{t("noPlansAvailable")}</p>
                                 </div>
                             )}
 
@@ -234,7 +235,7 @@ export default function FeaturePropertyModal({
                                                 className={`${styles.planCard} ${isSelected ? styles.planCardSelected : ""}`}
                                                 onClick={() => setSelectedPlanId(plan.id)}
                                             >
-                                                {free && <div className={styles.ribbonFree}>FREE</div>}
+                                                {free && <div className={styles.ribbonFree}>{t("freeBadge")}</div>}
                                                 {hasDiscount && (
                                                     <div className={styles.ribbonDiscount}>-{plan.discountPercent}%</div>
                                                 )}
@@ -247,7 +248,7 @@ export default function FeaturePropertyModal({
 
                                                 <div className={styles.priceRow}>
                                                     {free ? (
-                                                        <span className={styles.priceFree}>Free</span>
+                                                        <span className={styles.priceFree}>{t("free")}</span>
                                                     ) : (
                                                         <>
                                                             <span className={styles.priceAmount}>
@@ -264,14 +265,14 @@ export default function FeaturePropertyModal({
 
                                                 <div className={styles.durationBadge}>
                                                     <FiCalendar size={12} />
-                                                    <span>{plan.durationDays} Days Boost</span>
+                                                    <span>{t("durationBoost", { days: plan.durationDays })}</span>
                                                 </div>
 
                                                 <div className={styles.locationsList}>
                                                     {plan.locations.map((location) => (
                                                         <span key={location} className={styles.locationChip}>
-                                                            {LOCATION_META[location]?.icon}
-                                                            {LOCATION_META[location]?.label || location}
+                                                            {LOCATION_ICONS[location]}
+                                                            {tLocations(location)}
                                                         </span>
                                                     ))}
                                                 </div>
@@ -279,9 +280,7 @@ export default function FeaturePropertyModal({
                                                 {plan.isIncludedFree && plan.availableFreeFeatured > 0 && (
                                                     <div className={styles.freeNote}>
                                                         <FiGift size={12} />
-                                                        {plan.availableFreeFeatured} free feature
-                                                        {plan.availableFreeFeatured > 1 ? "s" : ""} included in your
-                                                        subscription
+                                                        {t("freeFeaturesIncluded", { count: plan.availableFreeFeatured })}
                                                     </div>
                                                 )}
                                             </button>
@@ -303,11 +302,11 @@ export default function FeaturePropertyModal({
                                 <div className={styles.footerNote}>
                                     {selectedIsFree ? (
                                         <span>
-                                            <FiGift size={13} /> No charge — this plan will be applied instantly.
+                                            <FiGift size={13} /> {t("noChargeNote")}
                                         </span>
                                     ) : (
                                         <span>
-                                            <FiLock size={13} /> Secure payment powered by Stripe.
+                                            <FiLock size={13} /> {t("securePaymentNote")}
                                         </span>
                                     )}
                                 </div>
@@ -318,7 +317,7 @@ export default function FeaturePropertyModal({
                                         onClick={handleClose}
                                         disabled={submitting}
                                     >
-                                        Cancel
+                                        {t("cancel")}
                                     </button>
                                     <button
                                         type="button"
@@ -327,14 +326,14 @@ export default function FeaturePropertyModal({
                                         disabled={submitting || !selectedPlan}
                                     >
                                         {submitting ? (
-                                            "Processing..."
+                                            t("processing")
                                         ) : selectedIsFree ? (
                                             <>
-                                                <FiStar size={14} /> Feature Now, Free
+                                                <FiStar size={14} /> {t("featureNowFree")}
                                             </>
                                         ) : (
                                             <>
-                                                Proceed to Payment
+                                                {t("proceedToPayment")}
                                                 {selectedPlan && ` · ${formatQar(selectedPlan.discountedPrice)}`}
                                                 <FiArrowRight size={14} />
                                             </>

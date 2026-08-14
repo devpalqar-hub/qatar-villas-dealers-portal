@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { FiUserPlus, FiX, FiEye, FiEyeOff } from "react-icons/fi";
+import { useTranslations } from "next-intl";
 import { Button, Input } from "@/components/ui";
 import { staffService, CreateStaffPayload } from "@/services/staff.service";
 import styles from "./AddStaffModal.module.css";
@@ -13,14 +14,12 @@ interface AddStaffModalProps {
     onSuccess: () => void;
 }
 
-const AVAILABLE_PERMISSIONS = [
-    { id: "MANAGE_LISTINGS", label: "Manage Listings" },
-    { id: "MANAGE_CHATS", label: "Manage Chats" },
-    { id: "VIEW_ANALYTICS", label: "View Analytics" },
-    { id: "MANAGE_STAFF", label: "Manage Staff" },
-];
+const AVAILABLE_PERMISSIONS = ["MANAGE_LISTINGS", "MANAGE_CHATS", "VIEW_ANALYTICS", "MANAGE_STAFF"];
 
 export default function AddStaffModal({ open, onClose, onSuccess }: AddStaffModalProps) {
+    const t = useTranslations("staff");
+    const tPerm = useTranslations("permissionEnum");
+    const tCommon = useTranslations("common");
     const [formData, setFormData] = useState<CreateStaffPayload>({
         name: "",
         email: "",
@@ -93,15 +92,15 @@ export default function AddStaffModal({ open, onClose, onSuccess }: AddStaffModa
         setError(null);
 
         if (!formData.name.trim()) {
-            setError("Staff name is required.");
+            setError(t("modal.errors.nameRequired"));
             return;
         }
         if (!formData.email.trim()) {
-            setError("Email address is required.");
+            setError(t("modal.errors.emailRequired"));
             return;
         }
         if (!formData.password) {
-            setError("Password is required.");
+            setError(t("modal.errors.passwordRequired"));
             return;
         }
 
@@ -114,7 +113,7 @@ export default function AddStaffModal({ open, onClose, onSuccess }: AddStaffModa
             console.error("Failed to add staff:", err);
             setError(
                 err.response?.data?.message ||
-                "Failed to create staff member. Please check the details and try again."
+                t("modal.errors.createFailed")
             );
         } finally {
             setLoading(false);
@@ -137,11 +136,11 @@ export default function AddStaffModal({ open, onClose, onSuccess }: AddStaffModa
                             <FiUserPlus />
                         </div>
                         <div>
-                            <h2 className={styles.title}>Add Staff Member</h2>
-                            <p className={styles.subtitle}>Create a new account for your team member.</p>
+                            <h2 className={styles.title}>{t("modal.addTitle")}</h2>
+                            <p className={styles.subtitle}>{t("modal.addSubtitle")}</p>
                         </div>
                     </div>
-                    <button type="button" className={styles.closeBtn} onClick={onClose} aria-label="Close">
+                    <button type="button" className={styles.closeBtn} onClick={onClose} aria-label={t("modal.close")}>
                         <FiX />
                     </button>
                 </div>
@@ -152,8 +151,8 @@ export default function AddStaffModal({ open, onClose, onSuccess }: AddStaffModa
                     <div className={styles.grid}>
                         <div className={styles.fullWidth}>
                             <Input
-                                label="Full Name"
-                                placeholder="e.g. Sara Al-Dosari"
+                                label={t("modal.fullName")}
+                                placeholder={t("modal.fullNamePlaceholder")}
                                 value={formData.name}
                                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                                 required
@@ -162,9 +161,9 @@ export default function AddStaffModal({ open, onClose, onSuccess }: AddStaffModa
 
                         <div>
                             <Input
-                                label="Email Address"
+                                label={t("modal.emailAddress")}
                                 type="email"
-                                placeholder="e.g. sara@pearlrealestate.qa"
+                                placeholder={t("modal.emailPlaceholder")}
                                 value={formData.email}
                                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                                 required
@@ -173,8 +172,8 @@ export default function AddStaffModal({ open, onClose, onSuccess }: AddStaffModa
 
                         <div>
                             <Input
-                                label="Phone Number"
-                                placeholder="e.g. +97412345679"
+                                label={t("modal.phoneNumber")}
+                                placeholder={t("modal.phonePlaceholder")}
                                 value={formData.phone}
                                 onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                                 required
@@ -183,8 +182,8 @@ export default function AddStaffModal({ open, onClose, onSuccess }: AddStaffModa
 
                         <div>
                             <Input
-                                label="Position / Title"
-                                placeholder="e.g. Sales Agent"
+                                label={t("modal.position")}
+                                placeholder={t("modal.positionPlaceholder")}
                                 value={formData.position}
                                 onChange={(e) => setFormData({ ...formData, position: e.target.value })}
                                 required
@@ -193,12 +192,12 @@ export default function AddStaffModal({ open, onClose, onSuccess }: AddStaffModa
 
                         <div>
                             <label className={styles.label}>
-                                Password <span className={styles.required}>*</span>
+                                {t("modal.password")} <span className={styles.required}>*</span>
                             </label>
                             <div className={styles.passwordInputWrapper}>
                                 <Input
                                     type={showPassword ? "text" : "password"}
-                                    placeholder="Enter password..."
+                                    placeholder={t("modal.passwordPlaceholder")}
                                     value={formData.password}
                                     onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                                     required
@@ -207,7 +206,7 @@ export default function AddStaffModal({ open, onClose, onSuccess }: AddStaffModa
                                     type="button"
                                     className={styles.passwordToggleBtn}
                                     onClick={() => setShowPassword(!showPassword)}
-                                    title={showPassword ? "Hide Password" : "Show Password"}
+                                    title={showPassword ? t("modal.hidePassword") : t("modal.showPassword")}
                                 >
                                     {showPassword ? <FiEyeOff size={16} /> : <FiEye size={16} />}
                                 </button>
@@ -216,16 +215,16 @@ export default function AddStaffModal({ open, onClose, onSuccess }: AddStaffModa
 
                         <div className={styles.fullWidth}>
                             <div className={styles.permissionsSection}>
-                                <label className={styles.label}>Permissions</label>
+                                <label className={styles.label}>{t("modal.permissions")}</label>
                                 <div className={styles.permissionGrid}>
-                                    {AVAILABLE_PERMISSIONS.map((perm) => {
-                                        const isSelected = formData.permissions.includes(perm.id);
+                                    {AVAILABLE_PERMISSIONS.map((permId) => {
+                                        const isSelected = formData.permissions.includes(permId);
                                         return (
                                             <div
-                                                key={perm.id}
+                                                key={permId}
                                                 className={`${styles.permissionCard} ${isSelected ? styles.permissionCardActive : ""
                                                     }`}
-                                                onClick={() => handlePermissionToggle(perm.id)}
+                                                onClick={() => handlePermissionToggle(permId)}
                                             >
                                                 <input
                                                     type="checkbox"
@@ -233,7 +232,7 @@ export default function AddStaffModal({ open, onClose, onSuccess }: AddStaffModa
                                                     checked={isSelected}
                                                     onChange={() => { }} // handled by parent onClick
                                                 />
-                                                <span className={styles.permTitle}>{perm.label}</span>
+                                                <span className={styles.permTitle}>{tPerm(permId)}</span>
                                             </div>
                                         );
                                     })}
@@ -244,10 +243,10 @@ export default function AddStaffModal({ open, onClose, onSuccess }: AddStaffModa
 
                     <div className={styles.actions}>
                         <Button type="button" variant="secondary" onClick={onClose} disabled={loading}>
-                            Cancel
+                            {tCommon("cancel")}
                         </Button>
                         <Button type="submit" loading={loading}>
-                            Add Staff Member
+                            {t("modal.addAction")}
                         </Button>
                     </div>
                 </form>

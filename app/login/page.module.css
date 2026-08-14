@@ -82,32 +82,16 @@
     gap: 10px;
 }
 
-.logoMark {
-    width: 34px;
-    height: 34px;
-    flex-shrink: 0;
+.logoImage {
+    width: 140px;
+    height: auto;
+    object-fit: contain;
 }
 
-.logoTextGroup {
-    display: flex;
-    flex-direction: column;
-    line-height: 1.15;
-}
-
-.logoBrand {
-    font-family: Georgia, "Times New Roman", serif;
-    font-size: 22px;
-    font-weight: 700;
-    color: #ffffff;
-    letter-spacing: 0.01em;
-}
-
-.logoTag {
-    font-size: 10px;
-    font-weight: 600;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--vq-gold-light);
+@media (min-width: 1024px) {
+    .logoImage {
+        width: 170px;
+    }
 }
 
 /* Hero copy */
@@ -223,19 +207,21 @@
     top: 0;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 68px;
-    height: 68px;
+    width: 84px;
+    height: 84px;
     border-radius: 50%;
     background: var(--vq-cream-soft);
     box-shadow: 0 8px 24px rgba(60, 16, 30, 0.2);
     display: flex;
     align-items: center;
     justify-content: center;
+    padding: 10px;
 }
 
-.badgeMark {
-    width: 34px;
-    height: 34px;
+.badgeImage {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
 }
 
 .formInner {

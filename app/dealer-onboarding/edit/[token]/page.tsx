@@ -11,6 +11,7 @@ import {
     FiUploadCloud,
     FiX,
 } from "react-icons/fi";
+import { useTranslations } from "next-intl";
 import {
     dealerOnboardingService,
     EditApplicationData,
@@ -40,6 +41,9 @@ type DocEntry = ExistingDocEntry | NewDocEntry;
 
 // ── Page ──────────────────────────────────────────────────────────────────────
 export default function ResubmitApplicationPage() {
+    const t = useTranslations("onboarding.resubmit");
+    const t2 = useTranslations("onboarding.page2");
+    const tFooter = useTranslations("onboarding.footer");
     const routeParams = useParams();
     const token = (routeParams?.token as string) || "";
     const router = useRouter();
@@ -114,7 +118,7 @@ export default function ResubmitApplicationPage() {
                 const msg =
                     err.response?.data?.message ||
                     err.message ||
-                    "Invalid or expired edit token. Please contact support.";
+                    t("invalidTokenError");
                 setFetchError(msg);
             })
             .finally(() => {
@@ -159,11 +163,13 @@ export default function ResubmitApplicationPage() {
     const formatUploadDate = (dateStr: string): string => {
         try {
             const d = new Date(dateStr);
-            return `Uploaded ${d.toLocaleDateString("en-GB", {
-                day: "2-digit",
-                month: "short",
-                year: "numeric",
-            })}`;
+            return t("uploadedPrefix", {
+                date: d.toLocaleDateString("en-GB", {
+                    day: "2-digit",
+                    month: "short",
+                    year: "numeric",
+                }),
+            });
         } catch {
             return dateStr;
         }
@@ -176,10 +182,10 @@ export default function ResubmitApplicationPage() {
 
         // Validate required business fields only
         const errs: Record<string, string> = {};
-        if (!bizData.tradeNumber.trim()) errs.tradeNumber = "Trade License Number is required";
-        if (!bizData.address.trim()) errs.address = "Registered Address is required";
-        if (!bizData.city.trim()) errs.city = "City is required";
-        if (!bizData.country.trim()) errs.country = "Country is required";
+        if (!bizData.tradeNumber.trim()) errs.tradeNumber = t2("errors.tradeNumber");
+        if (!bizData.address.trim()) errs.address = t2("errors.address");
+        if (!bizData.city.trim()) errs.city = t2("errors.city");
+        if (!bizData.country.trim()) errs.country = t2("errors.country");
 
         if (Object.keys(errs).length > 0) {
             setBizErrors(errs);
@@ -188,7 +194,7 @@ export default function ResubmitApplicationPage() {
 
         // At least one document must exist
         if (docEntries.length === 0) {
-            setDocError("Please upload at least one document before resubmitting.");
+            setDocError(t("documentRequired"));
             return;
         }
 
@@ -222,7 +228,7 @@ export default function ResubmitApplicationPage() {
             setSubmitError(
                 err.response?.data?.message ||
                 err.message ||
-                "Failed to resubmit application. Please try again."
+                t("genericSubmitError")
             );
         } finally {
             setSubmitting(false);
@@ -252,10 +258,10 @@ export default function ResubmitApplicationPage() {
                 <div className={styles.contentWrapper}>
                     <div className={styles.errorCard}>
                         <FiAlertCircle size={48} style={{ color: "#ef4444" }} />
-                        <h2 className={styles.errorTitle}>Application Link Invalid</h2>
+                        <h2 className={styles.errorTitle}>{t("linkInvalidTitle")}</h2>
                         <p className={styles.errorDesc}>{fetchError}</p>
                         <Link href="/dealer-onboarding" className={styles.backBtn} style={{ marginTop: 16 }}>
-                            <FiArrowLeft /> Back to Dealer Onboarding
+                            <FiArrowLeft /> {t("backToOnboarding")}
                         </Link>
                     </div>
                 </div>
@@ -268,16 +274,13 @@ export default function ResubmitApplicationPage() {
         <div className={styles.pageContainer}>
             <div className={styles.contentWrapper}>
                 {/* Top Action Required Banner */}
-                <ActionRequiredBanner
-                    title="Action Required"
-                    description="Your application has been rejected. Please review the feedback below, update the required information, and resubmit your application."
-                />
+                <ActionRequiredBanner />
 
                 {/* Page Title */}
                 <div className={styles.pageHeader}>
-                    <h1 className={styles.title}>Edit Application</h1>
+                    <h1 className={styles.title}>{t("editTitle")}</h1>
                     <p className={styles.subtitle}>
-                        Please update the information below and resubmit your application.
+                        {t("editSubtitle")}
                     </p>
                 </div>
 
@@ -294,31 +297,31 @@ export default function ResubmitApplicationPage() {
                         <form onSubmit={handleSubmit}>
                             {/* Section 1: Agency Information — read-only */}
                             <div className={styles.sectionCard}>
-                                <h2 className={styles.sectionHeading}>Agency Information</h2>
+                                <h2 className={styles.sectionHeading}>{t2("agencyInfoHeading")}</h2>
                                 <p className={styles.sectionSubHeading}>
-                                    This information cannot be changed. Contact support if you need to update it.
+                                    {t("agencyInfoReadonlyNote")}
                                 </p>
                                 <div className={styles.grid2}>
                                     <div>
-                                        <label className={styles.fieldLabel}>Agency Name</label>
+                                        <label className={styles.fieldLabel}>{t2("agencyName")}</label>
                                         <div className={styles.readOnlyField}>
                                             {editData?.dealerName || "—"}
                                         </div>
                                     </div>
                                     <div>
-                                        <label className={styles.fieldLabel}>Contact Person</label>
+                                        <label className={styles.fieldLabel}>{t2("contactPerson")}</label>
                                         <div className={styles.readOnlyField}>
                                             {editData?.contactName || "—"}
                                         </div>
                                     </div>
                                     <div>
-                                        <label className={styles.fieldLabel}>Email</label>
+                                        <label className={styles.fieldLabel}>{t2("email")}</label>
                                         <div className={styles.readOnlyField}>
                                             {editData?.email || "—"}
                                         </div>
                                     </div>
                                     <div>
-                                        <label className={styles.fieldLabel}>Phone Number</label>
+                                        <label className={styles.fieldLabel}>{t2("phoneNumber")}</label>
                                         <div className={styles.readOnlyField}>
                                             {editData?.phone || "—"}
                                         </div>
@@ -328,11 +331,11 @@ export default function ResubmitApplicationPage() {
 
                             {/* Section 2: Business Details */}
                             <div className={styles.sectionCard} style={{ marginTop: 24 }}>
-                                <h2 className={styles.sectionHeading}>Business Details</h2>
+                                <h2 className={styles.sectionHeading}>{t2("businessDetailsHeading")}</h2>
                                 <div className={styles.grid2}>
                                     <div>
                                         <label className={styles.fieldLabel}>
-                                            Trade License Number <span className={styles.requiredStar}>*</span>
+                                            {t2("tradeLicenseNumber")} <span className={styles.requiredStar}>*</span>
                                         </label>
                                         <input
                                             type="text"
@@ -341,14 +344,14 @@ export default function ResubmitApplicationPage() {
                                             style={{ paddingLeft: 14 }}
                                             value={bizData.tradeNumber}
                                             onChange={handleBizChange}
-                                            placeholder="12345/2024"
+                                            placeholder={t2("tradeLicensePlaceholder")}
                                             required
                                         />
                                         {bizErrors.tradeNumber && <span className={styles.errorText}>{bizErrors.tradeNumber}</span>}
                                     </div>
 
                                     <div>
-                                        <label className={styles.fieldLabel}>RERA Number</label>
+                                        <label className={styles.fieldLabel}>{t2("reraNumber")}</label>
                                         <input
                                             type="text"
                                             name="reraNumber"
@@ -356,13 +359,13 @@ export default function ResubmitApplicationPage() {
                                             style={{ paddingLeft: 14 }}
                                             value={bizData.reraNumber}
                                             onChange={handleBizChange}
-                                            placeholder="RERA-2024-67890"
+                                            placeholder={t2("reraPlaceholder")}
                                         />
                                     </div>
 
                                     <div className={styles.fullWidth}>
                                         <label className={styles.fieldLabel}>
-                                            Registered Address <span className={styles.requiredStar}>*</span>
+                                            {t2("registeredAddress")} <span className={styles.requiredStar}>*</span>
                                         </label>
                                         <input
                                             type="text"
@@ -371,7 +374,7 @@ export default function ResubmitApplicationPage() {
                                             style={{ paddingLeft: 14 }}
                                             value={bizData.address}
                                             onChange={handleBizChange}
-                                            placeholder="Office 12, Al Sadd Street"
+                                            placeholder={t2("registeredAddressPlaceholder")}
                                             required
                                         />
                                         {bizErrors.address && <span className={styles.errorText}>{bizErrors.address}</span>}
@@ -381,7 +384,7 @@ export default function ResubmitApplicationPage() {
                                 <div className={styles.grid3} style={{ marginTop: 20 }}>
                                     <div>
                                         <label className={styles.fieldLabel}>
-                                            City <span className={styles.requiredStar}>*</span>
+                                            {t2("city")} <span className={styles.requiredStar}>*</span>
                                         </label>
                                         <input
                                             type="text"
@@ -397,7 +400,7 @@ export default function ResubmitApplicationPage() {
 
                                     <div>
                                         <label className={styles.fieldLabel}>
-                                            Country <span className={styles.requiredStar}>*</span>
+                                            {t2("country")} <span className={styles.requiredStar}>*</span>
                                         </label>
                                         <select
                                             name="country"
@@ -416,7 +419,7 @@ export default function ResubmitApplicationPage() {
                                     </div>
 
                                     <div>
-                                        <label className={styles.fieldLabel}>Website</label>
+                                        <label className={styles.fieldLabel}>{t2("website")}</label>
                                         <input
                                             type="url"
                                             name="website"
@@ -424,20 +427,20 @@ export default function ResubmitApplicationPage() {
                                             style={{ paddingLeft: 14 }}
                                             value={bizData.website}
                                             onChange={handleBizChange}
-                                            placeholder="https://pearlrealestate.qa"
+                                            placeholder={t2("websitePlaceholder")}
                                         />
                                     </div>
                                 </div>
 
                                 <div style={{ marginTop: 20 }}>
-                                    <label className={styles.fieldLabel}>Business Description</label>
+                                    <label className={styles.fieldLabel}>{t2("businessDescription")}</label>
                                     <textarea
                                         name="description"
                                         className={styles.textarea}
                                         value={bizData.description}
                                         onChange={handleBizChange}
                                         maxLength={500}
-                                        placeholder="Luxury real estate agency specializing in premium properties."
+                                        placeholder={t2("businessDescriptionPlaceholder")}
                                     />
                                     <div className={styles.charCount}>{bizData.description.length} / 500</div>
                                 </div>
@@ -446,10 +449,10 @@ export default function ResubmitApplicationPage() {
                             {/* Section 3: Documents — Unified upload zone */}
                             <div className={styles.sectionCard} style={{ marginTop: 24 }}>
                                 <h2 className={styles.sectionHeading}>
-                                    Documents <span className={styles.requiredStar}>*</span>
+                                    {t2("documentsHeading")} <span className={styles.requiredStar}>*</span>
                                 </h2>
                                 <p className={styles.sectionSubHeading}>
-                                    Review your existing documents below. You can remove any document and add new ones. At least one document is required.
+                                    {t("documentsReviewNote")}
                                 </p>
 
                                 {/* Upload drop zone */}
@@ -459,8 +462,8 @@ export default function ResubmitApplicationPage() {
                                     style={docError ? { borderColor: "#dc2626" } : undefined}
                                 >
                                     <FiUploadCloud className={styles.uploadIcon} />
-                                    <span className={styles.uploadText}>Click to add more documents</span>
-                                    <span className={styles.uploadHint}>PDF, PNG, JPG — select multiple files</span>
+                                    <span className={styles.uploadText}>{t("uploadMoreDocuments")}</span>
+                                    <span className={styles.uploadHint}>{t("uploadMoreHint")}</span>
                                     <input
                                         ref={docInputRef}
                                         type="file"
@@ -490,17 +493,17 @@ export default function ResubmitApplicationPage() {
                                                     <span className={styles.existingFileDate}>
                                                         {entry.kind === "existing"
                                                             ? formatUploadDate(entry.uploadedAt)
-                                                            : `${formatFileSize(entry.file.size)} — new`}
+                                                            : t("newFileSuffix", { size: formatFileSize(entry.file.size) })}
                                                     </span>
                                                 </div>
                                                 {entry.kind === "new" && (
-                                                    <span className={styles.newFileBadge}>New</span>
+                                                    <span className={styles.newFileBadge}>{t("newBadge")}</span>
                                                 )}
                                                 <button
                                                     type="button"
                                                     className={styles.removeFileBtn}
                                                     onClick={() => handleRemoveDoc(idx)}
-                                                    aria-label="Remove document"
+                                                    aria-label={t("removeDocument")}
                                                 >
                                                     <FiX size={14} />
                                                 </button>
@@ -517,7 +520,7 @@ export default function ResubmitApplicationPage() {
                                     className={styles.backBtn}
                                     onClick={() => router.back()}
                                 >
-                                    <FiArrowLeft /> Back
+                                    <FiArrowLeft /> {t2("back")}
                                 </button>
 
                                 <button
@@ -525,7 +528,7 @@ export default function ResubmitApplicationPage() {
                                     className={styles.resubmitBtn}
                                     disabled={submitting}
                                 >
-                                    {submitting ? "Submitting..." : <><FiSend /> Save Changes &amp; Resubmit</>}
+                                    {submitting ? t("submitting") : <><FiSend /> {t("saveAndResubmit")}</>}
                                 </button>
                             </div>
                         </form>
@@ -543,9 +546,9 @@ export default function ResubmitApplicationPage() {
 
                 {/* Footer */}
                 <footer className={styles.siteFooter}>
-                    <span>© 2026 Villas Qatar. All rights reserved.</span> |{" "}
-                    <a href="#">Terms of Service</a> | <a href="#">Privacy Policy</a> |{" "}
-                    <a href="#">Contact Us</a>
+                    <span>{tFooter("copyright", { year: new Date().getFullYear() })}</span> |{" "}
+                    <a href="#">{tFooter("terms")}</a> | <a href="#">{tFooter("privacy")}</a> |{" "}
+                    <a href="#">{tFooter("contact")}</a>
                 </footer>
             </div>
         </div>

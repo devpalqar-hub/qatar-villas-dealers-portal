@@ -16,8 +16,11 @@ import {
     FiClipboard,
     FiStar,
     FiAlertCircle,
+    FiCheck,
 } from "react-icons/fi";
+import { useTranslations } from "next-intl";
 import { inquiryService, Inquiry } from "@/services/inquiry.service";
+import { ConfirmModal } from "@/components/ui";
 import styles from "./InquiriesSection.module.css";
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -51,15 +54,18 @@ function getInitials(name: string) {
 type StatusKey = Inquiry["status"];
 
 function StatusBadge({ status }: { status: StatusKey }) {
-    const map: Record<StatusKey, { label: string; cls: string }> = {
-        PENDING: { label: "Pending", cls: styles.statusPending },
-        APPROVED: { label: "Approved", cls: styles.statusApproved },
-        REJECTED: { label: "Rejected", cls: styles.statusRejected },
-        COMPLETED: { label: "Completed", cls: styles.statusCompleted },
-        CANCELLED: { label: "Cancelled", cls: styles.statusCancelled },
+    const t = useTranslations("inquiries.status");
+    const clsMap: Record<StatusKey, string> = {
+        PENDING: styles.statusPending,
+        APPROVED: styles.statusApproved,
+        ACCEPTED: styles.statusApproved,
+        REJECTED: styles.statusRejected,
+        COMPLETED: styles.statusCompleted,
+        CANCELLED: styles.statusCancelled,
     };
-    const cfg = map[status] ?? { label: status, cls: styles.statusPending };
-    return <span className={`${styles.statusBadge} ${cfg.cls}`}>{cfg.label}</span>;
+    const cls = clsMap[status] ?? styles.statusPending;
+    const label = clsMap[status] ? t(status) : status;
+    return <span className={`${styles.statusBadge} ${cls}`}>{label}</span>;
 }
 
 // ─── Detail Modal ─────────────────────────────────────────────────────────────
@@ -72,6 +78,8 @@ function InquiryDetailModal({
     onClose: () => void;
 }) {
     const { visitor, listing, scheduledAt, proposedAt, status, notes, createdAt } = inquiry;
+    const t = useTranslations("inquiries.modal");
+    const tInquiries = useTranslations("inquiries");
 
     // Close on Escape
     useEffect(() => {
@@ -98,7 +106,7 @@ function InquiryDetailModal({
             className={styles.overlay}
             role="dialog"
             aria-modal="true"
-            aria-label="Inquiry Details"
+            aria-label={t("ariaLabel")}
             onClick={(e) => {
                 if (e.target === e.currentTarget) onClose();
             }}
@@ -108,9 +116,9 @@ function InquiryDetailModal({
                 <div className={styles.modalHeader}>
                     <h2 className={styles.modalTitle}>
                         <FiClipboard size={17} className={styles.modalTitleIcon} />
-                        Inquiry Details
+                        {t("title")}
                     </h2>
-                    <button className={styles.closeBtn} onClick={onClose} aria-label="Close">
+                    <button className={styles.closeBtn} onClick={onClose} aria-label={t("close")}>
                         <FiX size={16} />
                     </button>
                 </div>
@@ -120,7 +128,7 @@ function InquiryDetailModal({
                     {/* ── Visitor ── */}
                     <div className={styles.modalSection}>
                         <h3 className={styles.modalSectionTitle}>
-                            <FiUser size={13} /> Visitor Information
+                            <FiUser size={13} /> {t("visitorInfo")}
                         </h3>
 
                         <div className={styles.visitorHeaderRow}>
@@ -136,13 +144,13 @@ function InquiryDetailModal({
                         <div className={styles.modalGrid}>
                             <div className={styles.modalField}>
                                 <span className={styles.fieldLabel}>
-                                    <FiPhone size={10} /> Phone
+                                    <FiPhone size={10} /> {t("phone")}
                                 </span>
                                 <span className={styles.fieldValue}>{visitor.phone}</span>
                             </div>
                             <div className={styles.modalField}>
                                 <span className={styles.fieldLabel}>
-                                    <FiMail size={10} /> Email
+                                    <FiMail size={10} /> {t("email")}
                                 </span>
                                 <span className={styles.fieldValueLight}>{visitor.email}</span>
                             </div>
@@ -152,7 +160,7 @@ function InquiryDetailModal({
                     {/* ── Property ── */}
                     <div className={styles.modalSection}>
                         <h3 className={styles.modalSectionTitle}>
-                            <FiHome size={13} /> Property
+                            <FiHome size={13} /> {t("property")}
                         </h3>
 
                         <div className={styles.propertyThumbRow}>
@@ -172,7 +180,7 @@ function InquiryDetailModal({
                                     {listing.propertyName}
                                 </span>
                                 <span className={styles.propertyThumbMeta}>
-                                    REF: {listing.referenceCode} &nbsp;·&nbsp;{" "}
+                                    {tInquiries("referencePrefix", { code: listing.referenceCode })} &nbsp;·&nbsp;{" "}
                                     {listing.type?.title} &nbsp;·&nbsp; {listing.purpose}
                                 </span>
                             </div>
@@ -181,12 +189,12 @@ function InquiryDetailModal({
                         <div className={styles.modalGrid}>
                             {listing.price !== undefined && (
                                 <div className={styles.modalField}>
-                                    <span className={styles.fieldLabel}>Price</span>
+                                    <span className={styles.fieldLabel}>{t("price")}</span>
                                     <span className={styles.fieldValue}>
                                         {listing.price.toLocaleString()} QAR
                                         {listing.priceNegotiable && (
                                             <span style={{ fontWeight: 400, fontSize: 11, marginLeft: 6, color: "#0369a1" }}>
-                                                (Negotiable)
+                                                {t("negotiable")}
                                             </span>
                                         )}
                                     </span>
@@ -194,50 +202,50 @@ function InquiryDetailModal({
                             )}
                             {listing.status && (
                                 <div className={styles.modalField}>
-                                    <span className={styles.fieldLabel}>Listing Status</span>
+                                    <span className={styles.fieldLabel}>{t("listingStatus")}</span>
                                     <span className={styles.fieldValue}>{listing.status}</span>
                                 </div>
                             )}
                             {listing.bedrooms !== undefined && (
                                 <div className={styles.modalField}>
-                                    <span className={styles.fieldLabel}>Bedrooms</span>
-                                    <span className={styles.fieldValue}>{listing.bedrooms} Beds</span>
+                                    <span className={styles.fieldLabel}>{t("bedrooms")}</span>
+                                    <span className={styles.fieldValue}>{t("bedsSuffix", { count: listing.bedrooms })}</span>
                                 </div>
                             )}
                             {listing.bathrooms !== undefined && (
                                 <div className={styles.modalField}>
-                                    <span className={styles.fieldLabel}>Bathrooms</span>
-                                    <span className={styles.fieldValue}>{listing.bathrooms} Baths</span>
+                                    <span className={styles.fieldLabel}>{t("bathrooms")}</span>
+                                    <span className={styles.fieldValue}>{t("bathsSuffix", { count: listing.bathrooms })}</span>
                                 </div>
                             )}
                             {listing.area !== undefined && (
                                 <div className={styles.modalField}>
-                                    <span className={styles.fieldLabel}>Area</span>
-                                    <span className={styles.fieldValue}>{listing.area} sqm</span>
+                                    <span className={styles.fieldLabel}>{t("area")}</span>
+                                    <span className={styles.fieldValue}>{t("areaSuffix", { value: listing.area })}</span>
                                 </div>
                             )}
                             {listing.furnishing?.title && (
                                 <div className={styles.modalField}>
-                                    <span className={styles.fieldLabel}>Furnishing</span>
+                                    <span className={styles.fieldLabel}>{t("furnishing")}</span>
                                     <span className={styles.fieldValue}>{listing.furnishing.title}</span>
                                 </div>
                             )}
                             {listing.parkingSpaces !== undefined && (
                                 <div className={styles.modalField}>
-                                    <span className={styles.fieldLabel}>Parking Spaces</span>
+                                    <span className={styles.fieldLabel}>{t("parkingSpaces")}</span>
                                     <span className={styles.fieldValue}>{listing.parkingSpaces}</span>
                                 </div>
                             )}
                             {listing.yearBuilt && (
                                 <div className={styles.modalField}>
-                                    <span className={styles.fieldLabel}>Year Built</span>
+                                    <span className={styles.fieldLabel}>{t("yearBuilt")}</span>
                                     <span className={styles.fieldValue}>{listing.yearBuilt}</span>
                                 </div>
                             )}
                             {fullAddress && (
                                 <div className={styles.modalFieldFull}>
                                     <span className={styles.fieldLabel}>
-                                        <FiMapPin size={10} /> Address
+                                        <FiMapPin size={10} /> {t("address")}
                                     </span>
                                     <span className={styles.fieldValueLight}>{fullAddress}</span>
                                 </div>
@@ -248,7 +256,7 @@ function InquiryDetailModal({
                         {listing.amenities && listing.amenities.length > 0 && (
                             <div>
                                 <span className={styles.fieldLabel} style={{ display: "block", marginBottom: 8 }}>
-                                    <FiStar size={10} /> Amenities
+                                    <FiStar size={10} /> {t("amenities")}
                                 </span>
                                 <div className={styles.chipsRow}>
                                     {listing.amenities.map((a) => (
@@ -262,11 +270,11 @@ function InquiryDetailModal({
                         {listing.nearbyTags && listing.nearbyTags.length > 0 && (
                             <div>
                                 <span className={styles.fieldLabel} style={{ display: "block", marginBottom: 8 }}>
-                                    <FiTag size={10} /> Nearby Facilities
+                                    <FiTag size={10} /> {t("nearby")}
                                 </span>
                                 <div className={styles.chipsRow}>
-                                    {listing.nearbyTags.map((t) => (
-                                        <span key={t.id} className={styles.chip}>{t.title}</span>
+                                    {listing.nearbyTags.map((tag) => (
+                                        <span key={tag.id} className={styles.chip}>{tag.title}</span>
                                     ))}
                                 </div>
                             </div>
@@ -278,7 +286,7 @@ function InquiryDetailModal({
                                 {listing.contactPhone && (
                                     <div className={styles.modalField}>
                                         <span className={styles.fieldLabel}>
-                                            <FiPhone size={10} /> Contact Phone
+                                            <FiPhone size={10} /> {t("contactPhone")}
                                         </span>
                                         <span className={styles.fieldValue}>{listing.contactPhone}</span>
                                     </div>
@@ -286,7 +294,7 @@ function InquiryDetailModal({
                                 {listing.contactWhatsapp && (
                                     <div className={styles.modalField}>
                                         <span className={styles.fieldLabel}>
-                                            <FiMessageSquare size={10} /> WhatsApp
+                                            <FiMessageSquare size={10} /> {t("whatsapp")}
                                         </span>
                                         <span className={styles.fieldValue}>{listing.contactWhatsapp}</span>
                                     </div>
@@ -298,30 +306,30 @@ function InquiryDetailModal({
                     {/* ── Visit Details ── */}
                     <div className={styles.modalSection}>
                         <h3 className={styles.modalSectionTitle}>
-                            <FiCalendar size={13} /> Visit Details
+                            <FiCalendar size={13} /> {t("visitDetails")}
                         </h3>
 
                         <div className={styles.modalGrid}>
                             <div className={styles.modalField}>
-                                <span className={styles.fieldLabel}>Status</span>
+                                <span className={styles.fieldLabel}>{t("status")}</span>
                                 <StatusBadge status={status} />
                             </div>
                             <div className={styles.modalField}>
-                                <span className={styles.fieldLabel}>Scheduled At</span>
+                                <span className={styles.fieldLabel}>{t("scheduledAt")}</span>
                                 <span className={styles.fieldValue}>
-                                    {formatDate(scheduledAt)} at {formatTime(scheduledAt)}
+                                    {formatDate(scheduledAt)} {t("at")} {formatTime(scheduledAt)}
                                 </span>
                             </div>
                             {proposedAt && (
                                 <div className={styles.modalField}>
-                                    <span className={styles.fieldLabel}>Proposed At</span>
+                                    <span className={styles.fieldLabel}>{t("proposedAt")}</span>
                                     <span className={styles.fieldValue}>
-                                        {formatDate(proposedAt)} at {formatTime(proposedAt)}
+                                        {formatDate(proposedAt)} {t("at")} {formatTime(proposedAt)}
                                     </span>
                                 </div>
                             )}
                             <div className={styles.modalField}>
-                                <span className={styles.fieldLabel}>Inquiry Submitted</span>
+                                <span className={styles.fieldLabel}>{t("inquirySubmitted")}</span>
                                 <span className={styles.fieldValue}>{formatDate(createdAt)}</span>
                             </div>
                         </div>
@@ -332,7 +340,7 @@ function InquiryDetailModal({
                                     className={styles.fieldLabel}
                                     style={{ display: "flex", alignItems: "center", gap: 5, marginBottom: 8 }}
                                 >
-                                    <FiInfo size={10} /> Notes from Visitor
+                                    <FiInfo size={10} /> {t("notesFromVisitor")}
                                 </span>
                                 <div className={styles.notesBlock}>{notes}</div>
                             </div>
@@ -343,7 +351,7 @@ function InquiryDetailModal({
                 {/* Footer */}
                 <div className={styles.modalFooter}>
                     <button className={styles.closeModalBtn} onClick={onClose}>
-                        Close
+                        {t("close")}
                     </button>
                 </div>
             </div>
@@ -354,10 +362,14 @@ function InquiryDetailModal({
 // ─── Main Component ───────────────────────────────────────────────────────────
 
 export default function InquiriesSection() {
+    const t = useTranslations("inquiries");
     const [inquiries, setInquiries] = useState<Inquiry[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [selected, setSelected] = useState<Inquiry | null>(null);
+    const [acceptTarget, setAcceptTarget] = useState<Inquiry | null>(null);
+    const [accepting, setAccepting] = useState(false);
+    const [acceptError, setAcceptError] = useState<string | null>(null);
 
     useEffect(() => {
         void fetchInquiries();
@@ -371,7 +383,7 @@ export default function InquiriesSection() {
             setInquiries(data);
         } catch (err: unknown) {
             const e = err as { response?: { data?: { message?: string } } };
-            setError(e.response?.data?.message ?? "Failed to load inquiries.");
+            setError(e.response?.data?.message ?? t("loadError"));
         } finally {
             setLoading(false);
         }
@@ -379,11 +391,31 @@ export default function InquiriesSection() {
 
     const handleClose = useCallback(() => setSelected(null), []);
 
+    const handleConfirmAccept = useCallback(async () => {
+        if (!acceptTarget || accepting) return;
+        setAccepting(true);
+        setAcceptError(null);
+        try {
+            const updated = await inquiryService.acceptVisit(acceptTarget.id);
+            setInquiries((prev) =>
+                prev.map((inq) =>
+                    inq.id === acceptTarget.id ? { ...inq, ...updated, status: updated?.status ?? "ACCEPTED" } : inq
+                )
+            );
+            setAcceptTarget(null);
+        } catch (err: unknown) {
+            const e = err as { response?: { data?: { message?: string } } };
+            setAcceptError(e.response?.data?.message ?? t("acceptError"));
+        } finally {
+            setAccepting(false);
+        }
+    }, [acceptTarget, accepting, t]);
+
     if (loading) {
         return (
             <div className={styles.loadingState}>
                 <div className={styles.spinner} />
-                <span>Loading inquiries…</span>
+                <span>{t("loading")}</span>
             </div>
         );
     }
@@ -401,9 +433,9 @@ export default function InquiriesSection() {
         return (
             <div className={styles.emptyState}>
                 <FiClipboard size={40} className={styles.emptyIcon} />
-                <p className={styles.emptyTitle}>No Inquiries Yet</p>
+                <p className={styles.emptyTitle}>{t("emptyTitle")}</p>
                 <p className={styles.emptySubtitle}>
-                    Visit requests from potential buyers/renters will appear here.
+                    {t("emptySubtitle")}
                 </p>
             </div>
         );
@@ -415,12 +447,12 @@ export default function InquiriesSection() {
                 <table className={styles.table}>
                     <thead>
                         <tr>
-                            <th className={styles.th}>Visitor</th>
-                            <th className={styles.th}>Property</th>
-                            <th className={styles.th}>Scheduled</th>
-                            <th className={styles.th}>Status</th>
-                            <th className={styles.th}>Submitted</th>
-                            <th className={styles.th}>Action</th>
+                            <th className={styles.th}>{t("table.visitor")}</th>
+                            <th className={styles.th}>{t("table.property")}</th>
+                            <th className={styles.th}>{t("table.scheduled")}</th>
+                            <th className={styles.th}>{t("table.status")}</th>
+                            <th className={styles.th}>{t("table.submitted")}</th>
+                            <th className={styles.th}>{t("table.action")}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -446,7 +478,7 @@ export default function InquiriesSection() {
                                             {inq.listing.propertyName}
                                         </span>
                                         <span className={styles.propertyRef}>
-                                            REF: {inq.listing.referenceCode}
+                                            {t("referencePrefix", { code: inq.listing.referenceCode })}
                                         </span>
                                     </div>
                                 </td>
@@ -473,12 +505,25 @@ export default function InquiriesSection() {
 
                                 {/* Action */}
                                 <td className={styles.td}>
-                                    <button
-                                        className={styles.actionBtn}
-                                        onClick={() => setSelected(inq)}
-                                    >
-                                        <FiEye size={13} /> View Details
-                                    </button>
+                                    <div className={styles.actionsGroup}>
+                                        <button
+                                            className={styles.actionBtn}
+                                            onClick={() => setSelected(inq)}
+                                        >
+                                            <FiEye size={13} /> {t("viewDetails")}
+                                        </button>
+                                        {inq.status === "PENDING" && (
+                                            <button
+                                                className={styles.acceptBtn}
+                                                onClick={() => {
+                                                    setAcceptError(null);
+                                                    setAcceptTarget(inq);
+                                                }}
+                                            >
+                                                <FiCheck size={13} /> {t("accept")}
+                                            </button>
+                                        )}
+                                    </div>
                                 </td>
                             </tr>
                         ))}
@@ -488,6 +533,32 @@ export default function InquiriesSection() {
 
             {selected && (
                 <InquiryDetailModal inquiry={selected} onClose={handleClose} />
+            )}
+
+            <ConfirmModal
+                open={!!acceptTarget}
+                title={t("acceptTitle")}
+                description={
+                    acceptTarget
+                        ? t("acceptDescription", {
+                            name: acceptTarget.visitor.name,
+                            property: acceptTarget.listing.propertyName,
+                        })
+                        : undefined
+                }
+                confirmLabel={accepting ? t("accepting") : t("accept")}
+                intent="success"
+                onConfirm={() => void handleConfirmAccept()}
+                onCancel={() => {
+                    if (!accepting) setAcceptTarget(null);
+                }}
+            />
+
+            {acceptError && (
+                <div className={styles.errorState} style={{ marginTop: 12 }}>
+                    <FiAlertCircle size={16} style={{ color: "var(--danger)", marginBottom: 4 }} />
+                    <p style={{ margin: 0 }}>{acceptError}</p>
+                </div>
             )}
         </div>
     );

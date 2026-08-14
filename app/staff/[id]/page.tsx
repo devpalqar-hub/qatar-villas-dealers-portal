@@ -18,6 +18,7 @@ import {
     FiClock,
     FiHash,
 } from "react-icons/fi";
+import { useTranslations } from "next-intl";
 import { AppLayout, Button, Badge } from "@/components/ui";
 import { staffService, StaffMember } from "@/services/staff.service";
 import styles from "./page.module.css";
@@ -42,12 +43,6 @@ const getInitials = (name: string) =>
         .toUpperCase()
         .substring(0, 2);
 
-const formatPermission = (perm: string) =>
-    perm
-        .split("_")
-        .map((w) => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase())
-        .join(" ");
-
 const formatDate = (iso: string) =>
     new Date(iso).toLocaleDateString("en-QA", {
         year: "numeric",
@@ -61,6 +56,11 @@ export default function StaffDetailPage() {
     const params = useParams();
     const router = useRouter();
     const id = params?.id as string;
+    const t = useTranslations("staff.detail");
+    const tStaff = useTranslations("staff");
+    const tCommon = useTranslations("common");
+    const tSidebar = useTranslations("sidebar");
+    const tPerm = useTranslations("permissionEnum");
 
     const [staff, setStaff] = useState<StaffMember | null>(null);
     const [loading, setLoading] = useState(true);
@@ -78,7 +78,7 @@ export default function StaffDetailPage() {
             setStaff(data);
         } catch (err: any) {
             console.error("Failed to fetch staff details:", err);
-            setError(err.response?.data?.message || "Failed to load staff details.");
+            setError(err.response?.data?.message || t("loadError"));
         } finally {
             setLoading(false);
         }
@@ -90,11 +90,11 @@ export default function StaffDetailPage() {
             <AppLayout>
                 <div className={styles.container}>
                     <div className={styles.breadcrumbs}>
-                        <Link href="/dashboard">Dashboard</Link>
+                        <Link href="/dashboard">{tSidebar("dashboard")}</Link>
                         <span>&gt;</span>
-                        <Link href="/staff">Staff</Link>
+                        <Link href="/staff">{tSidebar("staff")}</Link>
                         <span>&gt;</span>
-                        <span>Loading...</span>
+                        <span>{t("breadcrumbLoading")}</span>
                     </div>
 
                     <div className={styles.headerCard}>
@@ -121,20 +121,20 @@ export default function StaffDetailPage() {
             <AppLayout>
                 <div className={styles.container}>
                     <div className={styles.breadcrumbs}>
-                        <Link href="/dashboard">Dashboard</Link>
+                        <Link href="/dashboard">{tSidebar("dashboard")}</Link>
                         <span>&gt;</span>
-                        <Link href="/staff">Staff</Link>
+                        <Link href="/staff">{tSidebar("staff")}</Link>
                         <span>&gt;</span>
-                        <span>Error</span>
+                        <span>{t("breadcrumbError")}</span>
                     </div>
                     <div className={styles.errorContainer}>
                         <FiInfo size={48} color="var(--primary)" />
-                        <h2 className={styles.errorTitle}>Staff Member Not Found</h2>
+                        <h2 className={styles.errorTitle}>{t("notFoundTitle")}</h2>
                         <p className={styles.errorSubtext}>
-                            {error || "The requested staff member could not be found."}
+                            {error || t("notFoundSubtext")}
                         </p>
                         <Button onClick={() => router.push("/staff")} leftIcon={<FiArrowLeft />}>
-                            Back to Staff
+                            {t("backToStaff")}
                         </Button>
                     </div>
                 </div>
@@ -152,17 +152,17 @@ export default function StaffDetailPage() {
             <div className={styles.container}>
                 {/* Breadcrumbs */}
                 <nav className={styles.breadcrumbs} aria-label="Breadcrumb">
-                    <Link href="/dashboard">Dashboard</Link>
+                    <Link href="/dashboard">{tSidebar("dashboard")}</Link>
                     <span>&gt;</span>
-                    <Link href="/staff">Staff</Link>
+                    <Link href="/staff">{tSidebar("staff")}</Link>
                     <span>&gt;</span>
                     <span style={{ color: "var(--text)", fontWeight: 500 }}>
-                        {user?.name || "Staff Member"}
+                        {user?.name || t("defaultName")}
                     </span>
                 </nav>
 
                 <button className={styles.backBtn} onClick={() => router.push("/staff")}>
-                    <FiArrowLeft size={16} /> Back to Staff
+                    <FiArrowLeft size={16} /> {t("backToStaff")}
                 </button>
 
                 {/* Header Card */}
@@ -177,10 +177,10 @@ export default function StaffDetailPage() {
 
                         <div className={styles.headerInfo}>
                             <div className={styles.titleRow}>
-                                <h1 className={styles.title}>{user?.name || "N/A"}</h1>
+                                <h1 className={styles.title}>{user?.name || tCommon("notAvailable")}</h1>
                                 <div className={styles.badgeGroup}>
                                     <Badge variant={isActive ? "success" : "danger"}>
-                                        {isActive ? "Active" : "Inactive"}
+                                        {isActive ? tStaff("statusActive") : tStaff("statusInactive")}
                                     </Badge>
                                     <span className={styles.roleBadge}>{user?.role}</span>
                                 </div>
@@ -205,7 +205,7 @@ export default function StaffDetailPage() {
 
                             <div className={styles.idRow}>
                                 <FiHash size={12} />
-                                Staff ID: {staff.id}
+                                {t("idPrefix", { id: staff.id })}
                             </div>
                         </div>
                     </div>
@@ -219,15 +219,15 @@ export default function StaffDetailPage() {
                         {/* Personal Information */}
                         <div className={styles.sectionCard}>
                             <h2 className={styles.sectionTitle}>
-                                <FiUser size={18} /> Personal Information
+                                <FiUser size={18} /> {t("personalInfo")}
                             </h2>
                             <div className={styles.infoGrid}>
                                 <div className={styles.infoItem}>
-                                    <span className={styles.infoLabel}>Full Name</span>
+                                    <span className={styles.infoLabel}>{t("fullName")}</span>
                                     <span className={styles.infoValue}>{user?.name || "—"}</span>
                                 </div>
                                 <div className={styles.infoItem}>
-                                    <span className={styles.infoLabel}>Email Address</span>
+                                    <span className={styles.infoLabel}>{t("emailAddress")}</span>
                                     <span className={styles.infoValue}>
                                         <a href={`mailto:${user?.email}`} className={styles.link}>
                                             {user?.email || "—"}
@@ -235,7 +235,7 @@ export default function StaffDetailPage() {
                                     </span>
                                 </div>
                                 <div className={styles.infoItem}>
-                                    <span className={styles.infoLabel}>Phone Number</span>
+                                    <span className={styles.infoLabel}>{t("phoneNumber")}</span>
                                     <span className={styles.infoValue}>
                                         <a href={`tel:${user?.phone}`} className={styles.link}>
                                             {user?.phone || "—"}
@@ -243,25 +243,25 @@ export default function StaffDetailPage() {
                                     </span>
                                 </div>
                                 <div className={styles.infoItem}>
-                                    <span className={styles.infoLabel}>System Role</span>
+                                    <span className={styles.infoLabel}>{t("systemRole")}</span>
                                     <span className={styles.infoValue}>{user?.role || "—"}</span>
                                 </div>
                                 <div className={styles.infoItem}>
-                                    <span className={styles.infoLabel}>Account Status</span>
+                                    <span className={styles.infoLabel}>{t("accountStatus")}</span>
                                     <span className={styles.infoValue}>
                                         {user?.isActive ? (
                                             <span className={styles.activeChip}>
-                                                <FiCheckCircle size={13} /> Active
+                                                <FiCheckCircle size={13} /> {tStaff("statusActive")}
                                             </span>
                                         ) : (
                                             <span className={styles.inactiveChip}>
-                                                <FiXCircle size={13} /> Inactive
+                                                <FiXCircle size={13} /> {tStaff("statusInactive")}
                                             </span>
                                         )}
                                     </span>
                                 </div>
                                 <div className={styles.infoItem}>
-                                    <span className={styles.infoLabel}>User ID</span>
+                                    <span className={styles.infoLabel}>{t("userId")}</span>
                                     <span className={styles.infoValue} style={{ fontFamily: "monospace", fontSize: 13 }}>
                                         {user?.id || "—"}
                                     </span>
@@ -272,13 +272,13 @@ export default function StaffDetailPage() {
                         {/* Position & Permissions */}
                         <div className={styles.sectionCard}>
                             <h2 className={styles.sectionTitle}>
-                                <FiKey size={18} /> Role & Permissions
+                                <FiKey size={18} /> {t("rolePermissions")}
                             </h2>
 
                             <div className={styles.positionRow}>
                                 <FiBriefcase size={16} />
                                 <div>
-                                    <span className={styles.positionLabel}>Position</span>
+                                    <span className={styles.positionLabel}>{t("position")}</span>
                                     <span className={styles.positionValue}>{staff.position || "—"}</span>
                                 </div>
                             </div>
@@ -287,19 +287,19 @@ export default function StaffDetailPage() {
 
                             <div className={styles.permissionsBlock}>
                                 <span className={styles.permissionsHeading}>
-                                    Assigned Permissions ({staff.permissions?.length || 0})
+                                    {t("assignedPermissions", { count: staff.permissions?.length || 0 })}
                                 </span>
                                 {staff.permissions && staff.permissions.length > 0 ? (
                                     <div className={styles.permGrid}>
                                         {staff.permissions.map((perm) => (
                                             <div key={perm} className={styles.permCard}>
                                                 <FiShield size={14} className={styles.permIcon} />
-                                                {formatPermission(perm)}
+                                                {tPerm(perm)}
                                             </div>
                                         ))}
                                     </div>
                                 ) : (
-                                    <p className={styles.noPerms}>No permissions assigned.</p>
+                                    <p className={styles.noPerms}>{t("noPermissionsAssigned")}</p>
                                 )}
                             </div>
                         </div>
@@ -311,25 +311,25 @@ export default function StaffDetailPage() {
                         {/* Status Card */}
                         <div className={styles.sectionCard}>
                             <h2 className={styles.sectionTitle}>
-                                <FiCheckCircle size={18} /> Status Overview
+                                <FiCheckCircle size={18} /> {t("statusOverview")}
                             </h2>
                             <div className={styles.statusGrid}>
                                 <div className={styles.statusRow}>
-                                    <span className={styles.statusLabel}>Staff Record</span>
+                                    <span className={styles.statusLabel}>{t("staffRecord")}</span>
                                     <Badge variant={staff.isActive ? "success" : "danger"}>
-                                        {staff.isActive ? "Active" : "Inactive"}
+                                        {staff.isActive ? tStaff("statusActive") : tStaff("statusInactive")}
                                     </Badge>
                                 </div>
                                 <div className={styles.statusRow}>
-                                    <span className={styles.statusLabel}>User Account</span>
+                                    <span className={styles.statusLabel}>{t("userAccount")}</span>
                                     <Badge variant={user?.isActive ? "success" : "danger"}>
-                                        {user?.isActive ? "Active" : "Inactive"}
+                                        {user?.isActive ? tStaff("statusActive") : tStaff("statusInactive")}
                                     </Badge>
                                 </div>
                                 <div className={styles.statusRow}>
-                                    <span className={styles.statusLabel}>Permissions</span>
+                                    <span className={styles.statusLabel}>{tStaff("table.permissions")}</span>
                                     <Badge variant="info">
-                                        {staff.permissions?.length || 0} granted
+                                        {t("permissionsGranted", { count: staff.permissions?.length || 0 })}
                                     </Badge>
                                 </div>
                             </div>
@@ -338,7 +338,7 @@ export default function StaffDetailPage() {
                         {/* Timeline */}
                         <div className={styles.sectionCard}>
                             <h2 className={styles.sectionTitle}>
-                                <FiCalendar size={18} /> Timeline
+                                <FiCalendar size={18} /> {t("timeline")}
                             </h2>
                             <div className={styles.timeline}>
                                 <div className={styles.timelineItem}>
@@ -346,7 +346,7 @@ export default function StaffDetailPage() {
                                         <FiClock size={14} />
                                     </div>
                                     <div className={styles.timelineContent}>
-                                        <span className={styles.timelineLabel}>Member Since</span>
+                                        <span className={styles.timelineLabel}>{t("memberSince")}</span>
                                         <span className={styles.timelineValue}>
                                             {formatDate(staff.createdAt)}
                                         </span>
@@ -357,7 +357,7 @@ export default function StaffDetailPage() {
                                         <FiCalendar size={14} />
                                     </div>
                                     <div className={styles.timelineContent}>
-                                        <span className={styles.timelineLabel}>Last Updated</span>
+                                        <span className={styles.timelineLabel}>{t("lastUpdated")}</span>
                                         <span className={styles.timelineValue}>
                                             {formatDate(staff.updatedAt)}
                                         </span>
@@ -369,7 +369,7 @@ export default function StaffDetailPage() {
                                             <FiUser size={14} />
                                         </div>
                                         <div className={styles.timelineContent}>
-                                            <span className={styles.timelineLabel}>User Created</span>
+                                            <span className={styles.timelineLabel}>{t("userCreated")}</span>
                                             <span className={styles.timelineValue}>
                                                 {formatDate(user.createdAt)}
                                             </span>
@@ -382,19 +382,19 @@ export default function StaffDetailPage() {
                         {/* System IDs */}
                         <div className={styles.sectionCard}>
                             <h2 className={styles.sectionTitle}>
-                                <FiHash size={18} /> System References
+                                <FiHash size={18} /> {t("systemReferences")}
                             </h2>
                             <div className={styles.idGrid}>
                                 <div className={styles.idItem}>
-                                    <span className={styles.idLabel}>Staff Record ID</span>
+                                    <span className={styles.idLabel}>{t("staffRecordId")}</span>
                                     <span className={styles.idValue}>{staff.id}</span>
                                 </div>
                                 <div className={styles.idItem}>
-                                    <span className={styles.idLabel}>Staff User ID</span>
+                                    <span className={styles.idLabel}>{t("staffUserId")}</span>
                                     <span className={styles.idValue}>{staff.staffUserId}</span>
                                 </div>
                                 <div className={styles.idItem}>
-                                    <span className={styles.idLabel}>Dealer ID</span>
+                                    <span className={styles.idLabel}>{t("dealerId")}</span>
                                     <span className={styles.idValue}>{staff.dealerUserId}</span>
                                 </div>
                             </div>

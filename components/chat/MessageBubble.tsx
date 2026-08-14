@@ -2,6 +2,7 @@
 
 import React from "react";
 import { FiCheck, FiCheckCircle, FiMapPin } from "react-icons/fi";
+import { useTranslations } from "next-intl";
 import { ChatMessage } from "@/types/chat";
 import styles from "./MessageBubble.module.css";
 
@@ -14,6 +15,7 @@ export default function MessageBubble({
     message,
     currentUserId,
 }: MessageBubbleProps) {
+    const t = useTranslations("chat");
     const isOutgoing = message.sender.id === currentUserId;
 
     const renderContent = () => {
@@ -49,7 +51,7 @@ export default function MessageBubble({
                             </div>
                             <div className={styles.locationDetails}>
                                 <span className={styles.locationTitle}>
-                                    {message.locationLabel || "Shared Location"}
+                                    {message.locationLabel || t("sharedLocation")}
                                 </span>
                                 {message.latitude && message.longitude && (
                                     <span className={styles.locationCoords}>

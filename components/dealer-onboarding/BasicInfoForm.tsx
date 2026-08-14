@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useTranslations } from "next-intl";
 import Input from "../ui/Input/Input";
 import Button from "../ui/Button/Button";
 import styles from "./BasicInfoForm.module.css";
@@ -10,6 +11,7 @@ interface Props {
 }
 
 export default function BasicInfoForm({ onSubmit, loading }: Props) {
+    const t = useTranslations("onboarding.basicInfo");
     const [formData, setFormData] = useState<BasicInfoData>({
         dealerName: "",
         contactName: "",
@@ -30,14 +32,14 @@ export default function BasicInfoForm({ onSubmit, loading }: Props) {
 
     const validate = () => {
         const newErrors: Partial<BasicInfoData> = {};
-        if (!formData.dealerName.trim()) newErrors.dealerName = "Dealer Name is required";
-        if (!formData.contactName.trim()) newErrors.contactName = "Contact Name is required";
+        if (!formData.dealerName.trim()) newErrors.dealerName = t("errors.dealerName");
+        if (!formData.contactName.trim()) newErrors.contactName = t("errors.contactName");
         if (!formData.email.trim()) {
-            newErrors.email = "Email is required";
+            newErrors.email = t("errors.emailRequired");
         } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-            newErrors.email = "Invalid email format";
+            newErrors.email = t("errors.emailInvalid");
         }
-        if (!formData.phone.trim()) newErrors.phone = "Phone is required";
+        if (!formData.phone.trim()) newErrors.phone = t("errors.phone");
 
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
@@ -53,54 +55,54 @@ export default function BasicInfoForm({ onSubmit, loading }: Props) {
     return (
         <form onSubmit={handleSubmit} className={styles.formContainer}>
             <div>
-                <h2 className={styles.title}>Basic Information</h2>
-                <p className={styles.subtitle}>Provide your main contact details.</p>
+                <h2 className={styles.title}>{t("title")}</h2>
+                <p className={styles.subtitle}>{t("subtitle")}</p>
             </div>
 
             <Input
-                label="Dealer Name"
+                label={t("dealerName")}
                 name="dealerName"
                 value={formData.dealerName}
                 onChange={handleChange}
                 error={errors.dealerName}
-                placeholder="Enter dealership name"
+                placeholder={t("dealerNamePlaceholder")}
                 required
             />
 
             <Input
-                label="Contact Name"
+                label={t("contactName")}
                 name="contactName"
                 value={formData.contactName}
                 onChange={handleChange}
                 error={errors.contactName}
-                placeholder="Enter contact person's name"
+                placeholder={t("contactNamePlaceholder")}
                 required
             />
 
             <Input
-                label="Email"
+                label={t("email")}
                 type="email"
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
                 error={errors.email}
-                placeholder="email@dealership.com"
+                placeholder={t("emailPlaceholder")}
                 required
             />
 
             <Input
-                label="Phone"
+                label={t("phone")}
                 name="phone"
                 value={formData.phone}
                 onChange={handleChange}
                 error={errors.phone}
-                placeholder="+974 1234 5678"
+                placeholder={t("phonePlaceholder")}
                 required
             />
 
             <div className={styles.actions}>
                 <Button type="submit" loading={loading} size="lg">
-                    Continue
+                    {t("continue")}
                 </Button>
             </div>
         </form>

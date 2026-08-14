@@ -49,6 +49,7 @@
 .iconWrap.danger  { background: #fef2f2; color: #dc2626; }
 .iconWrap.warning { background: #fffbeb; color: #d97706; }
 .iconWrap.info    { background: #eff6ff; color: #2563eb; }
+.iconWrap.success { background: #f0fdf4; color: #16a34a; }
 
 /* text */
 .title {
@@ -118,3 +119,9 @@
     color: #fff;
 }
 .btnConfirm.info:hover { background: var(--primary-hover); }
+
+.btnConfirm.success {
+    background: #16a34a;
+    color: #fff;
+}
+.btnConfirm.success:hover { opacity: 0.88; }

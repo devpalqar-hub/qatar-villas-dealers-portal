@@ -1,17 +1,18 @@
 import { FiCheck } from "react-icons/fi";
+import { useTranslations } from "next-intl";
 import styles from "./DealerOnboardingStepper.module.css";
 
 interface StepperProps {
     currentStep: number;
 }
 
-const steps = [
-    { id: 1, label: "Basic Info" },
-    { id: 2, label: "Business Details" },
-    { id: 3, label: "Submitted" },
-];
-
 export default function DealerOnboardingStepper({ currentStep }: StepperProps) {
+    const t = useTranslations("onboarding.stepper");
+    const steps = [
+        { id: 1, label: t("basicInfo") },
+        { id: 2, label: t("businessDetails") },
+        { id: 3, label: t("submitted") },
+    ];
     return (
         <div className={styles.stepperContainer}>
             {steps.map((step, index) => {

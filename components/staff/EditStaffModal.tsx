@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { FiEdit2, FiX } from "react-icons/fi";
+import { useTranslations } from "next-intl";
 import { Button, Input } from "@/components/ui";
 import { staffService, StaffMember, UpdateStaffPayload } from "@/services/staff.service";
 import styles from "./AddStaffModal.module.css";
@@ -14,14 +15,12 @@ interface EditStaffModalProps {
     onSuccess: () => void;
 }
 
-const AVAILABLE_PERMISSIONS = [
-    { id: "MANAGE_LISTINGS", label: "Manage Listings" },
-    { id: "MANAGE_CHATS", label: "Manage Chats" },
-    { id: "VIEW_ANALYTICS", label: "View Analytics" },
-    { id: "MANAGE_STAFF", label: "Manage Staff" },
-];
+const AVAILABLE_PERMISSIONS = ["MANAGE_LISTINGS", "MANAGE_CHATS", "VIEW_ANALYTICS", "MANAGE_STAFF"];
 
 export default function EditStaffModal({ staffMember, open, onClose, onSuccess }: EditStaffModalProps) {
+    const t = useTranslations("staff");
+    const tPerm = useTranslations("permissionEnum");
+    const tCommon = useTranslations("common");
     const [formData, setFormData] = useState<UpdateStaffPayload>({
         name: "",
         phone: "",
@@ -90,7 +89,7 @@ export default function EditStaffModal({ staffMember, open, onClose, onSuccess }
         setError(null);
 
         if (!formData.name?.trim()) {
-            setError("Staff name is required.");
+            setError(t("modal.errors.nameRequired"));
             return;
         }
 
@@ -103,7 +102,7 @@ export default function EditStaffModal({ staffMember, open, onClose, onSuccess }
             console.error("Failed to update staff member:", err);
             setError(
                 err.response?.data?.message ||
-                "Failed to update staff member details. Please try again."
+                t("modal.errors.updateFailed")
             );
         } finally {
             setLoading(false);
@@ -126,11 +125,11 @@ export default function EditStaffModal({ staffMember, open, onClose, onSuccess }
                             <FiEdit2 />
                         </div>
                         <div>
-                            <h2 className={styles.title}>Edit Staff Member</h2>
-                            <p className={styles.subtitle}>Update profile and permission details.</p>
+                            <h2 className={styles.title}>{t("modal.editTitle")}</h2>
+                            <p className={styles.subtitle}>{t("modal.editSubtitle")}</p>
                         </div>
                     </div>
-                    <button type="button" className={styles.closeBtn} onClick={onClose} aria-label="Close">
+                    <button type="button" className={styles.closeBtn} onClick={onClose} aria-label={t("modal.close")}>
                         <FiX />
                     </button>
                 </div>
@@ -141,8 +140,8 @@ export default function EditStaffModal({ staffMember, open, onClose, onSuccess }
                     <div className={styles.grid}>
                         <div className={styles.fullWidth}>
                             <Input
-                                label="Full Name"
-                                placeholder="e.g. Sara Al-Dosari"
+                                label={t("modal.fullName")}
+                                placeholder={t("modal.fullNamePlaceholder")}
                                 value={formData.name || ""}
                                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                                 required
@@ -151,8 +150,8 @@ export default function EditStaffModal({ staffMember, open, onClose, onSuccess }
 
                         <div>
                             <Input
-                                label="Phone Number"
-                                placeholder="e.g. +97412345679"
+                                label={t("modal.phoneNumber")}
+                                placeholder={t("modal.phonePlaceholder")}
                                 value={formData.phone || ""}
                                 onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                                 required
@@ -161,8 +160,8 @@ export default function EditStaffModal({ staffMember, open, onClose, onSuccess }
 
                         <div>
                             <Input
-                                label="Position / Title"
-                                placeholder="e.g. Sales Agent"
+                                label={t("modal.position")}
+                                placeholder={t("modal.positionPlaceholder")}
                                 value={formData.position || ""}
                                 onChange={(e) => setFormData({ ...formData, position: e.target.value })}
                                 required
@@ -171,7 +170,7 @@ export default function EditStaffModal({ staffMember, open, onClose, onSuccess }
 
                         <div className={styles.fullWidth}>
                             <div className={styles.permissionsSection}>
-                                <label className={styles.label}>Account Status</label>
+                                <label className={styles.label}>{t("modal.accountStatus")}</label>
                                 <div className={styles.permissionGrid}>
                                     <div
                                         className={`${styles.permissionCard} ${
@@ -186,7 +185,7 @@ export default function EditStaffModal({ staffMember, open, onClose, onSuccess }
                                             checked={formData.isActive === true}
                                             onChange={() => {}}
                                         />
-                                        <span className={styles.permTitle}>Active</span>
+                                        <span className={styles.permTitle}>{t("statusActive")}</span>
                                     </div>
                                     <div
                                         className={`${styles.permissionCard} ${
@@ -201,7 +200,7 @@ export default function EditStaffModal({ staffMember, open, onClose, onSuccess }
                                             checked={formData.isActive === false}
                                             onChange={() => {}}
                                         />
-                                        <span className={styles.permTitle}>Inactive</span>
+                                        <span className={styles.permTitle}>{t("statusInactive")}</span>
                                     </div>
                                 </div>
                             </div>
@@ -209,17 +208,17 @@ export default function EditStaffModal({ staffMember, open, onClose, onSuccess }
 
                         <div className={styles.fullWidth}>
                             <div className={styles.permissionsSection}>
-                                <label className={styles.label}>Permissions</label>
+                                <label className={styles.label}>{t("modal.permissions")}</label>
                                 <div className={styles.permissionGrid}>
-                                    {AVAILABLE_PERMISSIONS.map((perm) => {
-                                        const isSelected = (formData.permissions || []).includes(perm.id);
+                                    {AVAILABLE_PERMISSIONS.map((permId) => {
+                                        const isSelected = (formData.permissions || []).includes(permId);
                                         return (
                                             <div
-                                                key={perm.id}
+                                                key={permId}
                                                 className={`${styles.permissionCard} ${
                                                     isSelected ? styles.permissionCardActive : ""
                                                 }`}
-                                                onClick={() => handlePermissionToggle(perm.id)}
+                                                onClick={() => handlePermissionToggle(permId)}
                                             >
                                                 <input
                                                     type="checkbox"
@@ -227,7 +226,7 @@ export default function EditStaffModal({ staffMember, open, onClose, onSuccess }
                                                     checked={isSelected}
                                                     onChange={() => {}}
                                                 />
-                                                <span className={styles.permTitle}>{perm.label}</span>
+                                                <span className={styles.permTitle}>{tPerm(permId)}</span>
                                             </div>
                                         );
                                     })}
@@ -238,10 +237,10 @@ export default function EditStaffModal({ staffMember, open, onClose, onSuccess }
 
                     <div className={styles.actions}>
                         <Button type="button" variant="secondary" onClick={onClose} disabled={loading}>
-                            Cancel
+                            {tCommon("cancel")}
                         </Button>
                         <Button type="submit" loading={loading}>
-                            Save Changes
+                            {tCommon("saveChanges")}
                         </Button>
                     </div>
                 </form>

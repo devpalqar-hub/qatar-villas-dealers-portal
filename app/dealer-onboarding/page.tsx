@@ -17,6 +17,7 @@ import {
     FiSend,
     FiUploadCloud,
 } from "react-icons/fi";
+import { useTranslations } from "next-intl";
 import { useDealerOnboarding } from "@/hooks/useDealerOnboarding";
 import { BasicInfoData, BusinessDetailsData } from "@/services/dealerOnboarding.service";
 // uploadFileToS3 not used here – files sent as multipart form-data directly
@@ -25,6 +26,9 @@ import SubmissionSuccess from "@/components/dealer-onboarding/SubmissionSuccess"
 import styles from "./page.module.css";
 
 export default function DealerOnboardingPage() {
+    const t1 = useTranslations("onboarding.page1");
+    const t2 = useTranslations("onboarding.page2");
+    const tFooter = useTranslations("onboarding.footer");
     const {
         loading,
         error,
@@ -83,14 +87,14 @@ export default function DealerOnboardingPage() {
     const handleBasicSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         const errs: Partial<BasicInfoData> = {};
-        if (!basicInfo.dealerName.trim()) errs.dealerName = "Agency Name is required";
-        if (!basicInfo.contactName.trim()) errs.contactName = "Contact Person is required";
+        if (!basicInfo.dealerName.trim()) errs.dealerName = t1("errors.dealerName");
+        if (!basicInfo.contactName.trim()) errs.contactName = t1("errors.contactName");
         if (!basicInfo.email.trim()) {
-            errs.email = "Business Email is required";
+            errs.email = t1("errors.emailRequired");
         } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(basicInfo.email)) {
-            errs.email = "Invalid email format";
+            errs.email = t1("errors.emailInvalid");
         }
-        if (!basicInfo.phone.trim()) errs.phone = "Phone Number is required";
+        if (!basicInfo.phone.trim()) errs.phone = t1("errors.phone");
 
         if (Object.keys(errs).length > 0) {
             setBasicErrors(errs);
@@ -137,10 +141,10 @@ export default function DealerOnboardingPage() {
     const handleBizSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         const errs: Record<string, string> = {};
-        if (!bizData.tradeNumber.trim()) errs.tradeNumber = "Trade License Number is required";
-        if (!bizData.address.trim()) errs.address = "Registered Address is required";
-        if (!bizData.city.trim()) errs.city = "City is required";
-        if (!bizData.country.trim()) errs.country = "Country is required";
+        if (!bizData.tradeNumber.trim()) errs.tradeNumber = t2("errors.tradeNumber");
+        if (!bizData.address.trim()) errs.address = t2("errors.address");
+        if (!bizData.city.trim()) errs.city = t2("errors.city");
+        if (!bizData.country.trim()) errs.country = t2("errors.country");
 
         if (Object.keys(errs).length > 0) {
             setBizErrors(errs);
@@ -149,7 +153,7 @@ export default function DealerOnboardingPage() {
 
         // At least one document is required
         if (documentFiles.length === 0) {
-            setDocError("Please upload at least one document before submitting.");
+            setDocError(t2("documentRequired"));
             return;
         }
 
@@ -205,20 +209,20 @@ export default function DealerOnboardingPage() {
                 /* ── PAGE 2: EDIT / APPLICATION DETAILS ── */
                 <div className={styles.editContainer}>
                     <div className={styles.editPageHeader}>
-                        <h1 className={styles.editTitle}>Application Details</h1>
+                        <h1 className={styles.editTitle}>{t2("title")}</h1>
                         <p className={styles.editSubtitle}>
-                            Please update the information below and submit your application.
+                            {t2("subtitle")}
                         </p>
                     </div>
 
                     <form onSubmit={handleBizSubmit}>
                         {/* Section 1: Agency Information (Prefilled / Readonly display) */}
                         <div className={styles.sectionCard}>
-                            <h2 className={styles.sectionHeading}>Agency Information</h2>
+                            <h2 className={styles.sectionHeading}>{t2("agencyInfoHeading")}</h2>
                             <div className={styles.grid2}>
                                 <div>
                                     <label className={styles.fieldLabel}>
-                                        Agency Name <span className={styles.requiredStar}>*</span>
+                                        {t2("agencyName")} <span className={styles.requiredStar}>*</span>
                                     </label>
                                     <div className={styles.inputWrapper}>
                                         <FiHome className={styles.inputIcon} />
@@ -232,7 +236,7 @@ export default function DealerOnboardingPage() {
                                                     dealerName: e.target.value,
                                                 }))
                                             }
-                                            placeholder="Agency Name"
+                                            placeholder={t2("agencyName")}
                                             required
                                         />
                                     </div>
@@ -240,7 +244,7 @@ export default function DealerOnboardingPage() {
 
                                 <div>
                                     <label className={styles.fieldLabel}>
-                                        Contact Person <span className={styles.requiredStar}>*</span>
+                                        {t2("contactPerson")} <span className={styles.requiredStar}>*</span>
                                     </label>
                                     <div className={styles.inputWrapper}>
                                         <FiUser className={styles.inputIcon} />
@@ -254,7 +258,7 @@ export default function DealerOnboardingPage() {
                                                     contactName: e.target.value,
                                                 }))
                                             }
-                                            placeholder="Contact Person"
+                                            placeholder={t2("contactPerson")}
                                             required
                                         />
                                     </div>
@@ -262,7 +266,7 @@ export default function DealerOnboardingPage() {
 
                                 <div>
                                     <label className={styles.fieldLabel}>
-                                        Email <span className={styles.requiredStar}>*</span>
+                                        {t2("email")} <span className={styles.requiredStar}>*</span>
                                     </label>
                                     <div className={styles.inputWrapper}>
                                         <FiMail className={styles.inputIcon} />
@@ -276,7 +280,7 @@ export default function DealerOnboardingPage() {
                                                     email: e.target.value,
                                                 }))
                                             }
-                                            placeholder="email@domain.com"
+                                            placeholder={t2("emailPlaceholder")}
                                             required
                                         />
                                     </div>
@@ -284,7 +288,7 @@ export default function DealerOnboardingPage() {
 
                                 <div>
                                     <label className={styles.fieldLabel}>
-                                        Phone Number <span className={styles.requiredStar}>*</span>
+                                        {t2("phoneNumber")} <span className={styles.requiredStar}>*</span>
                                     </label>
                                     <div className={styles.phoneGroup}>
                                         <div className={styles.flagPrefix}>
@@ -305,7 +309,7 @@ export default function DealerOnboardingPage() {
                                                     phone: e.target.value,
                                                 }))
                                             }
-                                            placeholder="Phone Number"
+                                            placeholder={t2("phoneNumber")}
                                             required
                                         />
                                     </div>
@@ -315,11 +319,11 @@ export default function DealerOnboardingPage() {
 
                         {/* Section 2: Business Details */}
                         <div className={styles.sectionCard}>
-                            <h2 className={styles.sectionHeading}>Business Details</h2>
+                            <h2 className={styles.sectionHeading}>{t2("businessDetailsHeading")}</h2>
                             <div className={styles.grid2}>
                                 <div>
                                     <label className={styles.fieldLabel}>
-                                        Trade License Number <span className={styles.requiredStar}>*</span>
+                                        {t2("tradeLicenseNumber")} <span className={styles.requiredStar}>*</span>
                                     </label>
                                     <input
                                         type="text"
@@ -329,7 +333,7 @@ export default function DealerOnboardingPage() {
                                         style={{ paddingLeft: "14px" }}
                                         value={bizData.tradeNumber}
                                         onChange={handleBizChange}
-                                        placeholder="e.g. 12345/2024"
+                                        placeholder={t2("tradeLicensePlaceholder")}
                                         required
                                     />
                                     {bizErrors.tradeNumber && (
@@ -338,7 +342,7 @@ export default function DealerOnboardingPage() {
                                 </div>
 
                                 <div>
-                                    <label className={styles.fieldLabel}>RERA Number</label>
+                                    <label className={styles.fieldLabel}>{t2("reraNumber")}</label>
                                     <input
                                         type="text"
                                         name="reraNumber"
@@ -346,13 +350,13 @@ export default function DealerOnboardingPage() {
                                         style={{ paddingLeft: "14px" }}
                                         value={bizData.reraNumber}
                                         onChange={handleBizChange}
-                                        placeholder="e.g. RERA-2024-67890"
+                                        placeholder={t2("reraPlaceholder")}
                                     />
                                 </div>
 
                                 <div className={styles.fullWidth}>
                                     <label className={styles.fieldLabel}>
-                                        Registered Address <span className={styles.requiredStar}>*</span>
+                                        {t2("registeredAddress")} <span className={styles.requiredStar}>*</span>
                                     </label>
                                     <input
                                         type="text"
@@ -362,7 +366,7 @@ export default function DealerOnboardingPage() {
                                         style={{ paddingLeft: "14px" }}
                                         value={bizData.address}
                                         onChange={handleBizChange}
-                                        placeholder="Street, Building, Office number"
+                                        placeholder={t2("registeredAddressPlaceholder")}
                                         required
                                     />
                                     {bizErrors.address && (
@@ -374,7 +378,7 @@ export default function DealerOnboardingPage() {
                             <div className={`${styles.grid3} ${styles.fullWidth}`} style={{ marginTop: "20px" }}>
                                 <div>
                                     <label className={styles.fieldLabel}>
-                                        City <span className={styles.requiredStar}>*</span>
+                                        {t2("city")} <span className={styles.requiredStar}>*</span>
                                     </label>
                                     <input
                                         type="text"
@@ -390,7 +394,7 @@ export default function DealerOnboardingPage() {
 
                                 <div>
                                     <label className={styles.fieldLabel}>
-                                        Country <span className={styles.requiredStar}>*</span>
+                                        {t2("country")} <span className={styles.requiredStar}>*</span>
                                     </label>
                                     <select
                                         name="country"
@@ -409,7 +413,7 @@ export default function DealerOnboardingPage() {
                                 </div>
 
                                 <div>
-                                    <label className={styles.fieldLabel}>Website</label>
+                                    <label className={styles.fieldLabel}>{t2("website")}</label>
                                     <input
                                         type="url"
                                         name="website"
@@ -417,20 +421,20 @@ export default function DealerOnboardingPage() {
                                         style={{ paddingLeft: "14px" }}
                                         value={bizData.website}
                                         onChange={handleBizChange}
-                                        placeholder="https://agency.qa"
+                                        placeholder={t2("websitePlaceholder")}
                                     />
                                 </div>
                             </div>
 
                             <div className={styles.fullWidth} style={{ marginTop: "20px" }}>
-                                <label className={styles.fieldLabel}>Business Description</label>
+                                <label className={styles.fieldLabel}>{t2("businessDescription")}</label>
                                 <textarea
                                     name="description"
                                     className={styles.textarea}
                                     value={bizData.description}
                                     onChange={handleBizChange}
                                     maxLength={500}
-                                    placeholder="Brief description of your real estate agency..."
+                                    placeholder={t2("businessDescriptionPlaceholder")}
                                 />
                                 <div className={styles.charCount}>
                                     {bizData.description.length} / 500
@@ -441,10 +445,10 @@ export default function DealerOnboardingPage() {
                         {/* Section 3: Documents Upload */}
                         <div className={styles.sectionCard}>
                             <h2 className={styles.sectionHeading}>
-                                Documents <span className={styles.requiredStar}>*</span>
+                                {t2("documentsHeading")} <span className={styles.requiredStar}>*</span>
                             </h2>
                             <p className={styles.sectionSubHeading}>
-                                Upload at least one document for agency verification (Trade License, RERA Certificate, etc.)
+                                {t2("documentsSubHeading")}
                             </p>
 
                             {/* Drop Zone */}
@@ -454,8 +458,8 @@ export default function DealerOnboardingPage() {
                                 style={docError ? { borderColor: "#dc2626" } : undefined}
                             >
                                 <FiUploadCloud className={styles.uploadIcon} />
-                                <span className={styles.uploadText}>Click to upload documents</span>
-                                <span className={styles.uploadHint}>PDF, PNG, JPG — you can add multiple files</span>
+                                <span className={styles.uploadText}>{t2("uploadDocuments")}</span>
+                                <span className={styles.uploadHint}>{t2("uploadHint")}</span>
                                 <input
                                     ref={docInputRef}
                                     type="file"
@@ -486,7 +490,7 @@ export default function DealerOnboardingPage() {
                                                 type="button"
                                                 className={styles.removeFileBtn}
                                                 onClick={() => handleRemoveDoc(idx)}
-                                                aria-label="Remove file"
+                                                aria-label={t2("removeFile")}
                                             >
                                                 <FiX size={16} />
                                             </button>
@@ -503,7 +507,7 @@ export default function DealerOnboardingPage() {
                                 className={styles.backBtn}
                                 onClick={() => window.location.reload()}
                             >
-                                <FiArrowLeft /> Back
+                                <FiArrowLeft /> {t2("back")}
                             </button>
 
                             <button
@@ -512,10 +516,10 @@ export default function DealerOnboardingPage() {
                                 disabled={loading}
                             >
                                 {loading ? (
-                                    "Submitting Application..."
+                                    t2("submitting")
                                 ) : (
                                     <>
-                                        Submit Application <FiSend />
+                                        {t2("submitApplication")} <FiSend />
                                     </>
                                 )}
                             </button>
@@ -524,9 +528,9 @@ export default function DealerOnboardingPage() {
 
                     {/* Site Footer */}
                     <footer className={styles.siteFooter}>
-                        <span>© 2026 Villas Qatar. All rights reserved.</span> |{" "}
-                        <a href="#">Terms of Service</a> | <a href="#">Privacy Policy</a> |{" "}
-                        <a href="#">Contact Us</a>
+                        <span>{tFooter("copyright", { year: new Date().getFullYear() })}</span> |{" "}
+                        <a href="#">{tFooter("terms")}</a> | <a href="#">{tFooter("privacy")}</a> |{" "}
+                        <a href="#">{tFooter("contact")}</a>
                     </footer>
                 </div>
             ) : (
@@ -535,17 +539,16 @@ export default function DealerOnboardingPage() {
                     {/* Left Form Panel */}
                     <div className={styles.leftPanel}>
                         <h1 className={styles.title}>
-                            Register <span className={styles.highlightTitle}>Your Agency</span>
+                            {t1("titlePrefix")} <span className={styles.highlightTitle}>{t1("titleHighlight")}</span>
                         </h1>
                         <p className={styles.subtitle}>
-                            Let's get started! Please enter your agency and contact details to begin your
-                            onboarding journey.
+                            {t1("subtitle")}
                         </p>
 
                         <form onSubmit={handleBasicSubmit}>
                             {/* Agency Name */}
                             <div className={styles.formGroup}>
-                                <label className={styles.fieldLabel}>Agency Name</label>
+                                <label className={styles.fieldLabel}>{t1("agencyName")}</label>
                                 <div className={styles.inputWrapper}>
                                     <FiHome className={styles.inputIcon} />
                                     <input
@@ -553,7 +556,7 @@ export default function DealerOnboardingPage() {
                                         name="dealerName"
                                         className={`${styles.textInput} ${basicErrors.dealerName ? styles.textInputError : ""
                                             }`}
-                                        placeholder="Enter agency / company name"
+                                        placeholder={t1("agencyNamePlaceholder")}
                                         value={basicInfo.dealerName}
                                         onChange={handleBasicChange}
                                         required
@@ -566,7 +569,7 @@ export default function DealerOnboardingPage() {
 
                             {/* Contact Person */}
                             <div className={styles.formGroup}>
-                                <label className={styles.fieldLabel}>Contact Person</label>
+                                <label className={styles.fieldLabel}>{t1("contactPerson")}</label>
                                 <div className={styles.inputWrapper}>
                                     <FiUser className={styles.inputIcon} />
                                     <input
@@ -574,7 +577,7 @@ export default function DealerOnboardingPage() {
                                         name="contactName"
                                         className={`${styles.textInput} ${basicErrors.contactName ? styles.textInputError : ""
                                             }`}
-                                        placeholder="Enter full name of contact person"
+                                        placeholder={t1("contactPersonPlaceholder")}
                                         value={basicInfo.contactName}
                                         onChange={handleBasicChange}
                                         required
@@ -587,7 +590,7 @@ export default function DealerOnboardingPage() {
 
                             {/* Business Email */}
                             <div className={styles.formGroup}>
-                                <label className={styles.fieldLabel}>Business Email</label>
+                                <label className={styles.fieldLabel}>{t1("businessEmail")}</label>
                                 <div className={styles.inputWrapper}>
                                     <FiMail className={styles.inputIcon} />
                                     <input
@@ -595,7 +598,7 @@ export default function DealerOnboardingPage() {
                                         name="email"
                                         className={`${styles.textInput} ${basicErrors.email ? styles.textInputError : ""
                                             }`}
-                                        placeholder="Enter business email address"
+                                        placeholder={t1("businessEmailPlaceholder")}
                                         value={basicInfo.email}
                                         onChange={handleBasicChange}
                                         required
@@ -608,7 +611,7 @@ export default function DealerOnboardingPage() {
 
                             {/* Phone Number */}
                             <div className={styles.formGroup}>
-                                <label className={styles.fieldLabel}>Phone Number</label>
+                                <label className={styles.fieldLabel}>{t1("phoneNumber")}</label>
                                 <div className={styles.phoneGroup}>
                                     <div className={styles.flagPrefix}>
                                         <img
@@ -622,7 +625,7 @@ export default function DealerOnboardingPage() {
                                         type="tel"
                                         name="phone"
                                         className={styles.phoneInputNoBorder}
-                                        placeholder="Enter phone number"
+                                        placeholder={t1("phoneNumberPlaceholder")}
                                         value={basicInfo.phone}
                                         onChange={handleBasicChange}
                                         required
@@ -640,19 +643,19 @@ export default function DealerOnboardingPage() {
                                     className={styles.continueBtn}
                                     disabled={loading}
                                 >
-                                    {loading ? "Processing..." : <>Continue <FiArrowRight /></>}
+                                    {loading ? t1("processing") : <>{t1("continue")} <FiArrowRight /></>}
                                 </button>
 
                                 <div className={styles.securityNote}>
                                     <FiShield className={styles.securityIcon} />
-                                    <span>Your information is secure and will not be shared.</span>
+                                    <span>{t1("securityNote")}</span>
                                 </div>
                             </div>
                         </form>
 
                         <div className={styles.statusCheckLink}>
-                            Already applied?{" "}
-                            <Link href="/dealer-onboarding/status">Check Application Status</Link>
+                            {t1("alreadyApplied")}{" "}
+                            <Link href="/dealer-onboarding/status">{t1("checkApplicationStatus")}</Link>
                         </div>
                     </div>
 

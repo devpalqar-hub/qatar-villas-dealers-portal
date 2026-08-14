@@ -1,4 +1,5 @@
 import api from "@/lib/axios";
+import { PropertyAnalyticsFilters, PropertyAnalyticsResponse } from "@/types/propertyAnalytics";
 
 export interface PropertyPhoto {
     url: string;
@@ -312,6 +313,19 @@ export const propertyService = {
     // Activates a listing that's free of charge, or creates a Stripe Checkout session to pay for it.
     makePayment: async (payload: MakePaymentPayload): Promise<MakePaymentResponse> => {
         const response = await api.post(`/listings/make-payment`, payload);
+        return response.data;
+    },
+
+    getListingAnalytics: async (
+        id: string,
+        filters: PropertyAnalyticsFilters = {}
+    ): Promise<PropertyAnalyticsResponse> => {
+        const params: Record<string, string> = {};
+        if (filters.startDate) params.startDate = filters.startDate;
+        if (filters.endDate) params.endDate = filters.endDate;
+        if (filters.granularity) params.granularity = filters.granularity;
+
+        const response = await api.get(`/listings/${id}/analytics`, { params });
         return response.data;
     },
 };
