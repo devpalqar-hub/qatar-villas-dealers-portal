@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { RiEyeLine, RiEyeOffLine, RiLockPasswordLine, RiMailLine, RiAlertLine, RiArrowRightLine, RiShieldKeyholeLine } from "react-icons/ri";
-import { useLocale, useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
 import { Input } from "@/components/ui";
 import { authService } from "@/services/auth.service";
 import styles from "./page.module.css";
@@ -32,7 +32,6 @@ function LogoMark({ className }: { className?: string }) {
 export default function LoginPage() {
     const t = useTranslations("login");
     const tCommon = useTranslations("common");
-    const locale = useLocale();
     const [identifier, setIdentifier] = useState("");
     const [password, setPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
@@ -64,7 +63,7 @@ export default function LoginPage() {
 
             document.cookie = `auth_token=${access_token}; path=/; max-age=${60 * 60 * 24 * 7}; SameSite=Lax`;
             localStorage.setItem("auth_token", access_token);
-            window.location.href = `/${locale}`;
+            window.location.href = "/";
         } catch (err: unknown) {
             const serviceError = err as { response?: { data?: { message?: string } }, message?: string };
             const message = serviceError?.response?.data?.message || serviceError?.message || t("errors.invalidCredentials");
@@ -210,7 +209,7 @@ Z"
                                         />
                                         {("remember me")}
                                     </label>
-                                    <a href={`/${locale}/forgot-password`} className={styles.forgotLink}>
+                                    <a href="/forgot-password" className={styles.forgotLink}>
                                         {("forgot password?")}
                                     </a>
                                 </div>

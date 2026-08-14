@@ -1,0 +1,559 @@
+.container {
+    padding: 32px;
+    max-width: 1280px;
+    margin: 0 auto;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+/* ---------- Loading / error states ---------- */
+
+.skeletonCover {
+    height: 260px;
+    border-radius: 20px;
+    background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+}
+
+.skeletonGrid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 20px;
+}
+
+.skeletonCard {
+    height: 320px;
+    border-radius: var(--radius);
+    background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+.stateBox {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    padding: 70px 20px;
+    text-align: center;
+    color: var(--text-light);
+    background: var(--surface);
+    border: 1px dashed var(--border);
+    border-radius: var(--radius);
+}
+
+/* ---------- Hero / cover ---------- */
+
+.hero {
+    position: relative;
+    border-radius: 20px;
+    overflow: hidden;
+    background: var(--surface);
+    border: 1px solid var(--border);
+}
+
+.coverWrapper {
+    position: relative;
+    width: 100%;
+    height: 220px;
+}
+
+.coverImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.coverFallback {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, var(--sidebar-bg) 0%, var(--primary) 100%);
+}
+
+.coverOverlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, 0.45) 100%);
+}
+
+.heroContent {
+    display: flex;
+    align-items: flex-end;
+    gap: 20px;
+    padding: 0 28px 24px;
+    margin-top: -56px;
+    position: relative;
+}
+
+.logoWrapper {
+    flex-shrink: 0;
+    width: 112px;
+    height: 112px;
+    border-radius: 20px;
+    border: 4px solid var(--surface);
+    background: var(--surface);
+    box-shadow: var(--shadow-md);
+    overflow: hidden;
+}
+
+.logoImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.logoFallback {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, var(--primary), var(--primary-hover));
+    color: #ffffff;
+    font-size: 32px;
+    font-weight: var(--font-bold);
+}
+
+.heroInfo {
+    flex: 1;
+    min-width: 0;
+    padding-bottom: 6px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.heroTitleRow {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.dealerName {
+    font-size: var(--text-2xl);
+    font-weight: var(--font-bold);
+    color: var(--text);
+    margin: 0;
+}
+
+.tagline {
+    font-size: var(--text-sm);
+    color: var(--text-light);
+    font-style: italic;
+    margin: 0;
+}
+
+.memberSince {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12.5px;
+    color: var(--text-light);
+    font-weight: var(--font-medium);
+}
+
+/* ---------- Stats ---------- */
+
+.statsGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+
+.statCard {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 18px 20px;
+    box-shadow: var(--shadow-sm);
+}
+
+.statIcon {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.statIconGreen { background: #dcfce7; color: #16a34a; }
+.statIconBlue { background: #dbeafe; color: #2563eb; }
+.statIconPurple { background: #f3e8ff; color: #9333ea; }
+
+.statValue {
+    display: block;
+    font-size: 22px;
+    font-weight: var(--font-bold);
+    color: var(--text);
+}
+
+.statLabel {
+    display: block;
+    font-size: 12.5px;
+    color: var(--text-light);
+    font-weight: var(--font-medium);
+}
+
+/* ---------- Main layout ---------- */
+
+.mainGrid {
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(280px, 1fr);
+    gap: 20px;
+    align-items: start;
+}
+
+.mainColumn,
+.sideColumn {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    min-width: 0;
+}
+
+.card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 22px 24px;
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.cardTitle {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    font-size: var(--text-base);
+    font-weight: var(--font-bold);
+    color: var(--text);
+    margin: 0;
+}
+
+.cardTitle svg {
+    color: var(--primary);
+    flex-shrink: 0;
+}
+
+.description {
+    font-size: var(--text-sm);
+    color: var(--text);
+    line-height: 1.65;
+    margin: 0;
+    white-space: pre-wrap;
+}
+
+/* ---------- Info rows ---------- */
+
+.infoGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px 20px;
+}
+
+.infoRowWide {
+    grid-column: 1 / -1;
+}
+
+.infoRow {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    min-width: 0;
+}
+
+.infoRow > div {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    min-width: 0;
+}
+
+.infoIcon {
+    width: 30px;
+    height: 30px;
+    border-radius: 9px;
+    background: var(--bg);
+    color: var(--text-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.infoLabel {
+    font-size: 11px;
+    font-weight: var(--font-semibold);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--text-light);
+}
+
+.infoValue {
+    font-size: var(--text-sm);
+    font-weight: var(--font-medium);
+    color: var(--text);
+    overflow-wrap: anywhere;
+}
+
+/* ---------- Social links ---------- */
+
+.linksRow {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.linkChip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: var(--font-semibold);
+    text-decoration: none;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    color: var(--text);
+    transition: all 0.2s ease;
+}
+
+.linkChip:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-sm);
+}
+
+.linkWebsite:hover { border-color: var(--primary); color: var(--primary); }
+.linkWhatsapp:hover { border-color: #16a34a; color: #16a34a; }
+.linkFacebook:hover { border-color: #1877f2; color: #1877f2; }
+.linkInstagram:hover { border-color: #d6249f; color: #d6249f; }
+.linkYoutube:hover { border-color: #ff0000; color: #ff0000; }
+
+/* ---------- Plan card ---------- */
+
+.planCard {
+    background: linear-gradient(165deg, var(--surface) 0%, rgba(138, 21, 56, 0.04) 100%);
+}
+
+.planHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.planName {
+    font-size: var(--text-lg);
+    font-weight: var(--font-bold);
+    color: var(--text);
+}
+
+.planMetaRow {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: var(--text-sm);
+    color: var(--text-light);
+}
+
+.planStatsGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}
+
+.planStat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 10px 6px;
+}
+
+.planStatValue {
+    font-size: var(--text-lg);
+    font-weight: var(--font-bold);
+    color: var(--primary);
+}
+
+.planStatLabel {
+    font-size: 10.5px;
+    color: var(--text-light);
+    font-weight: var(--font-medium);
+    text-align: center;
+}
+
+.planDates {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 12.5px;
+    color: var(--text-light);
+    padding-top: 6px;
+    border-top: 1px dashed var(--border);
+}
+
+.noPlanText {
+    font-size: var(--text-sm);
+    color: var(--text-light);
+    line-height: 1.55;
+    margin: 0;
+}
+
+.planCta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 11px 16px;
+    border-radius: 10px;
+    background: var(--primary);
+    color: #ffffff;
+    font-size: var(--text-sm);
+    font-weight: var(--font-semibold);
+    text-decoration: none;
+    transition: background 0.2s ease;
+}
+
+.planCta:hover {
+    background: var(--primary-hover);
+}
+
+/* ---------- Quota ---------- */
+
+.quotaGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.quotaTile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 8px;
+}
+
+.quotaValue {
+    font-size: 24px;
+    font-weight: var(--font-bold);
+    color: var(--primary);
+}
+
+.quotaLabel {
+    font-size: 11.5px;
+    color: var(--text-light);
+    font-weight: var(--font-medium);
+    text-align: center;
+}
+
+/* ---------- Status card ---------- */
+
+.statusRow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 6px 0;
+}
+
+.statusRow:not(:last-child) {
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 14px;
+}
+
+.statusLabel {
+    font-size: var(--text-sm);
+    color: var(--text-light);
+    font-weight: var(--font-medium);
+}
+
+.statusValue {
+    font-size: var(--text-sm);
+    color: var(--text);
+    font-weight: var(--font-semibold);
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 1023px) {
+    .container {
+        padding: 16px;
+    }
+
+    .mainGrid,
+    .skeletonGrid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .statsGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .coverWrapper {
+        height: 160px;
+    }
+
+    .heroContent {
+        flex-direction: column;
+        align-items: flex-start;
+        margin-top: -40px;
+        padding: 0 18px 20px;
+    }
+
+    .logoWrapper {
+        width: 88px;
+        height: 88px;
+        border-radius: 16px;
+    }
+
+    .logoFallback {
+        font-size: 24px;
+    }
+
+    .infoGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .planStatsGrid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .dealerName {
+        font-size: var(--text-xl);
+    }
+
+    .card {
+        padding: 18px;
+    }
+}

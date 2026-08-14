@@ -1,0 +1,23 @@
+.pageHeader {
+    margin-bottom: 22px;
+}
+
+.pageTitle {
+    font-size: 26px;
+    font-weight: 800;
+    color: #0f172a;
+    margin: 0 0 6px;
+    letter-spacing: -0.02em;
+}
+
+.pageSubtitle {
+    font-size: 14px;
+    color: #64748b;
+    margin: 0;
+}
+
+@media (max-width: 640px) {
+    .pageTitle {
+        font-size: 21px;
+    }
+}

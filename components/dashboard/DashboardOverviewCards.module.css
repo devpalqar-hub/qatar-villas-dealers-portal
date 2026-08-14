@@ -1,0 +1,184 @@
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 18px;
+}
+
+.card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 18px 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+        box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s ease;
+    position: relative;
+    overflow: hidden;
+    animation: cardIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px -6px rgba(0, 0, 0, 0.08);
+}
+
+@keyframes cardIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.cardIndigo:hover { border-color: #818cf8; }
+.cardSky:hover { border-color: #38bdf8; }
+.cardEmerald:hover { border-color: #34d399; }
+.cardAmber:hover { border-color: #fbbf24; }
+.cardViolet:hover { border-color: #c084fc; }
+.cardTeal:hover { border-color: #2dd4bf; }
+.cardGreen:hover { border-color: #4ade80; }
+.cardRose:hover { border-color: var(--primary); }
+
+.cardHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.cardTitle {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: #475569;
+}
+
+.iconBadge {
+    width: 38px;
+    height: 38px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.iconIndigo { background: #e0e7ff; color: #4f46e5; }
+.iconSky { background: #e0f2fe; color: #0284c7; }
+.iconEmerald { background: #dcfce7; color: #16a34a; }
+.iconAmber { background: #fef3c7; color: #d97706; }
+.iconViolet { background: #f3e8ff; color: #9333ea; }
+.iconTeal { background: #ccfbf1; color: #0d9488; }
+.iconGreen { background: #dcfce7; color: #15803d; }
+.iconRose { background: #fce7ec; color: var(--primary); }
+
+.cardValueRow {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.cardValue {
+    font-size: 28px;
+    font-weight: 800;
+    color: #0f172a;
+    letter-spacing: -0.02em;
+}
+
+.cardSubtext {
+    font-size: 12px;
+    color: #64748b;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.progressBarBg {
+    height: 6px;
+    width: 100%;
+    background: #f1f5f9;
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.progressBarFillIndigo {
+    height: 100%;
+    background: linear-gradient(90deg, #6366f1, #4f46e5);
+    border-radius: 999px;
+    transition: width 0.8s ease-out;
+}
+
+.progressBarFillSky {
+    height: 100%;
+    background: linear-gradient(90deg, #38bdf8, #0284c7);
+    border-radius: 999px;
+    transition: width 0.8s ease-out;
+}
+
+.progressBarFillEmerald {
+    height: 100%;
+    background: linear-gradient(90deg, #4ade80, #16a34a);
+    border-radius: 999px;
+    transition: width 0.8s ease-out;
+}
+
+.progressBarFillTeal {
+    height: 100%;
+    background: linear-gradient(90deg, #2dd4bf, #0d9488);
+    border-radius: 999px;
+    transition: width 0.8s ease-out;
+}
+
+.progressBarFillGreen {
+    height: 100%;
+    background: linear-gradient(90deg, #4ade80, #15803d);
+    border-radius: 999px;
+    transition: width 0.8s ease-out;
+}
+
+.tagsRow {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.tagsRow > span {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 6px;
+    white-space: nowrap;
+}
+
+.tagSuccess { background: #dcfce7; color: #15803d; }
+.tagWarning { background: #fef3c7; color: #b45309; }
+.tagInfo { background: #e0e7ff; color: #4338ca; }
+.tagDanger { background: #fee2e2; color: #b91c1c; }
+.tagMuted { background: #f1f5f9; color: #475569; }
+.tagFeatured { background: #fae8ff; color: #86198f; }
+.tagViolet { background: #f3e8ff; color: #7e22ce; }
+.tagRose { background: #fce7ec; color: var(--primary); font-size: 12px !important; }
+
+.skeletonCard {
+    height: 128px;
+    background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: 16px;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: 200% 0;
+    }
+    100% {
+        background-position: -200% 0;
+    }
+}

@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import {FiBell, FiSearch, FiMenu} from "react-icons/fi";
 import {useTranslations} from "next-intl";
 import LanguageSwitcher from "@/components/layout/LanguageSwitcher/LanguageSwitcher";
@@ -44,7 +45,7 @@ export default function Navbar({onMenuClick}: NavbarProps) {
                     <FiBell />
                 </button>
 
-                <div className={styles.profile}>
+                <Link href="/profile" className={styles.profile}>
                     <div className={styles.avatar}>
                         F
                     </div>
@@ -53,7 +54,7 @@ export default function Navbar({onMenuClick}: NavbarProps) {
                         <h4>Fayaz</h4>
                         <span>{t("role")}</span>
                     </div>
-                </div>
+                </Link>
             </div>
         </header>
     );

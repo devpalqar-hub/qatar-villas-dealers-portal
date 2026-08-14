@@ -31,10 +31,11 @@
     "properties": "Properties",
     "staff": "Staff",
     "inquiries": "Inquiries",
+    "bulkUpload": "Bulk Upload",
     "analytics": "Analytics",
     "subscription": "Subscription",
     "chat": "Chat",
-    "settings": "Settings",
+    "profile": "Profile",
     "closeMenu": "Close menu",
     "logout": "Log out",
     "logoutTitle": "Log out?",
@@ -43,6 +44,177 @@
   },
   "home": {
     "welcome": "Welcome to Villas Qatar"
+  },
+  "dashboard": {
+    "subtitle": "Here's how your listings are performing across views, leads and sales.",
+    "loading": "Loading dashboard...",
+    "errorTitle": "Couldn't load the dashboard",
+    "retry": "Try again",
+    "filters": {
+      "title": "Dashboard Filters",
+      "dateRange": "Date Range",
+      "startDate": "Start Date",
+      "endDate": "End Date",
+      "granularity": "Group By",
+      "granularityDaily": "Daily",
+      "granularityWeekly": "Weekly",
+      "granularityMonthly": "Monthly",
+      "granularityYearly": "Yearly",
+      "listing": "Property",
+      "allListings": "All Properties",
+      "staff": "Sales Agent",
+      "allStaff": "All Agents",
+      "propertyType": "Property Type",
+      "allPropertyTypes": "All Property Types",
+      "purpose": "Purpose",
+      "allPurposes": "All Purposes",
+      "status": "Status",
+      "allStatuses": "All Statuses",
+      "municipality": "Municipality",
+      "allMunicipalities": "All Municipalities",
+      "areaName": "Area / Neighbourhood",
+      "areaNamePlaceholder": "e.g. The Pearl, Lusail...",
+      "presets": "Quick Ranges",
+      "last7Days": "Last 7 Days",
+      "last30Days": "Last 30 Days",
+      "last90Days": "Last 90 Days",
+      "thisMonth": "This Month",
+      "thisYear": "This Year",
+      "reset": "Reset Filters",
+      "moreFilters": "More Filters",
+      "hideFilters": "Hide Filters",
+      "apply": "Apply"
+    },
+    "kpi": {
+      "listingsTitle": "Portfolio",
+      "totalListings": "Total Listings",
+      "open": "Active",
+      "pending": "Pending",
+      "rejected": "Rejected",
+      "sold": "Sold",
+      "inactive": "Inactive",
+      "featured": "Featured",
+      "views": "Property Views",
+      "impressions": "Impressions",
+      "reach": "Unique Reach",
+      "inPeriod": "in selected period",
+      "allTime": "all-time total",
+      "conversations": "Chat Conversations",
+      "chatUsers": "Unique Chat Users",
+      "whatsappClicks": "WhatsApp Clicks",
+      "siteVisits": "Site Visits",
+      "soldUnits": "Units Sold",
+      "soldValue": "Sales Value"
+    },
+    "charts": {
+      "trendTitle": "Performance Trend",
+      "trendSubtitle": "Views, visits and chats over the selected period",
+      "seriesViews": "Views",
+      "seriesVisits": "Visits",
+      "seriesChats": "Chats",
+      "seriesWhatsapp": "WhatsApp Chats",
+      "noData": "No activity recorded for this period",
+      "statusTitle": "Listings by Status",
+      "statusSubtitle": "How your portfolio is distributed",
+      "visitsTitle": "Site Visits by Status",
+      "visitsSubtitle": "Scheduling outcome of requested visits",
+      "totalLabel": "Total"
+    },
+    "visitStatus": {
+      "PENDING": "Pending",
+      "ACCEPTED": "Accepted",
+      "RESCHEDULED": "Rescheduled",
+      "REJECTED": "Rejected",
+      "CANCELLED": "Cancelled"
+    },
+    "topListings": {
+      "title": "Top Performing Listings",
+      "subtitle": "Your best listings ranked by engagement",
+      "metricViews": "Views",
+      "metricReach": "Reach",
+      "metricConversations": "Chats",
+      "metricVisits": "Visits",
+      "metricWhatsapp": "WhatsApp",
+      "empty": "No listings match the selected filters",
+      "reference": "Ref",
+      "view": "View"
+    },
+    "subscription": {
+      "title": "Subscription Plan",
+      "active": "Active",
+      "expired": "Expired",
+      "noPlan": "No Active Plan",
+      "noPlanDesc": "Subscribe to a plan to unlock more listings and features.",
+      "daysRemaining": "days remaining",
+      "maxListings": "Max Listings",
+      "unlimited": "Unlimited",
+      "startDate": "Started",
+      "endDate": "Renews / Ends",
+      "quotaTitle": "Free Quota Remaining",
+      "freeListings": "Free Listings",
+      "freeFeatured": "Free Featured Slots"
+    },
+    "staff": {
+      "title": "Team",
+      "subtitle": "staff members on your account",
+      "empty": "No staff members added yet"
+    }
+  },
+  "profile": {
+    "loadError": "Couldn't load your profile. Please try again.",
+    "retry": "Try Again",
+    "accountActive": "Active",
+    "accountInactive": "Inactive",
+    "accountStatus": "Account Status",
+    "memberSince": "Member since {date}",
+    "memberSinceLabel": "Member Since",
+    "about": "About",
+    "noDescription": "No description added yet.",
+    "contactInfo": "Contact Information",
+    "businessDetails": "Business Details",
+    "notProvided": "Not provided",
+    "fields": {
+      "contactName": "Contact Name",
+      "email": "Email Address",
+      "phone": "Phone Number",
+      "contactPhone": "Business Contact Phone",
+      "address": "Address",
+      "tradeNumber": "Trade License Number",
+      "reraNumber": "RERA Number",
+      "status": "Status"
+    },
+    "links": {
+      "title": "Links & Social",
+      "website": "Website",
+      "whatsapp": "WhatsApp",
+      "facebook": "Facebook",
+      "instagram": "Instagram",
+      "youtube": "YouTube"
+    },
+    "stats": {
+      "soldProperties": "Sold Properties",
+      "activeProperties": "Active Properties",
+      "staffMembers": "Staff Members"
+    },
+    "plan": {
+      "title": "Subscription Plan",
+      "active": "Active",
+      "expired": "Expired",
+      "noPlanBadge": "No Plan",
+      "noPlanDesc": "You don't have an active subscription plan yet. Subscribe to unlock free listings, featured credits, and discounts.",
+      "maxListings": "Up to {count} listings",
+      "listingDiscount": "Listing Discount",
+      "featuringDiscount": "Featuring Discount",
+      "daysRemaining": "Days Left",
+      "startedOn": "Started {date}",
+      "expiresOn": "Expires {date}",
+      "manage": "Manage Subscription"
+    },
+    "quota": {
+      "title": "Free Quota Remaining",
+      "freeListings": "Free Listings",
+      "freeFeatured": "Free Featured"
+    }
   },
   "login": {
     "title": "Welcome back",
@@ -90,6 +262,11 @@
     "markSoldDescription": "This will update {name} to SOLD.",
     "markSoldUpdating": "Updating...",
     "markSoldError": "Unable to mark this property as sold right now.",
+    "makePayment": "Make Payment",
+    "freeListingAvailable": "Free listing available — use your subscription benefit",
+    "makingPayment": "Processing...",
+    "makePaymentError": "Unable to process the payment right now. Please try again.",
+    "makePaymentActivated": "Payment not required — this property is now live.",
     "goToInventory": "Go to Inventory",
     "addAnother": "Add Another",
     "createTitle": "Add New Property",
@@ -126,6 +303,30 @@
       "statusPrefix": "Status:"
     },
     "form": {
+      "sections": {
+        "basics": "Basic Details",
+        "basicsHint": "The name and description shown to buyers and tenants.",
+        "category": "Category",
+        "categoryHint": "What kind of property is this, and is it for sale or rent?",
+        "contact": "Contact Information",
+        "contactHint": "How interested buyers or tenants can reach you.",
+        "pricing": "Pricing",
+        "pricingHint": "Set the asking price and whether it's open to offers.",
+        "specs": "Specifications",
+        "specsHint": "Size and layout details of the property.",
+        "specialFeatures": "Special Features",
+        "specialFeaturesHint": "Standout features that make this property special.",
+        "amenities": "Amenities",
+        "amenitiesHint": "Select everything included with this property.",
+        "notes": "Additional Notes",
+        "notesHint": "Anything else worth mentioning about this listing.",
+        "address": "Address",
+        "addressHint": "The street address and general area of the property.",
+        "map": "Exact Location",
+        "mapHint": "Pin the exact position of the property on the map.",
+        "nearby": "Nearby Facilities",
+        "nearbyHint": "Highlight what's within easy reach of this property."
+      },
       "propertyName": "Property Name",
       "propertyNamePlaceholder": "e.g. Luxury 4-BR Villa in The Pearl Qatar",
       "description": "Description",
@@ -137,9 +338,11 @@
       "contactWhatsapp": "Contact WhatsApp",
       "contactWhatsappPlaceholder": "e.g. +97455512345",
       "contactVerified": "Contact Verified",
+      "contactVerifiedHint": "Mark this contact as verified so buyers know it's genuine.",
       "price": "Price (QAR)",
       "pricePlaceholder": "e.g. 5500000",
       "priceNegotiable": "Price Negotiable",
+      "priceNegotiableHint": "Let buyers know you're open to reasonable offers.",
       "area": "Built-up Area (sqm)",
       "areaPlaceholder": "e.g. 450.5",
       "furnishingStatus": "Furnishing Status",
@@ -153,7 +356,12 @@
       "yearBuilt": "Year Built",
       "gardenArea": "Garden Area (sqm)",
       "privatePool": "Private Pool",
+      "privatePoolHint": "Does this property have its own private swimming pool?",
       "amenities": "Amenities",
+      "amenitiesPlaceholder": "Select amenities...",
+      "searchAmenities": "Search amenities...",
+      "noAmenitiesFound": "No amenities found",
+      "clearSelection": "Clear all",
       "otherFeatures": "Other Features",
       "otherFeaturesPlaceholder": "e.g. Comes with a dedicated boat berth in the marina",
       "addressLine1": "Address Line 1",
@@ -165,6 +373,9 @@
       "municipality": "Municipality",
       "selectMunicipality": "Select Municipality",
       "nearbyFacilities": "Nearby Facilities",
+      "nearbyPlaceholder": "Select nearby facilities...",
+      "searchNearby": "Search facilities...",
+      "noNearbyFound": "No facilities found",
       "exactPropertyLocation": "Exact Property Location",
       "searchLocationPlaceholder": "Search location in Qatar...",
       "searchingLocations": "Searching Qatar locations...",
@@ -182,6 +393,249 @@
       "photoAlt": "Photo {number}",
       "removePhoto": "Remove photo",
       "addCaption": "Add caption..."
+    }
+  },
+  "bulkUpload": {
+    "title": "Bulk Upload",
+    "subtitle": "Upload multiple property listings at once using an Excel, CSV, or JSON file.",
+    "downloadTemplate": "Download Sample Template",
+    "howItWorks": {
+      "title": "How Bulk Upload Works",
+      "subtitle": "A quick guide before you upload your first file.",
+      "step1Title": "Download the sample template",
+      "step1Desc": "Start from the provided Excel template so your column names match exactly.",
+      "step2Title": "Fill one property per row",
+      "step2Desc": "Each row in the \"Listings\" sheet represents a single property listing.",
+      "step3Title": "Keep column names unchanged",
+      "step3Desc": "Do not rename, remove, or reorder the columns — the system reads them by name.",
+      "step4Title": "Match the sample formatting",
+      "step4Desc": "Use the same value formats shown in the sample row, e.g. booleans, coordinates, and comma-separated lists.",
+      "step5Title": "Upload your file",
+      "step5Desc": "Upload an .xlsx, .xls, .csv, or .json file containing your listings.",
+      "step6Title": "Review your drafts",
+      "step6Desc": "Every row becomes a draft. Valid and invalid rows are both shown, with reasons for any issues.",
+      "step7Title": "Open a draft to finish it",
+      "step7Desc": "Open any draft to pre-fill the normal property form, fix issues, and submit it like any other listing.",
+      "toggleShow": "Show field format notes",
+      "toggleHide": "Hide field format notes",
+      "fieldsTitle": "Field format notes",
+      "fieldRow": "Every spreadsheet row represents one property — you can upload many properties in a single file.",
+      "fieldColumns": "Column names must stay exactly as provided; the system matches fields by column name.",
+      "fieldAmenities": "\"amenities\" and \"nearbyTags\" must use values the system already recognizes — check the sample row for examples.",
+      "fieldPhotos": "\"photos\" should be one or more image URLs, separated by commas.",
+      "fieldExtraProperties": "\"extraProperties\" must be valid JSON, e.g. '{'\"privatePool\": true, \"gardenAreaSqm\": 200'}'.",
+      "fieldErrors": "Rows with unrecognized values aren't silently accepted — every issue is reported on the draft so you can fix it."
+    },
+    "upload": {
+      "title": "Upload File",
+      "dragActive": "Drop your file here",
+      "dragDefault": "Drag & drop your file here",
+      "or": "or",
+      "chooseFile": "Choose File",
+      "supported": "Supported: Excel (.xlsx, .xls), CSV, JSON",
+      "uploading": "Uploading and processing your file...",
+      "selected": "Selected file",
+      "changeFile": "Change file",
+      "errors": {
+        "unsupportedType": "Unsupported file type. Please upload an Excel, CSV, or JSON file.",
+        "tooLarge": "This file is too large. Please upload a file smaller than {maxSizeMb} MB.",
+        "networkError": "Couldn't reach the server. Please check your connection and try again.",
+        "genericError": "We couldn't process this file. Please check it and try again.",
+        "unauthorized": "Your session has expired. Please sign in again to continue.",
+        "emptyResponse": "The upload succeeded, but no results were returned. Please refresh and try again."
+      }
+    },
+    "result": {
+      "title": "Upload Complete",
+      "subtitle": "Batch {batchId}",
+      "totalRows": "Total Properties",
+      "validRows": "Valid",
+      "invalidRows": "Needs Attention",
+      "dismiss": "Dismiss",
+      "rowLabel": "Row {number}",
+      "untitledRow": "Untitled row",
+      "needsAttention": "Needs Attention",
+      "issueCount": "{count, plural, one {# issue} other {# issues}}",
+      "viewDrafts": "View in Draft Properties"
+    },
+    "drafts": {
+      "title": "Draft Properties",
+      "subtitle": "Review, complete, and submit properties created from your uploads.",
+      "statusLabel": "Status",
+      "statusAll": "All",
+      "batchLabel": "Batch",
+      "batchAll": "All Batches",
+      "batchOption": "{source} upload — {date} — {count, plural, one {# property} other {# properties}}",
+      "refresh": "Refresh",
+      "table": {
+        "row": "Row",
+        "property": "Property",
+        "type": "Type",
+        "purpose": "Purpose",
+        "price": "Price",
+        "location": "Location",
+        "status": "Status",
+        "validation": "Validation",
+        "actions": "Actions"
+      },
+      "untitled": "Untitled property",
+      "openDraft": "Open draft in property form",
+      "discardDraft": "Discard draft",
+      "validIndicator": "Valid",
+      "invalidIndicator": "{count, plural, one {# issue} other {# issues}}",
+      "empty": {
+        "noDraftsTitle": "No bulk-upload drafts yet",
+        "noDraftsBody": "Upload an Excel, CSV, or JSON file to create property drafts.",
+        "noDraftsCta": "Bulk Upload",
+        "noMatchTitle": "No drafts match your filters",
+        "noMatchBody": "Try changing the status or batch filter."
+      },
+      "pageInfo": "Showing {start} to {end} of {total} drafts",
+      "loadError": "Couldn't load drafts. Please try again."
+    },
+    "statusEnum": {
+      "PENDING": "Pending",
+      "USED": "Used",
+      "DISCARDED": "Discarded"
+    },
+    "discardModal": {
+      "title": "Discard Draft?",
+      "description": "Are you sure you want to discard \"{name}\"? This draft will no longer appear in your pending bulk-upload drafts.",
+      "confirm": "Discard Draft",
+      "discarding": "Discarding...",
+      "cancel": "Cancel",
+      "errorToast": "Couldn't discard this draft. Please try again."
+    },
+    "openDraftError": "Couldn't load this draft. Please try again.",
+    "createFromDraft": {
+      "banner": "This listing was pre-filled from a bulk-upload draft (Row {row}).",
+      "bannerClean": "All fields from this draft were resolved successfully. Review and submit when ready.",
+      "bannerIssues": "{count, plural, one {# value} other {# values}} from your upload could not be matched automatically. They're highlighted below — please correct them before submitting.",
+      "fieldWarning": "This uploaded value could not be matched"
+    }
+  },
+  "subscription": {
+    "pageTitle": "Subscription",
+    "pageSubtitle": "Choose a plan that fits your property business.",
+    "pageSubtitleActive": "Manage your plan, benefits, and billing history.",
+    "yourCurrentSubscription": "Your Current Subscription",
+    "availablePlans": "Available Plans",
+    "choosePlanTitle": "Choose Your Plan",
+    "choosePlanSubtitle": "Find a plan that fits your property business.",
+    "viewAllPlans": "View All Plans",
+    "hidePlans": "Hide Plans",
+    "renewPlan": "Renew Plan",
+    "processing": "Processing...",
+    "retry": "Try Again",
+    "loadingMore": "Loading...",
+    "loadMorePlans": "Load More Plans",
+    "noPlansAvailable": "No subscription plans are currently available.",
+    "noPlansAvailableHint": "Please check again later or contact support.",
+    "subscriptionHistory": "Subscription History",
+    "noHistoryYet": "No subscription history yet.",
+    "freeListingsRemainingLabel": "{count} free listings included",
+    "freeFeaturedRemainingLabel": "{count} free featured listings included",
+    "status": {
+      "ACTIVE": "Active",
+      "EXPIRING_SOON": "Expiring Soon",
+      "EXPIRED": "Expired",
+      "NONE": "No Subscription"
+    },
+    "planCard": {
+        "currentPlan": "Current Plan",
+      "currency": "QAR",
+      "free": "Free",
+      "validity": "{days} days",
+      "maxListings": "Up to {count} listings",
+      "freeListings": "{count} free listings",
+      "freeFeaturedListings": "{count} free featured listings",
+      "listingDiscount": "{percent}% listing discount",
+      "boostDiscount": "{percent}% boost discount",
+      "processing": "Processing...",
+      "choosePlan": "Choose Plan"
+    },
+    "paymentStatusLabel": {
+      "PENDING": "Pending",
+      "PAID": "Paid",
+      "FREE": "Free",
+      "COMPLETED": "Completed",
+      "FAILED": "Failed",
+      "CANCELLED": "Cancelled",
+      "EXPIRED": "Expired",
+      "REFUNDED": "Refunded"
+    },
+    "reminders": {
+      "expiredMessage": "Your subscription has expired.",
+      "expiresTomorrow": "Your plan expires tomorrow.",
+      "expiresInDays": "Your plan expires in {days} days.",
+      "listingsExhausted": "You've used all your included free listings.",
+      "featuredExhausted": "You've used all your included free featured listings.",
+      "renewPlan": "Renew Plan",
+      "viewPlans": "View Plans"
+    },
+    "entitlementModal": {
+      "close": "Close",
+      "or": "OR",
+      "processing": "Processing...",
+      "choosePlanTitle": "Choose a Subscription Plan",
+      "titles": {
+        "LISTING": "Choose How You'd Like to Continue",
+        "FEATURED_LISTING": "Choose How You'd Like to Continue"
+      },
+      "payLabels": {
+        "LISTING": "Pay for This Listing",
+        "FEATURED_LISTING": "Pay to Feature"
+      },
+      "explanations": {
+        "LISTING": {
+          "LIMIT_REACHED": "You've used all your included free listings. You can pay for this listing individually or choose a plan with more included listing benefits.",
+          "NO_SUBSCRIPTION": "This listing requires payment. You can pay for it individually, or subscribe to a plan for included free listings.",
+          "UPGRADE_REQUIRED": "Your current plan doesn't provide enough remaining benefits for this action. Choose a higher plan or continue with individual payment.",
+          "EXPIRING": "Your subscription is expiring soon. Renew to keep using your included listing benefits, or pay individually.",
+          "EXPIRED": "Your subscription has expired. Renew to restore your included listing benefits, or pay individually."
+        },
+        "FEATURED_LISTING": {
+          "LIMIT_REACHED": "You've used all your included featured listings. You can pay to feature this property or choose a plan with additional featured listing benefits.",
+          "NO_SUBSCRIPTION": "This feature requires payment. You can pay to feature this property, or subscribe to a plan for included featured benefits.",
+          "UPGRADE_REQUIRED": "Your current plan doesn't provide enough remaining benefits for this action. Choose a higher plan or continue with individual payment.",
+          "EXPIRING": "Your subscription is expiring soon. Renew to keep using your included featured benefits, or pay individually.",
+          "EXPIRED": "Your subscription has expired. Renew to restore your included featured benefits, or pay individually."
+        }
+      }
+    },
+    "detail": {
+      "backToPlans": "Back to Plans",
+      "notFound": "This plan could not be found.",
+      "loadFailed": "Couldn't load this plan. Please try again.",
+      "planOverview": "Plan Overview",
+      "benefits": "Benefits",
+      "yourRemainingBenefits": "Your Remaining Benefits"
+    },
+    "createProperty": {
+      "includedWithPlan": "Included with your {planName} — {count} free listings remaining",
+      "noFreeListingsLeft": "You have 0 free listings remaining on your {planName}. New listings may require payment once approved.",
+      "noSubscriptionNote": "New listings may require payment once approved."
+    },
+    "errors": {
+      "plansLoadFailed": "Couldn't load subscription plans. Please try again.",
+      "checkoutFailed": "Couldn't start checkout. Please try again."
+    }
+  },
+  "payments": {
+    "success": {
+      "title": "Payment Successful",
+      "listingSubtitle": "Thank you — your payment has been received and your property listing is now live.",
+      "subscriptionSubtitle": "Thank you — your payment has been received and your subscription is being activated.",
+      "viewProperty": "View Property",
+      "goToProperties": "Go to Properties",
+      "viewSubscription": "View Subscription"
+    },
+    "failed": {
+      "title": "Payment Failed",
+      "subtitle": "Something went wrong and your payment could not be completed. No charge was made — you can try again.",
+      "tryAgain": "Try Again",
+      "goToProperties": "Go to Properties",
+      "viewSubscription": "View Subscription"
     }
   },
   "staff": {
@@ -374,7 +828,8 @@
     "RESUBMITED": "Resubmitted",
     "REJECTED": "Rejected",
     "SOLD": "Sold",
-    "SUBMITTED": "Submitted"
+    "SUBMITTED": "Submitted",
+    "PENDING_PAYMENT": "Pending Payment"
   },
   "purposeEnum": {
     "SALE": "For Sale",

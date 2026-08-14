@@ -162,6 +162,54 @@
     box-shadow: 0 5px 12px rgba(217, 119, 6, 0.35);
 }
 
+.payBtn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    margin-top: 10px;
+    padding: 9px 16px;
+    background: linear-gradient(135deg, #16a34a, #15803d);
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    white-space: nowrap;
+    box-shadow: 0 3px 8px rgba(21, 128, 61, 0.28);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.payBtn:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 5px 12px rgba(21, 128, 61, 0.35);
+}
+
+.payBtn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.paymentErrorBanner {
+    margin: -12px 0 24px;
+    padding: 14px 18px;
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    border-radius: var(--radius);
+    font-size: var(--text-sm);
+    color: #b91c1c;
+}
+
+.paymentNoticeBanner {
+    margin: -12px 0 24px;
+    padding: 14px 18px;
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    border-radius: var(--radius);
+    font-size: var(--text-sm);
+    color: #166534;
+}
+
 .priceLabel {
     font-size: 12px;
     font-weight: 500;

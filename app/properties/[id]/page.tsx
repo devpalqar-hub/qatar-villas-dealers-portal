@@ -25,6 +25,7 @@ import {
     FiExternalLink,
     FiClipboard,
     FiStar,
+    FiCreditCard,
 } from "react-icons/fi";
 import { AppLayout, Button, Badge } from "@/components/ui";
 import PropertyMap from "@/components/property/PropertyMap";
@@ -43,6 +44,9 @@ export default function PropertyDetailPage() {
     const [error, setError] = useState<string | null>(null);
     const [selectedPhotoIndex, setSelectedPhotoIndex] = useState<number>(0);
     const [isFeatureModalOpen, setIsFeatureModalOpen] = useState<boolean>(false);
+    const [isPaying, setIsPaying] = useState<boolean>(false);
+    const [paymentError, setPaymentError] = useState<string | null>(null);
+    const [paymentNotice, setPaymentNotice] = useState<string | null>(null);
 
     useEffect(() => {
         if (id) {
@@ -71,10 +75,40 @@ export default function PropertyDetailPage() {
             case "ACTIVE": return "success";
             case "PENDING": return "warning";
             case "RESUBMITED": return "warning";
+            case "PENDING_PAYMENT": return "warning";
             case "REJECTED": return "danger";
             case "SOLD": return "info";
             case "INACTIVE":
             default: return "default";
+        }
+    };
+
+    const handleMakePayment = async () => {
+        if (!property || isPaying) return;
+        setPaymentError(null);
+        setPaymentNotice(null);
+        setIsPaying(true);
+        try {
+            const origin = window.location.origin;
+            const result = await propertyService.makePayment({
+                listingId: property.id,
+                successUrl: `${origin}/payments/success?listingId=${property.id}`,
+                failedUrl: `${origin}/payments/failed?listingId=${property.id}`,
+            });
+            if (result.activated) {
+                setPaymentNotice("Payment not required — this property is now live.");
+                void fetchPropertyDetail(property.id);
+            } else if (result.paymentUrl) {
+                window.location.assign(result.paymentUrl);
+                return;
+            } else {
+                setPaymentError("Unable to process the payment right now. Please try again.");
+            }
+        } catch (err: unknown) {
+            const serviceError = err as { response?: { data?: { message?: string } } };
+            setPaymentError(serviceError.response?.data?.message || "Unable to process the payment right now. Please try again.");
+        } finally {
+            setIsPaying(false);
         }
     };
 
@@ -218,8 +252,23 @@ export default function PropertyDetailPage() {
                                 {property.isFeatured ? "Extend Featured Status" : "Feature This Property"}
                             </button>
                         )}
+
+                        {property.status?.toUpperCase() === "PENDING_PAYMENT" && (
+                            <button
+                                type="button"
+                                className={styles.payBtn}
+                                onClick={() => void handleMakePayment()}
+                                disabled={isPaying}
+                            >
+                                <FiCreditCard size={14} />
+                                {isPaying ? "Processing..." : "Make Payment"}
+                            </button>
+                        )}
                     </div>
                 </div>
+
+                {paymentError && <div className={styles.paymentErrorBanner}>{paymentError}</div>}
+                {paymentNotice && <div className={styles.paymentNoticeBanner}>{paymentNotice}</div>}
 
                 <div className={styles.contentStack}>
                 <div className={styles.layoutGrid}>

@@ -1,0 +1,161 @@
+.backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    background: rgba(15, 23, 42, 0.55);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    overflow-y: auto;
+    animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.panel {
+    position: relative;
+    width: 100%;
+    max-width: 880px;
+    max-height: calc(100vh - 48px);
+    overflow-y: auto;
+    background: var(--surface);
+    border-radius: 22px;
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.35);
+    padding: 40px 36px;
+    margin: auto;
+    animation: scaleIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.96) translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+.closeBtn {
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    z-index: 1;
+}
+
+[dir="rtl"] .closeBtn {
+    right: auto;
+    left: 18px;
+}
+
+.closeBtn:hover:not(:disabled) {
+    background: var(--bg);
+    color: var(--text);
+}
+
+.closeBtn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.header {
+    text-align: center;
+    max-width: 560px;
+    margin: 0 auto 28px;
+    padding-inline-end: 30px;
+}
+
+[dir="rtl"] .header {
+    padding-inline-end: 0;
+    padding-inline-start: 30px;
+}
+
+.title {
+    font-size: var(--text-2xl);
+    font-weight: var(--font-bold);
+    color: var(--text);
+    margin: 0 0 10px;
+}
+
+.explanation {
+    font-size: var(--text-base);
+    color: var(--text-light);
+    line-height: 1.6;
+    margin: 0;
+}
+
+.payOption {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 24px;
+}
+
+.divider {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin: 0 0 28px;
+    color: var(--text-light);
+    font-size: 12px;
+    font-weight: var(--font-bold);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+.divider::before,
+.divider::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+}
+
+.plansSection {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.plansTitle {
+    font-size: var(--text-lg);
+    font-weight: var(--font-bold);
+    color: var(--text);
+    margin: 0;
+    text-align: center;
+}
+
+@media (max-width: 640px) {
+    .backdrop {
+        padding: 0;
+        align-items: flex-end;
+    }
+
+    .panel {
+        max-width: 100%;
+        max-height: 92vh;
+        border-radius: 20px 20px 0 0;
+        padding: 28px 18px 24px;
+    }
+
+    .header {
+        padding-inline-end: 0;
+    }
+}

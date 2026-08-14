@@ -155,6 +155,22 @@ export interface PropertyFilterParams {
     status?: string;
 }
 
+export interface MakePaymentPayload {
+    listingId: string;
+    successUrl?: string;
+    failedUrl?: string;
+}
+
+export interface MakePaymentResponse {
+    activated?: boolean;
+    price?: number;
+    stripeSessionId?: string;
+    paymentUrl?: string;
+    paymentIntentClientSecret?: string;
+    message?: string;
+    [key: string]: unknown;
+}
+
 export interface PropertyDetailPhoto {
     id: string;
     url: string;
@@ -290,6 +306,12 @@ export const propertyService = {
 
     markPropertyAsSold: async (id: string): Promise<any> => {
         const response = await api.post(`/listings/${id}/sold`);
+        return response.data;
+    },
+
+    // Activates a listing that's free of charge, or creates a Stripe Checkout session to pay for it.
+    makePayment: async (payload: MakePaymentPayload): Promise<MakePaymentResponse> => {
+        const response = await api.post(`/listings/make-payment`, payload);
         return response.data;
     },
 };

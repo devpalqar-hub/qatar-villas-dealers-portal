@@ -1,50 +1,49 @@
 "use client";
 
-import {useMemo} from "react";
 import {useLocale} from "next-intl";
-import {usePathname, useSearchParams} from "next/navigation";
+import {useRouter} from "next/navigation";
+import {useTransition} from "react";
 import styles from "./LanguageSwitcher.module.css";
 
 const SUPPORTED_LOCALES = ["en", "ar"] as const;
-
-function replaceLocale(pathname: string, locale: string) {
-    const segments = pathname.split("/").filter(Boolean);
-
-    if (segments.length > 0 && SUPPORTED_LOCALES.includes(segments[0] as (typeof SUPPORTED_LOCALES)[number])) {
-        segments[0] = locale;
-        return `/${segments.join("/")}`;
-    }
-
-    return `/${locale}${pathname === "/" ? "" : pathname}`;
-}
+const LOCALE_COOKIE_NAME = "NEXT_LOCALE";
+const LOCALE_COOKIE_MAX_AGE = 60 * 60 * 24 * 365;
 
 export default function LanguageSwitcher() {
     const locale = useLocale();
-    const pathname = usePathname();
-    const searchParams = useSearchParams();
+    const router = useRouter();
+    const [isPending, startTransition] = useTransition();
 
-    const search = useMemo(() => searchParams.toString(), [searchParams]);
+    const switchLocale = (targetLocale: (typeof SUPPORTED_LOCALES)[number]) => {
+        if (targetLocale === locale) return;
+
+        document.cookie = `${LOCALE_COOKIE_NAME}=${targetLocale}; path=/; max-age=${LOCALE_COOKIE_MAX_AGE}; SameSite=Lax`;
+
+        startTransition(() => {
+            router.refresh();
+        });
+    };
 
     return (
-        <div className={styles.switcher} aria-label={locale === "ar" ? "???? ?????" : "Language switcher"}>
+        <div className={styles.switcher} aria-label={locale === "ar" ? "مبدل اللغة" : "Language switcher"}>
             {SUPPORTED_LOCALES.map((targetLocale, index) => {
-                const href = `${replaceLocale(pathname, targetLocale)}${search ? `?${search}` : ""}`;
                 const isActive = locale === targetLocale;
                 const label = targetLocale === "en" ? "EN" : "AR";
-                const fullLabel = targetLocale === "en" ? "English" : "???????";
+                const fullLabel = targetLocale === "en" ? "English" : "العربية";
 
                 return (
                     <span key={targetLocale} className={styles.optionWrap}>
-                        <a
-                            href={href}
+                        <button
+                            type="button"
+                            onClick={() => switchLocale(targetLocale)}
                             className={`${styles.option} ${isActive ? styles.active : ""}`}
-                            hrefLang={targetLocale}
                             lang={targetLocale}
                             aria-current={isActive ? "true" : undefined}
                             aria-label={fullLabel}
+                            disabled={isPending}
                         >
                             {label}
-                        </a>
+                        </button>
                         {index < SUPPORTED_LOCALES.length - 1 && <span className={styles.divider}>|</span>}
                     </span>
                 );
